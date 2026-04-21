@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cats vs. Rocks vs. Gerbils</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    margin: 0;
+    padding: 2rem 1.5rem;
+    background: #f7f6f3;
+    color: #1a1a1a;
+    line-height: 1.5;
+  }
+  h1 {
+    text-align: center;
+    margin: 0 0 0.25rem;
+    font-size: 1.9rem;
+    font-weight: 600;
+  }
+  .subtitle {
+    text-align: center;
+    color: #666;
+    margin-bottom: 2rem;
+    font-size: 0.95rem;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+    max-width: 1200px;
+    margin: 0 auto 2rem;
+  }
+  .card {
+    background: #fff;
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+    border-top: 4px solid var(--accent);
+  }
+  .card.cats { --accent: #d97757; }
+  .card.rocks { --accent: #8a8a8a; }
+  .card.gerbils { --accent: #c5a572; }
+  .card h2 {
+    margin: 0 0 1rem;
+    font-size: 1.35rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .emoji { font-size: 1.5rem; }
+  dl {
+    margin: 0;
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 0.5rem 0.9rem;
+  }
+  dt {
+    font-weight: 600;
+    color: #555;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    padding-top: 0.15rem;
+  }
+  dd {
+    margin: 0;
+    font-size: 0.93rem;
+  }
+  .bottom-line {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 10px;
+    padding: 1.5rem 1.75rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    border-left: 4px solid #1a1a1a;
+  }
+  .bottom-line h3 {
+    margin: 0 0 0.6rem;
+    font-size: 1.1rem;
+  }
+  .bottom-line p {
+    margin: 0.5rem 0;
+    font-size: 0.95rem;
+  }
+  @media (max-width: 800px) {
+    .grid { grid-template-columns: 1fr; }
+    body { padding: 1.25rem 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<h1>Cats vs. Rocks vs. Gerbils</h1>
+<p class="subtitle">As pets — an honest comparison</p>
+
+<div class="grid">
+
+  <div class="card cats">
+    <h2><span class="emoji">🐈</span> Cats</h2>
+    <dl>
+      <dt>Type</dt>
+      <dd>Real companion animal</dd>
+
+      <dt>Lifespan</dt>
+      <dd>12–18 years</dd>
+
+      <dt>Cost</dt>
+      <dd>~$50–100/month baseline, plus occasional large vet bills</dd>
+
+      <dt>Interaction</dt>
+      <dd>Affectionate on their own terms; form real attachments</dd>
+
+      <dt>Travel fit</dt>
+      <dd>Tolerate absences with a sitter, but notice them</dd>
+
+      <dt>Commitment</dt>
+      <dd>Long — you're signing up for a lasting relationship</dd>
+    </dl>
+  </div>
+
+  <div class="card rocks">
+    <h2><span class="emoji">🪨</span> Rocks</h2>
+    <dl>
+      <dt>Type</dt>
+      <dd>The joke entry (pet rock)</dd>
+
+      <dt>Lifespan</dt>
+      <dd>Infinite</dd>
+
+      <dt>Cost</dt>
+      <dd>$0 — no food, no vet, no litter</dd>
+
+      <dt>Interaction</dt>
+      <dd>None. Zero emotional reciprocation</dd>
+
+      <dt>Travel fit</dt>
+      <dd>Perfect — fully travel-compatible</dd>
+
+      <dt>Commitment</dt>
+      <dd>Zero maintenance; fails as "pet" in any real sense</dd>
+    </dl>
+  </div>
+
+  <div class="card gerbils">
+    <h2><span class="emoji">🐹</span> Gerbils</h2>
+    <dl>
+      <dt>Type</dt>
+      <dd>Actual small pet</dd>
+
+      <dt>Lifespan</dt>
+      <dd>3–4 years</dd>
+
+      <dt>Cost</dt>
+      <dd>Cheap — ~$20/month</dd>
+
+      <dt>Interaction</dt>
+      <dd>Minimal; more "watch them" than bond with them. Social — should be kept in same-sex pairs, not alone</dd>
+
+      <dt>Travel fit</dt>
+      <dd>Easier to board or leave with a neighbor</dd>
+
+      <dt>Commitment</dt>
+      <dd>Low day-to-day maintenance</dd>
+    </dl>
+  </div>
+
+</div>
+
+<div class="bottom-line">
+  <h3>Bottom line for your situation</h3>
+  <p>With 3–6 months of travel per year, solo, and a "max life / min stress" constraint:</p>
+  <p><strong>Gerbils</strong> are a bad fit because of the travel. <strong>Cats</strong> are workable but require a reliable sitter network and add a recurring logistical variable to every trip. <strong>Rocks</strong> are genuinely the lowest-friction option — which matters if simplicity is the real constraint.</p>
+  <p>If you want a real pet that tolerates your lifestyle, the honest answer isn't on this list — it's something like a bonded cat pair with a trusted sitter, or no pet and borrowing other people's.</p>
+</div>
+
+</body>
+</html>
