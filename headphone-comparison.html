@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flagship closed-back comparison — Stellia vs Vérité Closed vs Stealth</title>
+<style>
+  :root {
+    --bg: #fafaf7;
+    --surface: #ffffff;
+    --text: #1a1a1a;
+    --text-muted: #5f5e5a;
+    --text-subtle: #888780;
+    --border: rgba(0,0,0,0.12);
+    --border-strong: rgba(0,0,0,0.22);
+    --accent-stellia: #854F0B;
+    --accent-verite: #26215C;
+    --accent-stealth: #0F6E56;
+    --radius: 12px;
+    --radius-sm: 8px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a1a1a;
+      --surface: #252523;
+      --text: #f0efea;
+      --text-muted: #b4b2a9;
+      --text-subtle: #888780;
+      --border: rgba(255,255,255,0.12);
+      --border-strong: rgba(255,255,255,0.22);
+      --accent-stellia: #FAC775;
+      --accent-verite: #AFA9EC;
+      --accent-stealth: #5DCAA5;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    padding: 2rem 1rem;
+  }
+  .container { max-width: 1100px; margin: 0 auto; }
+  header { margin-bottom: 2.5rem; }
+  h1 {
+    font-size: 1.75rem;
+    font-weight: 500;
+    margin: 0 0 0.5rem;
+    letter-spacing: -0.01em;
+  }
+  .subtitle {
+    color: var(--text-muted);
+    font-size: 1rem;
+    margin: 0;
+  }
+  h2 {
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin: 3rem 0 1rem;
+    letter-spacing: -0.005em;
+  }
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  .card {
+    background: var(--surface);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+  }
+  .card-stellia { border-top: 3px solid var(--accent-stellia); }
+  .card-verite { border-top: 3px solid var(--accent-verite); }
+  .card-stealth { border-top: 3px solid var(--accent-stealth); }
+  .card h3 {
+    font-size: 1.05rem;
+    font-weight: 500;
+    margin: 0 0 0.25rem;
+  }
+  .card .maker {
+    font-size: 0.85rem;
+    color: var(--text-subtle);
+    margin: 0 0 0.75rem;
+  }
+  .card .price {
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin: 0 0 1rem;
+  }
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 1rem;
+  }
+  .tag {
+    font-size: 0.75rem;
+    padding: 3px 9px;
+    border-radius: 999px;
+    background: var(--bg);
+    border: 0.5px solid var(--border);
+    color: var(--text-muted);
+  }
+  .pros-cons { font-size: 0.9rem; }
+  .pros-cons strong { font-weight: 500; }
+  .pros-cons ul { margin: 0.35rem 0 1rem; padding-left: 1.1rem; }
+  .pros-cons li { margin-bottom: 0.25rem; color: var(--text-muted); }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--surface);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    font-size: 0.9rem;
+  }
+  th, td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 0.5px solid var(--border);
+    vertical-align: top;
+  }
+  th {
+    font-weight: 500;
+    background: var(--bg);
+    color: var(--text-muted);
+    font-size: 0.85rem;
+  }
+  tr:last-child td { border-bottom: none; }
+  td.label {
+    font-weight: 500;
+    color: var(--text-muted);
+    width: 22%;
+  }
+  .sound-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+  }
+  .verdict {
+    background: var(--surface);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.25rem 1.5rem;
+    margin-top: 1rem;
+  }
+  .verdict p { margin: 0 0 0.75rem; }
+  .verdict p:last-child { margin-bottom: 0; }
+  .verdict strong { font-weight: 500; color: var(--text); }
+  .note {
+    margin-top: 2.5rem;
+    font-size: 0.8rem;
+    color: var(--text-subtle);
+    font-style: italic;
+    border-top: 0.5px solid var(--border);
+    padding-top: 1rem;
+  }
+  .scale {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0.35rem 0;
+    font-size: 0.85rem;
+  }
+  .scale-label { width: 90px; color: var(--text-muted); }
+  .scale-bar {
+    flex: 1;
+    height: 6px;
+    background: var(--bg);
+    border-radius: 3px;
+    overflow: hidden;
+    border: 0.5px solid var(--border);
+  }
+  .scale-fill { height: 100%; }
+  .fill-stellia { background: var(--accent-stellia); }
+  .fill-verite { background: var(--accent-verite); }
+  .fill-stealth { background: var(--accent-stealth); }
+  .scale-value { width: 32px; text-align: right; font-size: 0.8rem; color: var(--text-subtle); }
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+  <h1>Flagship closed-back comparison</h1>
+  <p class="subtitle">Focal Stellia · ZMF Vérité Closed · Dan Clark Stealth</p>
+</header>
+
+<div class="cards">
+  <div class="card card-stellia">
+    <h3>Focal Stellia</h3>
+    <p class="maker">Focal — France</p>
+    <p class="price">~$3,000</p>
+    <div class="tags">
+      <span class="tag">Dynamic</span>
+      <span class="tag">Beryllium</span>
+      <span class="tag">Closed-back</span>
+      <span class="tag">35Ω</span>
+    </div>
+    <div class="pros-cons">
+      <strong>Strengths</strong>
+      <ul>
+        <li>Extreme detail and transient speed</li>
+        <li>Tight, textured bass</li>
+        <li>Luxurious cognac leather build</li>
+        <li>Efficient — runs from portable sources</li>
+      </ul>
+      <strong>Weaknesses</strong>
+      <ul>
+        <li>Treble can be hot / fatiguing</li>
+        <li>Smaller stage than open flagships</li>
+        <li>Clamp force on larger heads</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card card-verite">
+    <h3>Vérité Closed</h3>
+    <p class="maker">ZMF — USA</p>
+    <p class="price">~$2,700–3,200</p>
+    <div class="tags">
+      <span class="tag">Dynamic</span>
+      <span class="tag">Be-coated PEN</span>
+      <span class="tag">Closed-back</span>
+      <span class="tag">300Ω</span>
+    </div>
+    <div class="pros-cons">
+      <strong>Strengths</strong>
+      <ul>
+        <li>Warm, organic, musical tuning</li>
+        <li>Unusually large stage for a closed-back</li>
+        <li>Excellent long-session comfort</li>
+        <li>Tunable via wood cups and pads</li>
+      </ul>
+      <strong>Weaknesses</strong>
+      <ul>
+        <li>Less resolving than Stellia/Stealth</li>
+        <li>Needs a real amp (300Ω)</li>
+        <li>Long lead times / hand-built variance</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card card-stealth">
+    <h3>Dan Clark Stealth</h3>
+    <p class="maker">Dan Clark Audio — USA</p>
+    <p class="price">~$4,000</p>
+    <div class="tags">
+      <span class="tag">Planar magnetic</span>
+      <span class="tag">AMTS</span>
+      <span class="tag">Closed-back</span>
+      <span class="tag">23Ω</span>
+    </div>
+    <div class="pros-cons">
+      <strong>Strengths</strong>
+      <ul>
+        <li>Closest to Harman/reference target</li>
+        <li>Best-in-class isolation</li>
+        <li>Exceptional technical performance</li>
+        <li>Foldable for travel</li>
+      </ul>
+      <strong>Weaknesses</strong>
+      <ul>
+        <li>Can sound clinical / unengaging</li>
+        <li>Heavy (~415g)</li>
+        <li>Hard to drive despite low impedance</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<h2>Specifications</h2>
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>Stellia</th>
+      <th>Vérité Closed</th>
+      <th>Stealth</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="label">Driver type</td>
+      <td>Dynamic, pure beryllium M-dome</td>
+      <td>Dynamic, Be-coated PEN</td>
+      <td>Planar magnetic w/ AMTS waveguide</td>
+    </tr>
+    <tr>
+      <td class="label">Driver size</td>
+      <td>40mm</td>
+      <td>50mm</td>
+      <td>~70mm planar</td>
+    </tr>
+    <tr>
+      <td class="label">Impedance</td>
+      <td>35Ω</td>
+      <td>300Ω</td>
+      <td>23Ω</td>
+    </tr>
+    <tr>
+      <td class="label">Sensitivity</td>
+      <td>106 dB SPL / 1mW</td>
+      <td>99 dB / 1mW</td>
+      <td>87 dB / 1mW</td>
+    </tr>
+    <tr>
+      <td class="label">Weight</td>
+      <td>~435g</td>
+      <td>~500g (varies by wood)</td>
+      <td>~415g</td>
+    </tr>
+    <tr>
+      <td class="label">Amping needs</td>
+      <td>Low — works from dongles</td>
+      <td>High — needs a real amp</td>
+      <td>High — low sensitivity</td>
+    </tr>
+    <tr>
+      <td class="label">Build</td>
+      <td>Aluminum, leather</td>
+      <td>Hand-built wood cups, leather</td>
+      <td>Carbon fiber, alcantara, folding</td>
+    </tr>
+    <tr>
+      <td class="label">Cable</td>
+      <td>Dual 3.5mm, balanced available</td>
+      <td>Dual mini-XLR</td>
+      <td>Dual proprietary Hirose</td>
+    </tr>
+    <tr>
+      <td class="label">Price (new)</td>
+      <td>~$3,000</td>
+      <td>~$2,700–3,200</td>
+      <td>~$4,000</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>Sonic character</h2>
+<div class="sound-grid">
+  <div class="card">
+    <h3 style="margin-bottom: 0.5rem;">Tonal balance</h3>
+    <div class="scale">
+      <span class="scale-label">Stellia</span>
+      <div class="scale-bar"><div class="scale-fill fill-stellia" style="width: 70%;"></div></div>
+      <span class="scale-value">bright</span>
+    </div>
+    <div class="scale">
+      <span class="scale-label">Vérité C.</span>
+      <div class="scale-bar"><div class="scale-fill fill-verite" style="width: 32%;"></div></div>
+      <span class="scale-value">warm</span>
+    </div>
+    <div class="scale">
+      <span class="scale-label">Stealth</span>
+      <div class="scale-bar"><div class="scale-fill fill-stealth" style="width: 50%;"></div></div>
+      <span class="scale-value">neutral</span>
+    </div>
+    <p style="font-size: 0.82rem; color: var(--text-subtle); margin: 0.75rem 0 0;">Left = warm/dark · Right = bright/analytical</p>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-bottom: 0.5rem;">Resolution</h3>
+    <div class="scale">
+      <span class="scale-label">Stellia</span>
+      <div class="scale-bar"><div class="scale-fill fill-stellia" style="width: 90%;"></div></div>
+      <span class="scale-value">9/10</span>
+    </div>
+    <div class="scale">
+      <span class="scale-label">Vérité C.</span>
+      <div class="scale-bar"><div class="scale-fill fill-verite" style="width: 78%;"></div></div>
+      <span class="scale-value">8/10</span>
+    </div>
+    <div class="scale">
+      <span class="scale-label">Stealth</span>
+      <div class="scale-bar"><div class="scale-fill fill-stealth" style="width: 95%;"></div></div>
+      <span class="scale-value">9.5/10</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-bottom: 0.5rem;">Soundstage</h3>
+    <div class="scale">
+      <span class="scale-label">Stellia</span>
+      <div class="scale-bar"><div class="scale-fill fill-stellia" style="width: 60%;"></div></div>
+      <span class="scale-value">6/10</span>
+    </div>
+    <div class="scale">
+      <span class="scale-label">Vérité C.</span>
+      <div class="scale-bar"><div class="scale-fill fill-verite" style="width: 88%;"></div></div>
+      <span class="scale-value">9/10</span>
+    </div>
+    <div class="scale">
+      <span class="scale-label">Stealth</span>
+      <div class="scale-bar"><div class="scale-fill fill-stealth" style="width: 70%;"></div></div>
+      <span class="scale-value">7/10</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-bottom: 0.5rem;">Bass slam / weight</h3>
+    <div class="scale">
+      <span class="scale-label">Stellia</span>
+      <div class="scale-bar"><div class="scale-fill fill-stellia" style="width: 75%;"></div></div>
+      <span class="scale-value">tight</span>
+    </div>
+    <div class="scale">
+      <span class="scale-label">Vérité C.</span>
+      <div class="scale-bar"><div class="scale-fill fill-verite" style="width: 85%;"></div></div>
+      <span class="scale-value">full</span>
+    </div>
+    <div class="scale">
+      <span class="scale-label">Stealth</span>
+      <div class="scale-bar"><div class="scale-fill fill-stealth" style="width: 70%;"></div></div>
+      <span class="scale-value">flat</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-bottom: 0.5rem;">Comfort (long session)</h3>
+    <div class="scale">
+      <span class="scale-label">Stellia</span>
+      <div class="scale-bar"><div class="scale-fill fill-stellia" style="width: 68%;"></div></div>
+      <span class="scale-value">7/10</span>
+    </div>
+    <div class="scale">
+      <span class="scale-label">Vérité C.</span>
+      <div class="scale-bar"><div class="scale-fill fill-verite" style="width: 92%;"></div></div>
+      <span class="scale-value">9/10</span>
+    </div>
+    <div class="scale">
+      <span class="scale-label">Stealth</span>
+      <div class="scale-bar"><div class="scale-fill fill-stealth" style="width: 60%;"></div></div>
+      <span class="scale-value">6/10</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-bottom: 0.5rem;">Isolation</h3>
+    <div class="scale">
+      <span class="scale-label">Stellia</span>
+      <div class="scale-bar"><div class="scale-fill fill-stellia" style="width: 72%;"></div></div>
+      <span class="scale-value">good</span>
+    </div>
+    <div class="scale">
+      <span class="scale-label">Vérité C.</span>
+      <div class="scale-bar"><div class="scale-fill fill-verite" style="width: 65%;"></div></div>
+      <span class="scale-value">good</span>
+    </div>
+    <div class="scale">
+      <span class="scale-label">Stealth</span>
+      <div class="scale-bar"><div class="scale-fill fill-stealth" style="width: 95%;"></div></div>
+      <span class="scale-value">best</span>
+    </div>
+  </div>
+</div>
+
+<h2>Who should buy which</h2>
+<div class="verdict">
+  <p><strong>Choose the Stellia</strong> if you want detail-first presentation, run off portable gear, listen to well-recorded acoustic or vocal material, and aren't treble sensitive. Best "wow factor" on first listen.</p>
+  <p><strong>Choose the Vérité Closed</strong> if you prioritize long-session comfort, musical engagement over analytical precision, and listen across a wide range of genres including rock, metal, and electronic. Most forgiving of the three.</p>
+  <p><strong>Choose the Stealth</strong> if you want reference-grade neutrality, the best isolation available, and are using it for critical listening, mixing, or travel. The "correct" choice if you trust measurements.</p>
+  <p style="color: var(--text-muted); font-size: 0.9rem;">All three are within a stone's throw of each other technically — the choice comes down to tuning preference and use case, not which one is "better."</p>
+</div>
+
+<p class="note">Figures for weight, impedance, sensitivity, and price are drawn from memory rather than a live data source. Sonic character ratings are subjective consensus distillations, not measurements. Confidence is high on the directional comparisons (Stellia brighter than Vérité, Stealth most neutral, etc.) and medium on exact numbers.</p>
+
+</div>
+</body>
+</html>
