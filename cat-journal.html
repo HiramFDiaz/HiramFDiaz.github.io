@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nine Lives · A Mindful Cat's Journal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #f7ecd9;
+    --cream-deep: #ecddc0;
+    --ink: #2a1f1a;
+    --ink-soft: #5a4a3e;
+    --ink-faint: #9a8b78;
+    --ginger: #c87339;
+    --ginger-soft: #e8a274;
+    --sage: #7a8a66;
+    --rose: #c87a7a;
+    --milk: #fdf6e8;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'Fraunces', serif;
+    font-weight: 300;
+    line-height: 1.6;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body {
+    background:
+      radial-gradient(ellipse at 15% 10%, rgba(232, 162, 116, 0.22) 0%, transparent 45%),
+      radial-gradient(ellipse at 85% 85%, rgba(122, 138, 102, 0.18) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 50%, rgba(253, 246, 232, 0.4) 0%, transparent 70%),
+      var(--cream);
+    background-attachment: fixed;
+    padding: 4vh 5vw 8vh;
+    position: relative;
+  }
+
+  /* Paw prints scattered on the background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23c87339' opacity='0.05'%3E%3Cellipse cx='40' cy='50' rx='6' ry='8'/%3E%3Cellipse cx='30' cy='38' rx='3' ry='4'/%3E%3Cellipse cx='38' cy='34' rx='3' ry='4'/%3E%3Cellipse cx='46' cy='34' rx='3' ry='4'/%3E%3Cellipse cx='54' cy='38' rx='3' ry='4'/%3E%3Cellipse cx='150' cy='140' rx='6' ry='8' transform='rotate(25 150 140)'/%3E%3Cellipse cx='142' cy='128' rx='3' ry='4' transform='rotate(25 142 128)'/%3E%3Cellipse cx='150' cy='123' rx='3' ry='4' transform='rotate(25 150 123)'/%3E%3Cellipse cx='158' cy='123' rx='3' ry='4' transform='rotate(25 158 123)'/%3E%3Cellipse cx='166' cy='128' rx='3' ry='4' transform='rotate(25 166 128)'/%3E%3C/g%3E%3C/svg%3E");
+    opacity: 1;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .container {
+    max-width: 780px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* Sleeping cat in corner */
+  .corner-cat {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 70px;
+    height: 70px;
+    z-index: 3;
+    opacity: 0.85;
+    transition: transform 0.3s ease;
+  }
+  .corner-cat:hover { transform: rotate(-5deg) scale(1.1); }
+
+  /* Masthead */
+  .masthead {
+    text-align: center;
+    padding: 3vh 0 5vh;
+    position: relative;
+    animation: fadeUp 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  .masthead .whisker-divider {
+    margin-top: 2rem;
+  }
+
+  .eyebrow {
+    font-family: 'Caveat', cursive;
+    font-size: 1.3rem;
+    letter-spacing: 0.05em;
+    color: var(--ginger);
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    transform: rotate(-1.5deg);
+    display: inline-block;
+  }
+
+  h1 {
+    font-family: 'Fraunces', serif;
+    font-weight: 300;
+    font-size: clamp(3rem, 8vw, 5rem);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    font-style: italic;
+    color: var(--ink);
+  }
+
+  h1 .paw {
+    color: var(--ginger);
+    font-style: normal;
+    display: inline-block;
+    transform: translateY(-0.1em);
+  }
+
+  .date-line {
+    font-family: 'Caveat', cursive;
+    font-size: 1.4rem;
+    margin-top: 1.5rem;
+    color: var(--ink-soft);
+    font-weight: 400;
+    transform: rotate(-0.5deg);
+    display: inline-block;
+  }
+
+  /* Header cat silhouette */
+  .cat-header-svg {
+    display: block;
+    margin: 0 auto 1rem;
+    width: 80px;
+    height: 60px;
+  }
+
+  /* Quote section */
+  .quote-section {
+    padding: 5vh 0 4vh;
+    text-align: center;
+    position: relative;
+    animation: fadeUp 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) 0.2s backwards;
+  }
+
+  .quote-card {
+    background: var(--milk);
+    border: 1px solid var(--cream-deep);
+    border-radius: 8px;
+    padding: 3.5rem 2.5rem 2.5rem;
+    position: relative;
+    box-shadow: 0 8px 24px rgba(42, 31, 26, 0.06), 0 2px 4px rgba(42, 31, 26, 0.04);
+  }
+
+  .quote-card::before {
+    content: '🐾';
+    position: absolute;
+    top: -18px;
+    left: 50%;
+    transform: translateX(-50%) rotate(-15deg);
+    background: var(--cream);
+    padding: 0 0.8rem;
+    font-size: 1.5rem;
+  }
+
+  blockquote {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: clamp(1.4rem, 3vw, 1.9rem);
+    line-height: 1.4;
+    font-weight: 300;
+    color: var(--ink);
+    max-width: 560px;
+    margin: 0 auto;
+    letter-spacing: -0.01em;
+  }
+
+  .attribution {
+    margin-top: 1.8rem;
+    font-family: 'Caveat', cursive;
+    font-size: 1.2rem;
+    color: var(--ginger);
+    font-weight: 500;
+  }
+
+  .attribution::before {
+    content: '— ';
+  }
+
+  /* Whisker divider */
+  .whisker-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 4vh 0 3vh;
+    gap: 1rem;
+    animation: fadeUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.4s backwards;
+  }
+
+  .whisker-divider .line {
+    flex: 1;
+    max-width: 100px;
+    height: 1px;
+    background: var(--ink-faint);
+    opacity: 0.5;
+  }
+
+  .whisker-divider .ornament {
+    font-size: 1.3rem;
+  }
+
+  /* Sections */
+  .section {
+    padding: 2.5vh 0;
+    animation: fadeUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.5s backwards;
+  }
+
+  .section-label {
+    font-family: 'Caveat', cursive;
+    font-size: 1.5rem;
+    color: var(--ink-soft);
+    margin-bottom: 1rem;
+    font-weight: 500;
+    display: flex;
+    align-items: baseline;
+    gap: 0.8rem;
+  }
+
+  .section-label .paw-num {
+    color: var(--ginger);
+    font-size: 1.2rem;
+  }
+
+  /* Mood grid — cat moods */
+  .mood-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 0.6rem;
+    margin-top: 1rem;
+  }
+
+  .mood-option {
+    background: var(--milk);
+    border: 1.5px solid var(--cream-deep);
+    border-radius: 14px;
+    padding: 1.2rem 0.4rem 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    text-align: center;
+    position: relative;
+  }
+
+  .mood-option:hover {
+    border-color: var(--ginger);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 14px rgba(200, 115, 57, 0.18);
+  }
+
+  .mood-option.selected {
+    background: var(--ginger);
+    border-color: var(--ginger);
+    color: var(--milk);
+    transform: translateY(-3px);
+  }
+
+  .mood-option.selected .mood-label { color: var(--milk); }
+
+  .mood-glyph {
+    font-size: 1.8rem;
+    display: block;
+    margin-bottom: 0.3rem;
+  }
+
+  .mood-label {
+    font-family: 'Caveat', cursive;
+    font-size: 0.95rem;
+    color: var(--ink-soft);
+    font-weight: 500;
+  }
+
+  /* Prompt blocks */
+  .prompt-block {
+    margin-top: 1rem;
+  }
+
+  .prompt-text {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 1.2rem;
+    color: var(--ink);
+    margin-bottom: 0.8rem;
+    line-height: 1.4;
+  }
+
+  textarea {
+    width: 100%;
+    background: var(--milk);
+    border: 1.5px solid var(--cream-deep);
+    border-radius: 10px;
+    padding: 1rem 1.2rem;
+    font-family: 'Caveat', cursive;
+    font-size: 1.3rem;
+    color: var(--ink);
+    resize: none;
+    outline: none;
+    transition: all 0.3s ease;
+    min-height: 3rem;
+    line-height: 1.5;
+  }
+
+  textarea:focus {
+    border-color: var(--ginger);
+    box-shadow: 0 0 0 3px rgba(200, 115, 57, 0.12);
+  }
+
+  textarea::placeholder {
+    color: var(--ink-faint);
+    font-style: italic;
+    opacity: 0.7;
+  }
+
+  .freewrite {
+    min-height: 220px;
+    font-size: 1.25rem;
+    line-height: 1.9;
+    background-image:
+      repeating-linear-gradient(
+        transparent,
+        transparent 1.85rem,
+        rgba(200, 115, 57, 0.12) 1.85rem,
+        rgba(200, 115, 57, 0.12) calc(1.85rem + 1px)
+      );
+    background-position: 0 2.6rem;
+  }
+
+  /* Purr section — replaces breathing */
+  .purr-section {
+    margin: 5vh 0;
+    text-align: center;
+    padding: 4vh 2rem;
+    background: var(--milk);
+    border-radius: 20px;
+    border: 1.5px solid var(--cream-deep);
+    position: relative;
+    overflow: hidden;
+    animation: fadeUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.6s backwards;
+  }
+
+  .purr-title {
+    font-family: 'Caveat', cursive;
+    font-size: 1.7rem;
+    margin-bottom: 2rem;
+    color: var(--ink-soft);
+    font-weight: 500;
+  }
+
+  .purr-cat {
+    width: 180px;
+    height: 120px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  .purr-cat svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .purr-cat .body {
+    transform-origin: center bottom;
+    animation: purr-breathe 5s ease-in-out infinite;
+  }
+
+  @keyframes purr-breathe {
+    0%, 100% { transform: scaleY(1); }
+    50% { transform: scaleY(1.06); }
+  }
+
+  .purr-label {
+    font-family: 'Caveat', cursive;
+    font-size: 1.3rem;
+    margin-top: 1rem;
+    color: var(--ginger);
+  }
+
+  .purr-waves {
+    position: absolute;
+    top: 50%;
+    right: 20%;
+    font-family: 'Caveat', cursive;
+    color: var(--ginger-soft);
+    font-size: 1.4rem;
+    animation: purr-float 2.5s ease-in-out infinite;
+    opacity: 0;
+  }
+
+  @keyframes purr-float {
+    0% { opacity: 0; transform: translateX(0) translateY(0); }
+    50% { opacity: 0.7; transform: translateX(15px) translateY(-8px); }
+    100% { opacity: 0; transform: translateX(30px) translateY(-16px); }
+  }
+
+  /* Close action */
+  .close {
+    text-align: center;
+    margin-top: 5vh;
+    padding-top: 4vh;
+    animation: fadeUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.7s backwards;
+  }
+
+  .close .whisker-divider { margin-bottom: 2.5rem; }
+
+  .new-quote-btn {
+    background: var(--ginger);
+    border: none;
+    padding: 1rem 2.5rem;
+    font-family: 'Caveat', cursive;
+    font-size: 1.2rem;
+    color: var(--milk);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    border-radius: 30px;
+    box-shadow: 0 4px 12px rgba(200, 115, 57, 0.3);
+  }
+
+  .new-quote-btn:hover {
+    background: var(--ink);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(42, 31, 26, 0.25);
+  }
+
+  .colophon {
+    margin-top: 2.5rem;
+    font-family: 'Caveat', cursive;
+    font-size: 1.1rem;
+    color: var(--ink-faint);
+    line-height: 1.5;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 600px) {
+    .mood-grid { grid-template-columns: repeat(3, 1fr); }
+    body { padding: 3vh 4vw 6vh; }
+    .quote-card { padding: 3rem 1.5rem 2rem; }
+    .corner-cat { width: 50px; height: 50px; top: 10px; right: 10px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Corner sleeping cat -->
+<svg class="corner-cat" viewBox="0 0 100 80" xmlns="http://www.w3.org/2000/svg">
+  <ellipse cx="50" cy="55" rx="38" ry="18" fill="#c87339"/>
+  <ellipse cx="80" cy="48" rx="12" ry="10" fill="#c87339"/>
+  <path d="M 72 42 L 70 34 L 76 40 Z" fill="#c87339"/>
+  <path d="M 84 42 L 88 34 L 86 42 Z" fill="#c87339"/>
+  <path d="M 12 52 Q 4 48 2 54 Q 8 58 12 58 Z" fill="#c87339"/>
+  <path d="M 75 48 Q 73 49 74 50 Q 76 49 75 48" fill="#2a1f1a"/>
+  <path d="M 85 48 Q 83 49 84 50 Q 86 49 85 48" fill="#2a1f1a"/>
+  <path d="M 78 51 Q 80 53 82 51" stroke="#2a1f1a" stroke-width="0.8" fill="none"/>
+  <text x="20" y="30" font-family="Caveat, cursive" font-size="14" fill="#9a8b78" opacity="0.7">z z z</text>
+</svg>
+
+<div class="container">
+
+  <!-- Masthead -->
+  <header class="masthead">
+    <!-- Cat silhouette header -->
+    <svg class="cat-header-svg" viewBox="0 0 80 60" xmlns="http://www.w3.org/2000/svg">
+      <path d="M 20 45 L 15 25 L 25 35 L 40 33 L 55 35 L 65 25 L 60 45 Z" fill="#2a1f1a"/>
+      <circle cx="33" cy="40" r="1.5" fill="#c87339"/>
+      <circle cx="47" cy="40" r="1.5" fill="#c87339"/>
+    </svg>
+
+    <div class="eyebrow">Vol. I · a journal for quiet souls</div>
+    <h1>Nine Lives <span class="paw">🐾</span><br>Nine Breaths</h1>
+    <div class="date-line" id="date-line"></div>
+  </header>
+
+  <!-- Quote -->
+  <section class="quote-section">
+    <div class="quote-card">
+      <blockquote id="quote-text"></blockquote>
+      <div class="attribution" id="quote-author"></div>
+    </div>
+  </section>
+
+  <!-- Mood -->
+  <section class="section">
+    <div class="section-label"><span class="paw-num">🐾</span>how the cat of you feels today</div>
+    <div class="mood-grid" id="mood-grid">
+      <div class="mood-option" data-mood="sunbeam"><span class="mood-glyph">☀️</span><span class="mood-label">sunbeam</span></div>
+      <div class="mood-option" data-mood="purring"><span class="mood-glyph">😺</span><span class="mood-label">purring</span></div>
+      <div class="mood-option" data-mood="loaf"><span class="mood-glyph">🍞</span><span class="mood-label">loaf mode</span></div>
+      <div class="mood-option" data-mood="zoomies"><span class="mood-glyph">⚡</span><span class="mood-label">zoomies</span></div>
+      <div class="mood-option" data-mood="hiding"><span class="mood-glyph">📦</span><span class="mood-label">in the box</span></div>
+      <div class="mood-option" data-mood="tender"><span class="mood-glyph">🐾</span><span class="mood-label">soft paws</span></div>
+    </div>
+  </section>
+
+  <!-- Whisker divider -->
+  <div class="whisker-divider">
+    <div class="line"></div>
+    <span class="ornament">🐾</span>
+    <div class="line"></div>
+  </div>
+
+  <!-- Gratitude -->
+  <section class="section">
+    <div class="section-label"><span class="paw-num">🐾</span>three small sunbeams</div>
+    <div class="prompt-block">
+      <div class="prompt-text">Little things worth stretching toward today—</div>
+      <textarea placeholder="warm toast, a good stretch, morning light on the floor..." rows="3"></textarea>
+    </div>
+  </section>
+
+  <!-- Intention -->
+  <section class="section">
+    <div class="section-label"><span class="paw-num">🐾</span>today's gentle intention</div>
+    <div class="prompt-block">
+      <div class="prompt-text">What I'm carrying in my paws today—</div>
+      <textarea placeholder="one word, one wish, one soft thing..." rows="2"></textarea>
+    </div>
+  </section>
+
+  <!-- Purr / breathing -->
+  <section class="purr-section">
+    <div class="purr-title">~ a pause to purr ~</div>
+    <div class="purr-cat">
+      <svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
+        <!-- Tail -->
+        <path d="M 20 85 Q 5 70 10 50 Q 15 40 25 45" stroke="#c87339" stroke-width="10" fill="none" stroke-linecap="round"/>
+        <!-- Body -->
+        <g class="body">
+          <ellipse cx="100" cy="85" rx="60" ry="25" fill="#c87339"/>
+          <!-- Head -->
+          <circle cx="145" cy="65" r="22" fill="#c87339"/>
+          <!-- Ears -->
+          <path d="M 130 50 L 128 35 L 138 48 Z" fill="#c87339"/>
+          <path d="M 160 50 L 162 35 L 152 48 Z" fill="#c87339"/>
+          <path d="M 131 47 L 132 40 L 136 46 Z" fill="#e8a274"/>
+          <path d="M 159 47 L 158 40 L 154 46 Z" fill="#e8a274"/>
+          <!-- Face -->
+          <ellipse cx="138" cy="65" rx="1.5" ry="2.5" fill="#2a1f1a"/>
+          <ellipse cx="152" cy="65" rx="1.5" ry="2.5" fill="#2a1f1a"/>
+          <!-- Nose -->
+          <path d="M 143 71 L 147 71 L 145 74 Z" fill="#c87a7a"/>
+          <!-- Mouth -->
+          <path d="M 145 74 Q 143 77 141 75" stroke="#2a1f1a" stroke-width="0.8" fill="none"/>
+          <path d="M 145 74 Q 147 77 149 75" stroke="#2a1f1a" stroke-width="0.8" fill="none"/>
+          <!-- Whiskers -->
+          <line x1="134" y1="72" x2="122" y2="70" stroke="#2a1f1a" stroke-width="0.5"/>
+          <line x1="134" y1="74" x2="122" y2="74" stroke="#2a1f1a" stroke-width="0.5"/>
+          <line x1="156" y1="72" x2="168" y2="70" stroke="#2a1f1a" stroke-width="0.5"/>
+          <line x1="156" y1="74" x2="168" y2="74" stroke="#2a1f1a" stroke-width="0.5"/>
+          <!-- Stripes -->
+          <path d="M 80 70 Q 82 75 80 80" stroke="#a55a2a" stroke-width="2" fill="none"/>
+          <path d="M 95 68 Q 97 75 95 82" stroke="#a55a2a" stroke-width="2" fill="none"/>
+          <path d="M 110 68 Q 112 75 110 82" stroke="#a55a2a" stroke-width="2" fill="none"/>
+          <path d="M 125 70 Q 127 75 125 80" stroke="#a55a2a" stroke-width="2" fill="none"/>
+          <!-- Paws tucked -->
+          <ellipse cx="75" cy="103" rx="8" ry="4" fill="#c87339"/>
+          <ellipse cx="105" cy="105" rx="8" ry="4" fill="#c87339"/>
+        </g>
+      </svg>
+      <div class="purr-waves">mrrr~</div>
+      <div class="purr-waves" style="animation-delay: 1.25s; top: 40%;">purr~</div>
+    </div>
+    <div class="purr-label">breathe in ~ purr out</div>
+  </section>
+
+  <!-- Free write / reflection -->
+  <section class="section">
+    <div class="section-label"><span class="paw-num">🐾</span>stretch and reflect</div>
+    <div class="prompt-text" id="reflection-prompt"></div>
+    <textarea class="freewrite" placeholder="write freely, like a cat kneading a blanket..." rows="8"></textarea>
+  </section>
+
+  <!-- Evening -->
+  <section class="section">
+    <div class="section-label"><span class="paw-num">🐾</span>curling up for the night</div>
+    <div class="prompt-block">
+      <div class="prompt-text">One thing I'm setting down before sleep—</div>
+      <textarea placeholder="a worry, a tangle, a small hiss of the day..." rows="2"></textarea>
+    </div>
+  </section>
+
+  <!-- Close -->
+  <div class="close">
+    <div class="whisker-divider">
+      <div class="line"></div>
+      <span class="ornament">🐾 🐾 🐾</span>
+      <div class="line"></div>
+    </div>
+    <button class="new-quote-btn" onclick="newQuote()">fetch another whisker of wisdom</button>
+    <div class="colophon">
+      written on soft paws ~ ginger ink on cream paper<br>
+      <em>be like the cat — curious, calm, and unbothered</em>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const quotes = [
+    { text: "Time spent with cats is never wasted.", author: "Sigmund Freud" },
+    { text: "One cat just leads to another.", author: "Ernest Hemingway" },
+    { text: "A cat has absolute emotional honesty.", author: "Ernest Hemingway" },
+    { text: "In ancient times cats were worshipped as gods; they have not forgotten this.", author: "Terry Pratchett" },
+    { text: "The smallest feline is a masterpiece.", author: "Leonardo da Vinci" },
+    { text: "Cats are connoisseurs of comfort.", author: "James Herriot" },
+    { text: "What greater gift than the love of a cat?", author: "Charles Dickens" },
+    { text: "A cat pours his body on the floor like water.", author: "William Lyon Phelps" },
+    { text: "Cats have it all — admiration, an endless sleep, and company only when they want it.", author: "Rod McKuen" },
+    { text: "There are no ordinary cats.", author: "Colette" },
+    { text: "A cat is more intelligent than people believe, and can be taught any crime.", author: "Mark Twain" },
+    { text: "If animals could speak, the dog would be a blundering outspoken fellow; but the cat would have the rare grace of never saying a word too much.", author: "Mark Twain" },
+    { text: "The present moment is the only moment available to us, and it is the door to all moments.", author: "Thich Nhat Hanh" },
+    { text: "Wherever you are, be there totally.", author: "Eckhart Tolle" },
+    { text: "You cannot stop the waves, but you can learn to surf — or simply nap through them.", author: "Jon Kabat-Zinn (adapted)" },
+    { text: "The quieter you become, the more you can hear.", author: "Ram Dass" },
+    { text: "Between stimulus and response there is a space. In that space lies a cat, napping.", author: "Viktor Frankl (adapted)" },
+    { text: "What you seek is seeking you.", author: "Rumi" },
+    { text: "Feelings come and go like clouds in a windy sky. Conscious breathing is my anchor.", author: "Thich Nhat Hanh" },
+    { text: "Happiness is not something ready made. It comes from your own actions — or a sunny windowsill.", author: "Dalai Lama (adapted)" },
+    { text: "Every moment is a fresh beginning.", author: "T.S. Eliot" },
+    { text: "Breath is the bridge which connects life to consciousness.", author: "Thich Nhat Hanh" },
+    { text: "Do not dwell in the past, do not dream of the future, concentrate the mind on the present moment.", author: "Buddha" },
+    { text: "In the midst of movement and chaos, keep stillness inside of you — cats do this effortlessly.", author: "Deepak Chopra (adapted)" },
+    { text: "You are the sky. Everything else is just the weather.", author: "Pema Chödrön" },
+    { text: "Be kind whenever possible. It is always possible.", author: "Dalai Lama" },
+    { text: "When you realize nothing is lacking, the whole world belongs to you.", author: "Lao Tzu" },
+    { text: "The wound is the place where the light enters you.", author: "Rumi" },
+    { text: "Life is a balance of holding on and letting go.", author: "Rumi" },
+    { text: "Smile, breathe, and go slowly — like a cat in the morning.", author: "Thich Nhat Hanh (adapted)" },
+    { text: "Nothing can bring you peace but yourself.", author: "Ralph Waldo Emerson" },
+    { text: "Mindfulness is a way of befriending ourselves and our experience.", author: "Jon Kabat-Zinn" },
+    { text: "Let go of the past and live fully in the present.", author: "Lao Tzu" },
+    { text: "Peace comes from within. Do not seek it without.", author: "Buddha" },
+    { text: "Everything has beauty, but not everyone sees it — cats never miss it.", author: "Confucius (adapted)" },
+    { text: "Tension is who you think you should be. Relaxation is who you are.", author: "Chinese Proverb" },
+    { text: "Walk as if you are kissing the Earth with your feet — or padding silently across it.", author: "Thich Nhat Hanh (adapted)" },
+    { text: "The little things? The little moments? They aren't little.", author: "Jon Kabat-Zinn" },
+    { text: "In today's rush, we all think too much, seek too much, want too much, and forget about the joy of just being.", author: "Eckhart Tolle" },
+    { text: "Each morning we are born again. What we do today is what matters most.", author: "Buddha" },
+    { text: "A calm mind brings inner strength and self-confidence.", author: "Dalai Lama" },
+    { text: "Be here now.", author: "Ram Dass" },
+    { text: "Drop the idea of becoming someone, because you are already a masterpiece — just ask any cat.", author: "Osho (adapted)" },
+    { text: "Within you there is a stillness and a sanctuary to which you can retreat at any time.", author: "Hermann Hesse" },
+    { text: "Life is available only in the present moment.", author: "Thich Nhat Hanh" },
+    { text: "Empty your mind, be formless, shapeless — like water, or a cat in a box.", author: "Bruce Lee (adapted)" },
+    { text: "When you do things from your soul, you feel a river moving in you, a joy.", author: "Rumi" },
+    { text: "Awareness is the greatest agent for change.", author: "Eckhart Tolle" },
+    { text: "Simplicity, patience, compassion. These three are your greatest treasures.", author: "Lao Tzu" },
+    { text: "Surrender to what is. Let go of what was. Have faith in what will be.", author: "Sonia Ricotti" },
+    { text: "The best meditation is effortless — watch a cat, it knows.", author: "Maxime Lagacé (adapted)" },
+    { text: "To a mind that is still, the whole universe surrenders.", author: "Zhuangzi" },
+    { text: "Don't believe everything you think.", author: "Allan Lokos" },
+    { text: "Mindfulness isn't difficult, we just need to remember to do it.", author: "Sharon Salzberg" },
+    { text: "Be the silent witness of your thoughts — as a cat watches from the windowsill.", author: "Eckhart Tolle (adapted)" },
+    { text: "Acknowledging the good that you already have in your life is the foundation for all abundance.", author: "Eckhart Tolle" },
+    { text: "Knowing others is intelligence; knowing yourself is true wisdom.", author: "Lao Tzu" },
+    { text: "Learn to be calm and you will always be happy.", author: "Paramahansa Yogananda" },
+    { text: "Notice the beauty in small things.", author: "Unknown" },
+    { text: "Just breathe. You're doing fine.", author: "Unknown" },
+    { text: "Our life is shaped by our mind; we become what we think.", author: "Buddha" },
+    { text: "If you want to conquer the anxiety of life, live in the moment, live in the breath.", author: "Amit Ray" },
+    { text: "Let go of your mind and then be mindful. Close your ears and listen — to the purr of the world.", author: "Rumi (adapted)" },
+    { text: "Quiet the mind, and the soul will speak.", author: "Ma Jaya Sati Bhagavati" },
+    { text: "Slow down and everything you are chasing will come around and catch you.", author: "John De Paola" },
+    { text: "Gratitude turns what we have into enough.", author: "Aesop" },
+    { text: "Let yourself be silently drawn by the strange pull of what you really love.", author: "Rumi" },
+    { text: "When I let go of what I am, I become what I might be.", author: "Lao Tzu" },
+    { text: "Nothing ever goes away until it has taught us what we need to know.", author: "Pema Chödrön" },
+    { text: "A single breath, taken with awareness, can change everything.", author: "Unknown" },
+    { text: "The heart is like a garden. It can grow compassion or fear, resentment or love.", author: "Jack Kornfield" },
+    { text: "Forever is composed of nows.", author: "Emily Dickinson" },
+    { text: "Kindness is the language which the deaf can hear and the blind can see.", author: "Mark Twain" },
+    { text: "Sometimes the most important thing in a whole day is the rest we take between two deep breaths.", author: "Etty Hillesum" },
+    { text: "If you correct your mind, the rest of your life will fall into place.", author: "Lao Tzu" },
+    { text: "You must learn to let go. Release the stress. You were never in control anyway.", author: "Steve Maraboli" },
+    { text: "Your calm mind is the ultimate weapon against your challenges.", author: "Bryant McGill" },
+    { text: "The greatest weapon against stress is our ability to choose one thought over another.", author: "William James" },
+    { text: "Joy is the simplest form of gratitude.", author: "Karl Barth" },
+    { text: "Let reality be reality. Let things flow naturally forward in whatever way they like.", author: "Lao Tzu" },
+    { text: "Cats are the ultimate narcissists. You can tell this by all the time they spend on personal grooming.", author: "James Gorman" },
+    { text: "A cat will be your friend, but never your slave.", author: "Théophile Gautier" },
+    { text: "Cats, like Buddhas, appear to meditate on nothing in particular.", author: "Unknown" },
+    { text: "Perhaps one reason we are fascinated by cats is because such a small animal can contain so much independence.", author: "Unknown" },
+    { text: "Cats know how to obtain food without labor, shelter without confinement, and love without penalties.", author: "W.L. George" },
+    { text: "As every cat owner knows, nobody owns a cat.", author: "Ellen Perry Berkeley" },
+    { text: "A kitten is, in the animal world, what a rosebud is in the garden.", author: "Robert Southey" },
+    { text: "The cat does not offer services. The cat offers itself.", author: "William S. Burroughs" },
+    { text: "A cat is not a dog.", author: "Percy Vere" },
+    { text: "Like all pure creatures, cats are practical.", author: "William S. Burroughs" },
+    { text: "There are few things in life more heartwarming than to be welcomed by a cat.", author: "Tay Hohoff" },
+    { text: "A meow massages the heart.", author: "Stuart McMillan" },
+    { text: "Who among us hasn't envied a cat's ability to ignore the cares of daily life?", author: "Karen Brademeyer" },
+    { text: "To a cat, a human is a slave with a can opener.", author: "Unknown" },
+    { text: "Cats can work out mathematically the exact place to sit that will cause most inconvenience.", author: "Pam Brown" },
+    { text: "Every life should have nine cats.", author: "Unknown" },
+    { text: "Dogs have owners, cats have staff.", author: "Unknown" },
+    { text: "A house without a cat is just a building.", author: "Unknown" },
+    { text: "Heaven will not be heaven unless my cats are there to welcome me.", author: "Unknown" },
+    { text: "Cats are God's way of saying 'relax'.", author: "Unknown" },
+    { text: "Be like a cat: rest often, stretch always, purr when possible.", author: "Unknown" }
+  ];
+
+  const reflectionPrompts = [
+    "Where in your body do you feel tight today? Can you soften it, the way a cat softens into sleep?",
+    "What sunbeam have you missed this week by looking elsewhere?",
+    "If you were a cat, where would you curl up right now? What does that place mean?",
+    "What small thing today did you pay attention to, that usually passes by?",
+    "Name something you've been chasing. What if, instead, you let it come to you?",
+    "What do you need to stretch into today — literally, or otherwise?",
+    "A cat doesn't apologize for napping. What are you apologizing for that you don't need to?",
+    "What's one thing you're quietly curious about right now? Follow it a little further.",
+    "Write about a small comfort from today in as much sensory detail as you can.",
+    "What's been hissing at the edges of your thoughts? What does it actually want?",
+    "Where have you been too hard on yourself? Write a softer, cat-like version.",
+    "If rest were not a reward but a birthright, what would today look like?",
+    "What are you carrying in your paws that isn't yours to carry?",
+    "Notice the space between your thoughts. What lives in that quiet?",
+    "What would 'enough' feel like today — not more, not less?"
+  ];
+
+  function dateString() {
+    const d = new Date();
+    const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    const day = d.getDate();
+    const suffix = (day % 10 === 1 && day !== 11) ? 'st' :
+                   (day % 10 === 2 && day !== 12) ? 'nd' :
+                   (day % 10 === 3 && day !== 13) ? 'rd' : 'th';
+    return `the ${day}${suffix} of ${months[d.getMonth()]}, ${d.getFullYear()}`;
+  }
+
+  function dailyIndex(arr) {
+    const d = new Date();
+    const dayOfYear = Math.floor((d - new Date(d.getFullYear(), 0, 0)) / 86400000);
+    return (dayOfYear * 7) % arr.length;
+  }
+
+  let quoteOffset = 0;
+
+  function setQuote() {
+    const idx = (dailyIndex(quotes) + quoteOffset) % quotes.length;
+    const q = quotes[idx];
+    const qEl = document.getElementById('quote-text');
+    const aEl = document.getElementById('quote-author');
+    qEl.style.opacity = 0;
+    aEl.style.opacity = 0;
+    setTimeout(() => {
+      qEl.textContent = q.text;
+      aEl.textContent = q.author;
+      qEl.style.transition = 'opacity 0.8s ease';
+      aEl.style.transition = 'opacity 0.8s ease';
+      qEl.style.opacity = 1;
+      aEl.style.opacity = 1;
+    }, 300);
+  }
+
+  function newQuote() {
+    quoteOffset++;
+    setQuote();
+  }
+
+  function setReflection() {
+    const idx = dailyIndex(reflectionPrompts);
+    document.getElementById('reflection-prompt').textContent = reflectionPrompts[idx];
+  }
+
+  // Mood selection
+  document.querySelectorAll('.mood-option').forEach(opt => {
+    opt.addEventListener('click', () => {
+      document.querySelectorAll('.mood-option').forEach(o => o.classList.remove('selected'));
+      opt.classList.add('selected');
+    });
+  });
+
+  // Auto-grow textareas (except the free-write)
+  document.querySelectorAll('textarea:not(.freewrite)').forEach(ta => {
+    ta.addEventListener('input', () => {
+      ta.style.height = 'auto';
+      ta.style.height = ta.scrollHeight + 'px';
+    });
+  });
+
+  // Initialize
+  document.getElementById('date-line').textContent = dateString();
+  setQuote();
+  setReflection();
+</script>
+</body>
+</html>
