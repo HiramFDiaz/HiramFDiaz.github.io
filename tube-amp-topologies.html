@@ -93,14 +93,59 @@
     margin-bottom: 28px;
   }
 
-  /* Battersea + pig SVG */
+  /* Amp scene */
   .scene {
+    position: relative;
     display: block;
     width: 100%;
     max-width: 760px;
+    margin: 16px auto 28px;
+    aspect-ratio: 4 / 3;
+  }
+  .scene .amp {
+    display: block;
+    width: 100%;
     height: auto;
-    margin: 8px auto 24px;
-    filter: drop-shadow(0 8px 40px rgba(0,0,0,0.5));
+    border-radius: 6px;
+    filter: drop-shadow(0 18px 60px rgba(0,0,0,0.65)) drop-shadow(0 0 40px rgba(255,158,196,0.08));
+    position: relative;
+    z-index: 2;
+  }
+  .scene .amp-glow {
+    position: absolute;
+    inset: -8% -4% -6% -4%;
+    background:
+      radial-gradient(ellipse at 50% 55%, rgba(255,158,196,0.22) 0%, rgba(255,158,196,0.06) 35%, transparent 65%),
+      radial-gradient(ellipse at 50% 80%, rgba(196,106,58,0.18) 0%, transparent 55%);
+    z-index: 1;
+    pointer-events: none;
+    filter: blur(6px);
+  }
+  .scene .overlay-pig {
+    position: absolute;
+    top: -14%;
+    left: 8%;
+    width: 18%;
+    transform: translateX(0);
+    z-index: 3;
+    animation: drift 8s ease-in-out infinite;
+    transform-origin: center;
+    filter: drop-shadow(0 8px 18px rgba(0,0,0,0.5));
+  }
+  .scene .caption {
+    position: absolute;
+    bottom: 8px;
+    right: 12px;
+    z-index: 4;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--pig);
+    background: rgba(10,8,12,0.55);
+    padding: 4px 8px;
+    border: 1px solid rgba(255,158,196,0.25);
+    border-radius: 2px;
   }
 
   /* ---------- SECTION HEADERS ---------- */
@@ -264,6 +309,46 @@
     animation: drift 8s ease-in-out infinite;
     transform-origin: center;
   }
+  .pig.p2 { animation-duration: 10s; animation-delay: -3s; }
+  .pig.p3 { animation-duration: 7s;  animation-delay: -1s; }
+  .pig.p4 { animation-duration: 11s; animation-delay: -5s; }
+  .pig.p5 { animation-duration: 9s;  animation-delay: -2s; }
+
+  /* (sky pigs removed — they were clipping at the edge and looking awful) */
+
+  /* inline pig icons in the table */
+  .pig-icon {
+    display: inline-block;
+    width: 14px;
+    height: 11px;
+    vertical-align: -1px;
+    margin-right: 6px;
+  }
+  .pig-bullet {
+    display: inline-block;
+    width: 16px;
+    height: 13px;
+    vertical-align: -2px;
+    margin-right: 8px;
+  }
+
+  /* pig parade at the bottom */
+  .parade {
+    margin-top: 40px;
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+    align-items: flex-end;
+    opacity: 0.7;
+    flex-wrap: wrap;
+  }
+  .parade svg {
+    width: 42px;
+    height: 34px;
+  }
+  .parade svg:nth-child(odd)  { transform: translateY(-3px); }
+  .parade svg:nth-child(3n)   { transform: translateY(2px) rotate(-4deg); }
+  .parade svg:nth-child(4n+1) { transform: translateY(-5px) rotate(3deg); }
 
   /* smoke drift */
   @keyframes smokeDrift {
@@ -290,111 +375,49 @@
     <h1>Tube Amp Topologies</h1>
     <div class="subtitle">Single-ended, push-pull triode, push-pull ultralinear — and the pigs that sing through them.</div>
 
-    <!-- Battersea Power Station + floating pig -->
-    <svg class="scene" viewBox="0 0 800 340" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <!-- sky gradient -->
-      <defs>
-        <linearGradient id="sky" x1="0" x2="0" y1="0" y2="1">
-          <stop offset="0%"  stop-color="#3a2f3a"/>
-          <stop offset="55%" stop-color="#221a22"/>
-          <stop offset="100%" stop-color="#0f0c10"/>
-        </linearGradient>
-        <linearGradient id="stack" x1="0" x2="0" y1="0" y2="1">
-          <stop offset="0%"  stop-color="#58545a"/>
-          <stop offset="100%" stop-color="#2a272b"/>
-        </linearGradient>
-        <linearGradient id="bldg" x1="0" x2="0" y1="0" y2="1">
-          <stop offset="0%"  stop-color="#4a3e3a"/>
-          <stop offset="100%" stop-color="#1e1815"/>
-        </linearGradient>
-        <radialGradient id="pigGrad" cx="50%" cy="40%" r="60%">
-          <stop offset="0%"  stop-color="#ffc4dc"/>
-          <stop offset="70%" stop-color="#ff9ec4"/>
-          <stop offset="100%" stop-color="#d06a93"/>
-        </radialGradient>
-        <filter id="blur1"><feGaussianBlur stdDeviation="3"/></filter>
-      </defs>
-
-      <rect x="0" y="0" width="800" height="340" fill="url(#sky)"/>
-
-      <!-- distant haze -->
-      <rect x="0" y="230" width="800" height="110" fill="#1a1318" opacity="0.6"/>
-
-      <!-- smoke plumes (behind stacks) -->
-      <g opacity="0.55">
-        <ellipse class="smoke"    cx="215" cy="70"  rx="40" ry="18" fill="#6a5a60" filter="url(#blur1)"/>
-        <ellipse class="smoke s2" cx="355" cy="55"  rx="55" ry="22" fill="#7a6a70" filter="url(#blur1)"/>
-        <ellipse class="smoke s3" cx="475" cy="50"  rx="60" ry="25" fill="#8a7a80" filter="url(#blur1)"/>
-        <ellipse class="smoke s4" cx="615" cy="65"  rx="45" ry="20" fill="#6a5a60" filter="url(#blur1)"/>
-      </g>
-
-      <!-- main building -->
-      <rect x="180" y="180" width="450" height="120" fill="url(#bldg)"/>
-      <!-- brick texture (stripes) -->
-      <g opacity="0.18" fill="#000">
-        <rect x="180" y="200" width="450" height="2"/>
-        <rect x="180" y="220" width="450" height="2"/>
-        <rect x="180" y="240" width="450" height="2"/>
-        <rect x="180" y="260" width="450" height="2"/>
-        <rect x="180" y="280" width="450" height="2"/>
-      </g>
-      <!-- windows -->
-      <g fill="#c46a3a" opacity="0.55">
-        <rect x="210" y="210" width="10" height="14"/>
-        <rect x="240" y="210" width="10" height="14"/>
-        <rect x="270" y="210" width="10" height="14"/>
-        <rect x="560" y="210" width="10" height="14"/>
-        <rect x="590" y="210" width="10" height="14"/>
-        <rect x="210" y="250" width="10" height="14"/>
-        <rect x="240" y="250" width="10" height="14"/>
-        <rect x="560" y="250" width="10" height="14"/>
-        <rect x="590" y="250" width="10" height="14"/>
-      </g>
-
-      <!-- four chimneys -->
-      <g>
-        <rect x="205" y="90"  width="22" height="130" fill="url(#stack)"/>
-        <rect x="345" y="75"  width="22" height="145" fill="url(#stack)"/>
-        <rect x="465" y="75"  width="22" height="145" fill="url(#stack)"/>
-        <rect x="605" y="90"  width="22" height="130" fill="url(#stack)"/>
-        <!-- caps -->
-        <rect x="201" y="86"  width="30" height="6" fill="#6a656c"/>
-        <rect x="341" y="71"  width="30" height="6" fill="#6a656c"/>
-        <rect x="461" y="71"  width="30" height="6" fill="#6a656c"/>
-        <rect x="601" y="86"  width="30" height="6" fill="#6a656c"/>
-      </g>
-
-      <!-- ground -->
-      <rect x="0" y="300" width="800" height="40" fill="#0a080a"/>
-      <rect x="0" y="298" width="800" height="3" fill="#2a2025" opacity="0.7"/>
-
-      <!-- flying pig, tethered -->
-      <g class="pig" transform="translate(400,130)">
-        <!-- tether line -->
-        <line x1="0" y1="18" x2="66" y2="100" stroke="#2a2025" stroke-width="1.2" opacity="0.6"/>
-        <line x1="-6" y1="18" x2="-80" y2="95" stroke="#2a2025" stroke-width="1.2" opacity="0.6"/>
+    <!-- Korneff 45 amp + floating pig overlay -->
+    <div class="scene">
+      <div class="amp-glow"></div>
+      <img class="amp" src="korneff-45.jpg" alt="Korneff Audio stereo 45 SET amplifier" />
+      <div class="caption">Two 45 Amps &middot; One Friend</div>
+      <svg class="overlay-pig" viewBox="-110 -50 200 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs>
+          <radialGradient id="pigGradOV" cx="50%" cy="40%" r="60%">
+            <stop offset="0%"  stop-color="#ffc4dc"/>
+            <stop offset="70%" stop-color="#ff9ec4"/>
+            <stop offset="100%" stop-color="#d06a93"/>
+          </radialGradient>
+        </defs>
+        <!-- tether ropes dangling down off-frame -->
+        <line x1="-20" y1="30" x2="-35" y2="55" stroke="#2a2025" stroke-width="1.4" opacity="0.75"/>
+        <line x1="20"  y1="30" x2="35"  y2="55" stroke="#2a2025" stroke-width="1.4" opacity="0.75"/>
+        <!-- back legs -->
+        <rect x="22" y="26" width="10" height="18" rx="3" fill="#b0527a"/>
+        <rect x="-6" y="26" width="10" height="18" rx="3" fill="#b0527a"/>
         <!-- body -->
-        <ellipse cx="0" cy="0" rx="48" ry="28" fill="url(#pigGrad)"/>
+        <ellipse cx="0" cy="0" rx="70" ry="40" fill="url(#pigGradOV)" stroke="#9a3e66" stroke-width="1.5"/>
+        <ellipse cx="-5" cy="12" rx="45" ry="12" fill="#ffc4dc" opacity="0.45"/>
+        <ellipse cx="-8" cy="-22" rx="32" ry="7" fill="#ffe0ec" opacity="0.55"/>
+        <!-- front legs -->
+        <rect x="-38" y="28" width="11" height="18" rx="3" fill="#d06a93"/>
+        <rect x="-56" y="28" width="11" height="18" rx="3" fill="#d06a93"/>
         <!-- head -->
-        <ellipse cx="-40" cy="-4" rx="16" ry="14" fill="url(#pigGrad)"/>
-        <!-- snout -->
-        <ellipse cx="-54" cy="-2" rx="6" ry="5" fill="#e76a9b"/>
-        <circle cx="-55" cy="-3" r="1" fill="#3a1a2a"/>
-        <circle cx="-53" cy="-1" r="1" fill="#3a1a2a"/>
-        <!-- eye -->
-        <circle cx="-44" cy="-7" r="1.6" fill="#2a1220"/>
-        <!-- ear -->
-        <path d="M -38 -16 L -32 -22 L -28 -14 Z" fill="#d06a93"/>
-        <!-- legs (dangling) -->
-        <rect x="-14" y="22" width="5" height="12" rx="2" fill="#d06a93"/>
-        <rect x="0"   y="24" width="5" height="12" rx="2" fill="#d06a93"/>
-        <rect x="14"  y="22" width="5" height="12" rx="2" fill="#d06a93"/>
-        <!-- tail -->
-        <path d="M 46 -2 q 8 -4 6 6 q -2 6 -8 2" fill="none" stroke="#d06a93" stroke-width="2.5" stroke-linecap="round"/>
-        <!-- highlight -->
-        <ellipse cx="-8" cy="-10" rx="18" ry="6" fill="#ffd4e4" opacity="0.45"/>
-      </g>
-    </svg>
+        <ellipse cx="-62" cy="-6" rx="26" ry="22" fill="url(#pigGradOV)" stroke="#9a3e66" stroke-width="1.5"/>
+        <path d="M -78 -24 L -70 -34 L -62 -22 Z" fill="#d06a93" stroke="#9a3e66" stroke-width="1"/>
+        <path d="M -54 -24 L -48 -32 L -44 -20 Z" fill="#e080a8" stroke="#9a3e66" stroke-width="1"/>
+        <ellipse cx="-85" cy="-2" rx="10" ry="8" fill="#e76a9b" stroke="#9a3e66" stroke-width="1"/>
+        <ellipse cx="-88" cy="-3" rx="1.8" ry="2.2" fill="#2a1220"/>
+        <ellipse cx="-83" cy="-1" rx="1.8" ry="2.2" fill="#2a1220"/>
+        <circle cx="-68" cy="-12" r="3" fill="#2a1220"/>
+        <circle cx="-67" cy="-13" r="1" fill="#fff"/>
+        <path d="M -90 6 q 4 3 8 0" fill="none" stroke="#9a3e66" stroke-width="1.2" stroke-linecap="round"/>
+        <path d="M 68 -2 q 10 -6 8 4 q -2 8 -6 6 q -4 -2 2 -8" fill="none" stroke="#d06a93" stroke-width="3" stroke-linecap="round"/>
+        <rect x="22" y="41" width="10" height="3" fill="#8a3a5a"/>
+        <rect x="-6" y="41" width="10" height="3" fill="#8a3a5a"/>
+        <rect x="-38" y="43" width="11" height="3" fill="#8a3a5a"/>
+        <rect x="-56" y="43" width="11" height="3" fill="#8a3a5a"/>
+      </svg>
+    </div>
   </header>
 
   <p class="lede">
