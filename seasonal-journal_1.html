@@ -1,0 +1,1565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Turning Year · A Seasonal Journal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f0f4e6;
+    --bg-deep: #dde5c8;
+    --ink: #1f2b1a;
+    --ink-soft: #3e5234;
+    --ink-faint: #7d8f70;
+    --accent: #d4708f;
+    --accent-soft: #f0a8be;
+    --accent-deep: #a84d6a;
+    --card: #fafdf3;
+    --glow-a: rgba(240, 168, 190, 0.28);
+    --glow-b: rgba(175, 200, 140, 0.22);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Fraunces', serif;
+    font-weight: 300;
+    line-height: 1.6;
+    min-height: 100vh;
+    overflow-x: hidden;
+    transition: background 0.8s ease, color 0.8s ease;
+  }
+
+  body {
+    background:
+      radial-gradient(ellipse at 15% 10%, var(--glow-a) 0%, transparent 45%),
+      radial-gradient(ellipse at 85% 85%, var(--glow-b) 0%, transparent 50%),
+      var(--bg);
+    background-attachment: fixed;
+    padding: 4vh 5vw 8vh;
+    position: relative;
+    transition: background 0.8s ease;
+  }
+
+  /* Season switcher */
+  .season-switcher {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 10;
+    background: var(--card);
+    border: 1.5px solid var(--bg-deep);
+    border-radius: 30px;
+    padding: 0.5rem 0.8rem;
+    box-shadow: 0 4px 14px rgba(31, 43, 26, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .season-switcher label {
+    font-family: 'Caveat', cursive;
+    font-size: 1.05rem;
+    color: var(--ink-soft);
+  }
+
+  .season-switcher select {
+    font-family: 'Caveat', cursive;
+    font-size: 1.1rem;
+    color: var(--accent-deep);
+    background: transparent;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 0.2rem 0.5rem;
+    font-weight: 600;
+  }
+
+  /* Corner mascot */
+  .corner-mascot {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 80px;
+    height: 80px;
+    z-index: 3;
+    opacity: 0.9;
+    transition: transform 0.5s ease;
+  }
+  .corner-mascot:hover { transform: rotate(-5deg) scale(1.1); }
+
+  /* Seasonal overlay effects */
+  .season-overlay {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+  }
+
+  /* Spring: floating petals */
+  body.season-spring .petal {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    background: radial-gradient(circle, #f8c8d4 30%, #e89ab0 100%);
+    border-radius: 50% 10% 50% 10%;
+    opacity: 0.7;
+    animation: petal-fall linear infinite;
+  }
+
+  @keyframes petal-fall {
+    0% { transform: translateY(-10vh) rotate(0deg); opacity: 0; }
+    10% { opacity: 0.7; }
+    90% { opacity: 0.7; }
+    100% { transform: translateY(110vh) rotate(720deg) translateX(50px); opacity: 0; }
+  }
+
+  /* Summer: sun rays and fireflies */
+  body.season-summer .firefly {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: #fff5a3;
+    border-radius: 50%;
+    box-shadow: 0 0 8px 2px rgba(255, 245, 163, 0.8);
+    animation: firefly-drift ease-in-out infinite;
+  }
+
+  @keyframes firefly-drift {
+    0%, 100% { transform: translate(0, 0); opacity: 0.3; }
+    25% { transform: translate(30px, -20px); opacity: 1; }
+    50% { transform: translate(60px, 10px); opacity: 0.6; }
+    75% { transform: translate(20px, 30px); opacity: 1; }
+  }
+
+  /* Fall: falling leaves */
+  body.season-fall .leaf {
+    position: absolute;
+    font-size: 20px;
+    opacity: 0.8;
+    animation: leaf-fall linear infinite;
+  }
+
+  @keyframes leaf-fall {
+    0% { transform: translateY(-10vh) rotate(0deg) translateX(0); opacity: 0; }
+    10% { opacity: 0.8; }
+    50% { transform: translateY(50vh) rotate(360deg) translateX(100px); }
+    90% { opacity: 0.8; }
+    100% { transform: translateY(110vh) rotate(720deg) translateX(-50px); opacity: 0; }
+  }
+
+  /* Winter: snowflakes */
+  body.season-winter .snow {
+    position: absolute;
+    color: #fff;
+    opacity: 0.8;
+    animation: snow-fall linear infinite;
+    text-shadow: 0 0 4px rgba(200, 220, 240, 0.8);
+  }
+
+  @keyframes snow-fall {
+    0% { transform: translateY(-10vh) translateX(0); opacity: 0; }
+    10% { opacity: 0.8; }
+    90% { opacity: 0.8; }
+    100% { transform: translateY(110vh) translateX(40px); opacity: 0; }
+  }
+
+  .container {
+    max-width: 780px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+    padding-top: 40px;
+  }
+
+  /* Masthead */
+  .masthead {
+    text-align: center;
+    padding: 3vh 0 5vh;
+    animation: fadeUp 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  .eyebrow {
+    font-family: 'Caveat', cursive;
+    font-size: 1.3rem;
+    color: var(--accent-deep);
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    transform: rotate(-1.5deg);
+    display: inline-block;
+  }
+
+  h1 {
+    font-family: 'Fraunces', serif;
+    font-weight: 300;
+    font-size: clamp(3rem, 8vw, 5.2rem);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    font-style: italic;
+    color: var(--ink);
+    transition: color 0.8s ease;
+  }
+
+  h1 .mark {
+    color: var(--accent-deep);
+    font-style: normal;
+    display: inline-block;
+  }
+
+  .date-line {
+    font-family: 'Caveat', cursive;
+    font-size: 1.4rem;
+    margin-top: 1.5rem;
+    color: var(--ink-soft);
+    font-weight: 400;
+    transform: rotate(-0.5deg);
+    display: inline-block;
+  }
+
+  .header-svg {
+    display: block;
+    margin: 0 auto 1rem;
+    width: 100px;
+    height: 70px;
+  }
+
+  /* Quote section */
+  .quote-section {
+    padding: 5vh 0 4vh;
+    text-align: center;
+    animation: fadeUp 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) 0.2s backwards;
+  }
+
+  .quote-card {
+    background: var(--card);
+    border: 1px solid var(--bg-deep);
+    border-radius: 8px;
+    padding: 3.5rem 2.5rem 2.5rem;
+    position: relative;
+    box-shadow: 0 8px 24px rgba(31, 43, 26, 0.08), 0 2px 4px rgba(31, 43, 26, 0.04);
+    transition: background 0.8s ease, border-color 0.8s ease;
+  }
+
+  .quote-card::before {
+    content: attr(data-mark);
+    position: absolute;
+    top: -18px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--bg);
+    padding: 0 0.8rem;
+    font-size: 1.6rem;
+    transition: background 0.8s ease;
+  }
+
+  blockquote {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: clamp(1.4rem, 3vw, 1.9rem);
+    line-height: 1.4;
+    font-weight: 300;
+    color: var(--ink);
+    max-width: 560px;
+    margin: 0 auto;
+  }
+
+  .attribution {
+    margin-top: 1.8rem;
+    font-family: 'Caveat', cursive;
+    font-size: 1.2rem;
+    color: var(--accent-deep);
+    font-weight: 500;
+  }
+
+  .attribution::before { content: '— '; }
+
+  /* Divider */
+  .divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 4vh 0 3vh;
+    gap: 1rem;
+    animation: fadeUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.4s backwards;
+  }
+
+  .divider .line {
+    flex: 1;
+    max-width: 100px;
+    height: 1px;
+    background: var(--ink-faint);
+    opacity: 0.5;
+  }
+
+  .divider .ornament { font-size: 1.4rem; }
+
+  /* Sections */
+  .section {
+    padding: 2.5vh 0;
+    animation: fadeUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.5s backwards;
+  }
+
+  .section-label {
+    font-family: 'Caveat', cursive;
+    font-size: 1.5rem;
+    color: var(--ink-soft);
+    margin-bottom: 1rem;
+    font-weight: 500;
+    display: flex;
+    align-items: baseline;
+    gap: 0.8rem;
+  }
+
+  .section-label .mark-num {
+    color: var(--accent-deep);
+    font-size: 1.2rem;
+  }
+
+  /* Mood grid */
+  .mood-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 0.6rem;
+    margin-top: 1rem;
+  }
+
+  .mood-option {
+    background: var(--card);
+    border: 1.5px solid var(--bg-deep);
+    border-radius: 14px;
+    padding: 1.2rem 0.4rem 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    text-align: center;
+  }
+
+  .mood-option:hover {
+    border-color: var(--accent-deep);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 14px rgba(31, 43, 26, 0.15);
+  }
+
+  .mood-option.selected {
+    background: var(--accent-deep);
+    border-color: var(--accent-deep);
+    transform: translateY(-3px);
+  }
+
+  .mood-option.selected .mood-label { color: var(--card); }
+
+  .mood-glyph { font-size: 1.8rem; display: block; margin-bottom: 0.3rem; }
+
+  .mood-label {
+    font-family: 'Caveat', cursive;
+    font-size: 0.95rem;
+    color: var(--ink-soft);
+    font-weight: 500;
+  }
+
+  /* Prompt blocks */
+  .prompt-text {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 1.2rem;
+    color: var(--ink);
+    margin-bottom: 0.8rem;
+    line-height: 1.4;
+  }
+
+  textarea {
+    width: 100%;
+    background: var(--card);
+    border: 1.5px solid var(--bg-deep);
+    border-radius: 10px;
+    padding: 1rem 1.2rem;
+    font-family: 'Caveat', cursive;
+    font-size: 1.3rem;
+    color: var(--ink);
+    resize: none;
+    outline: none;
+    transition: all 0.3s ease;
+    min-height: 3rem;
+    line-height: 1.5;
+  }
+
+  textarea:focus {
+    border-color: var(--accent-deep);
+    box-shadow: 0 0 0 3px var(--glow-a);
+  }
+
+  textarea::placeholder {
+    color: var(--ink-faint);
+    font-style: italic;
+    opacity: 0.7;
+  }
+
+  .freewrite {
+    min-height: 220px;
+    font-size: 1.25rem;
+    line-height: 1.9;
+    background-image:
+      repeating-linear-gradient(
+        transparent,
+        transparent 1.85rem,
+        var(--glow-a) 1.85rem,
+        var(--glow-a) calc(1.85rem + 1px)
+      );
+    background-position: 0 2.6rem;
+  }
+
+  /* Breathing section */
+  .breath-section {
+    margin: 5vh 0;
+    text-align: center;
+    padding: 4vh 2rem;
+    background: var(--card);
+    border-radius: 20px;
+    border: 1.5px solid var(--bg-deep);
+    position: relative;
+    overflow: hidden;
+    animation: fadeUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.6s backwards;
+    transition: background 0.8s ease, border-color 0.8s ease;
+  }
+
+  .breath-title {
+    font-family: 'Caveat', cursive;
+    font-size: 1.7rem;
+    margin-bottom: 2rem;
+    color: var(--ink-soft);
+    font-weight: 500;
+  }
+
+  .breath-mascot {
+    width: 220px;
+    height: 160px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  .breath-mascot svg { width: 100%; height: 100%; }
+
+  .breath-mascot .body {
+    transform-origin: center center;
+    animation: breath 5s ease-in-out infinite;
+  }
+
+  @keyframes breath {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.08); }
+  }
+
+  .breath-label {
+    font-family: 'Caveat', cursive;
+    font-size: 1.3rem;
+    margin-top: 1rem;
+    color: var(--accent-deep);
+  }
+
+  .breath-waves {
+    position: absolute;
+    top: 50%;
+    right: 12%;
+    font-family: 'Caveat', cursive;
+    color: var(--accent-soft);
+    font-size: 1.3rem;
+    animation: wave-float 2.5s ease-in-out infinite;
+    opacity: 0;
+  }
+
+  @keyframes wave-float {
+    0% { opacity: 0; transform: translateX(0) translateY(0); }
+    50% { opacity: 0.7; transform: translateX(15px) translateY(-8px); }
+    100% { opacity: 0; transform: translateX(30px) translateY(-16px); }
+  }
+
+  /* Signup */
+  .signup-section {
+    margin: 5vh 0 2vh;
+    padding: 3.5vh 2rem;
+    background: var(--card);
+    border: 1.5px solid var(--bg-deep);
+    border-radius: 16px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.8s ease, border-color 0.8s ease;
+    animation: fadeUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.6s backwards;
+  }
+
+  .signup-title {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 1.6rem;
+    color: var(--ink);
+    margin-bottom: 0.6rem;
+  }
+
+  .signup-subtitle {
+    font-family: 'Caveat', cursive;
+    font-size: 1.2rem;
+    color: var(--ink-soft);
+    margin-bottom: 1.6rem;
+    line-height: 1.4;
+  }
+
+  .signup-form {
+    display: flex;
+    gap: 0.6rem;
+    max-width: 440px;
+    margin: 0 auto;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .signup-form input {
+    flex: 1;
+    min-width: 200px;
+    background: var(--bg);
+    border: 1.5px solid var(--bg-deep);
+    border-radius: 30px;
+    padding: 0.85rem 1.3rem;
+    font-family: 'Caveat', cursive;
+    font-size: 1.2rem;
+    color: var(--ink);
+    outline: none;
+    transition: all 0.3s ease;
+  }
+
+  .signup-form input:focus {
+    border-color: var(--accent-deep);
+    box-shadow: 0 0 0 3px var(--glow-a);
+  }
+
+  .signup-form input::placeholder {
+    color: var(--ink-faint);
+    font-style: italic;
+    opacity: 0.7;
+  }
+
+  .signup-form button {
+    background: var(--accent-deep);
+    border: none;
+    padding: 0.85rem 1.8rem;
+    font-family: 'Caveat', cursive;
+    font-size: 1.15rem;
+    color: var(--card);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    border-radius: 30px;
+    white-space: nowrap;
+  }
+
+  .signup-form button:hover {
+    background: var(--ink);
+    transform: translateY(-2px);
+  }
+
+  .signup-note {
+    font-family: 'Caveat', cursive;
+    font-size: 0.95rem;
+    color: var(--ink-faint);
+    margin-top: 1rem;
+  }
+
+  .signup-thanks {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 1.3rem;
+    color: var(--accent-deep);
+    padding: 1rem;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    display: none;
+  }
+
+  .signup-thanks.show {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .signup-error {
+    font-family: 'Caveat', cursive;
+    font-size: 1rem;
+    color: #b84545;
+    margin-top: 0.6rem;
+    min-height: 1.2rem;
+  }
+
+  /* Close */
+  .close {
+    text-align: center;
+    margin-top: 5vh;
+    padding-top: 4vh;
+    animation: fadeUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.7s backwards;
+  }
+
+  .close .divider { margin-bottom: 2.5rem; }
+
+  .new-quote-btn {
+    background: var(--accent-deep);
+    border: none;
+    padding: 1rem 2.5rem;
+    font-family: 'Caveat', cursive;
+    font-size: 1.2rem;
+    color: var(--card);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    border-radius: 30px;
+    box-shadow: 0 4px 12px rgba(31, 43, 26, 0.25);
+  }
+
+  .new-quote-btn:hover {
+    background: var(--ink);
+    transform: translateY(-2px);
+  }
+
+  .colophon {
+    margin-top: 2.5rem;
+    font-family: 'Caveat', cursive;
+    font-size: 1.1rem;
+    color: var(--ink-faint);
+    line-height: 1.5;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 600px) {
+    .mood-grid { grid-template-columns: repeat(3, 1fr); }
+    body { padding: 3vh 4vw 6vh; }
+    .quote-card { padding: 3rem 1.5rem 2rem; }
+    .corner-mascot { width: 55px; height: 55px; top: 10px; right: 10px; }
+    .season-switcher { top: 10px; left: 10px; padding: 0.4rem 0.6rem; }
+    .season-switcher label { font-size: 0.95rem; }
+    .season-switcher select { font-size: 1rem; }
+    .container { padding-top: 60px; }
+  }
+</style>
+</head>
+<body class="season-spring">
+
+<!-- Season switcher -->
+<div class="season-switcher">
+  <label for="season-select">season:</label>
+  <select id="season-select">
+    <option value="spring">🌸 spring</option>
+    <option value="summer">🌞 summer</option>
+    <option value="fall">🍂 fall</option>
+    <option value="winter">❄️ winter</option>
+  </select>
+</div>
+
+<!-- Seasonal particle overlay -->
+<div class="season-overlay" id="season-overlay"></div>
+
+<!-- Corner mascot -->
+<div class="corner-mascot" id="corner-mascot"></div>
+
+<div class="container">
+
+  <header class="masthead">
+    <div class="header-svg" id="header-svg"></div>
+    <div class="eyebrow" id="eyebrow"></div>
+    <h1 id="title"></h1>
+    <div class="date-line" id="date-line"></div>
+  </header>
+
+  <section class="quote-section">
+    <div class="quote-card" id="quote-card" data-mark="🌸">
+      <blockquote id="quote-text"></blockquote>
+      <div class="attribution" id="quote-author"></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-label"><span class="mark-num"></span><span id="mood-heading"></span></div>
+    <div class="mood-grid" id="mood-grid"></div>
+  </section>
+
+  <div class="divider">
+    <div class="line"></div>
+    <span class="ornament" id="div-mark-1"></span>
+    <div class="line"></div>
+  </div>
+
+  <section class="section">
+    <div class="section-label"><span class="mark-num"></span><span id="gratitude-heading"></span></div>
+    <div class="prompt-text" id="gratitude-prompt"></div>
+    <textarea id="gratitude-input" rows="3"></textarea>
+  </section>
+
+  <section class="section">
+    <div class="section-label"><span class="mark-num"></span><span id="intention-heading"></span></div>
+    <div class="prompt-text" id="intention-prompt"></div>
+    <textarea id="intention-input" rows="2"></textarea>
+  </section>
+
+  <section class="breath-section">
+    <div class="breath-title" id="breath-title"></div>
+    <div class="breath-mascot" id="breath-mascot"></div>
+    <div class="breath-label" id="breath-label"></div>
+  </section>
+
+  <section class="section">
+    <div class="section-label"><span class="mark-num"></span><span id="reflect-heading"></span></div>
+    <div class="prompt-text" id="reflection-prompt"></div>
+    <textarea class="freewrite" id="reflection-input" rows="8"></textarea>
+  </section>
+
+  <section class="section">
+    <div class="section-label"><span class="mark-num"></span><span id="evening-heading"></span></div>
+    <div class="prompt-text" id="evening-prompt"></div>
+    <textarea id="evening-input" rows="2"></textarea>
+  </section>
+
+  <!-- Mailing list signup -->
+  <section class="signup-section">
+    <div class="signup-title" id="signup-title"></div>
+    <div class="signup-subtitle" id="signup-subtitle"></div>
+    <div class="signup-form" id="signup-form-wrap">
+      <input type="email" id="signup-email" placeholder="your email, soft and simple..." autocomplete="email">
+      <button id="signup-btn" onclick="handleSignup()">subscribe</button>
+    </div>
+    <div class="signup-error" id="signup-error"></div>
+    <div class="signup-thanks" id="signup-thanks"></div>
+    <div class="signup-note" id="signup-note"></div>
+  </section>
+
+  <div class="close">
+    <div class="divider">
+      <div class="line"></div>
+      <span class="ornament" id="div-mark-2"></span>
+      <div class="line"></div>
+    </div>
+    <button class="new-quote-btn" id="new-quote-btn" onclick="newQuote()"></button>
+    <div class="colophon" id="colophon"></div>
+  </div>
+
+</div>
+
+<script>
+/* ============================================================
+   MAILING LIST CONFIG
+   ============================================================
+   Change this to the address you want subscribers to email.
+   When the user clicks "subscribe", their default email app
+   opens with a pre-filled message to this address.
+============================================================ */
+const SIGNUP_EMAIL = 'you@example.com';
+
+/* ============================================================
+   SEASONS
+   ============================================================ */
+const SEASONS = {
+  spring: {
+    palette: {
+      bg: '#f0f4e6', bgDeep: '#dde5c8', ink: '#1f2b1a', inkSoft: '#3e5234',
+      inkFaint: '#7d8f70', accent: '#d4708f', accentSoft: '#f0a8be',
+      accentDeep: '#a84d6a', card: '#fafdf3',
+      glowA: 'rgba(240, 168, 190, 0.28)', glowB: 'rgba(175, 200, 140, 0.22)'
+    },
+    mark: '🌸',
+    markLarge: '🌸',
+    divMark: '❀',
+    divMarkEnd: '❀ 🌸 ❀',
+    eyebrow: 'Vol. I · a journal for waking hearts',
+    titleLine1: 'Tender Green,',
+    titleLine2: 'Small Blossoms',
+    moodHeading: 'how the season blooms in you today',
+    gratitudeHeading: 'three small blossoms',
+    gratitudePrompt: 'Little things budding today worth noticing—',
+    gratitudePlaceholder: 'a bird at the window, warm rain, a seed taking hold...',
+    intentionHeading: "today's fresh intention",
+    intentionPrompt: "What I'm planting in myself today—",
+    intentionPlaceholder: 'one word, one wish, one thing to nurture...',
+    breathTitle: '~ a pause to bloom ~',
+    breathLabel: 'breathe in ~ open softly',
+    reflectHeading: 'reflect and unfurl',
+    reflectPlaceholder: 'write freely, like petals opening...',
+    eveningHeading: 'evening in the garden',
+    eveningPrompt: "One thing I'm letting go of as the day closes—",
+    eveningPlaceholder: 'an old leaf, a worry, a weight from winter...',
+    buttonText: 'pluck another bloom of wisdom',
+    colophon: 'written in blossom ink on leaf-green paper<br><em>be like the spring — patient, green, quietly becoming</em>',
+    signupTitle: 'a letter with the morning light',
+    signupSubtitle: 'gentle reflections, arriving like the first warm breeze — once a week, in spring colors',
+    signupNote: '(opens your email app — no data saved here)',
+    signupThanks: 'thank you ~ your inbox will bloom soon 🌸',
+    breathWave1: '~ bloom ~',
+    breathWave2: '~ open ~',
+    moods: [
+      {glyph:'🌱', label:'sprouting'}, {glyph:'🌸', label:'blooming'},
+      {glyph:'🐝', label:'buzzy'}, {glyph:'🌦️', label:'showery'},
+      {glyph:'🥀', label:'wilting'}, {glyph:'🌿', label:'tender'}
+    ],
+    quotes: [
+      { text: "Where flowers bloom, so does hope.", author: "Lady Bird Johnson" },
+      { text: "Spring is the time of plans and projects.", author: "Leo Tolstoy" },
+      { text: "No matter how long the winter, spring is sure to follow.", author: "Proverb" },
+      { text: "The earth laughs in flowers.", author: "Ralph Waldo Emerson" },
+      { text: "Spring is nature's way of saying, 'Let's party!'", author: "Robin Williams" },
+      { text: "A flower blossoms for its own joy.", author: "Oscar Wilde" },
+      { text: "Adopt the pace of nature: her secret is patience.", author: "Ralph Waldo Emerson" },
+      { text: "An optimist is the human personification of spring.", author: "Susan J. Bissonette" },
+      { text: "To plant a garden is to believe in tomorrow.", author: "Audrey Hepburn" },
+      { text: "In the spring, I have counted 136 different kinds of weather inside of 24 hours.", author: "Mark Twain" },
+      { text: "The day the Lord created hope was probably the same day he created spring.", author: "Bernard Williams" },
+      { text: "Spring adds new life and new beauty to all that is.", author: "Jessica Harrelson" },
+      { text: "The present moment is the only moment available to us.", author: "Thich Nhat Hanh" },
+      { text: "Every moment is a fresh beginning.", author: "T.S. Eliot" },
+      { text: "Gratitude turns what we have into enough.", author: "Aesop" },
+      { text: "Be here now.", author: "Ram Dass" },
+      { text: "Wherever you are, be there totally.", author: "Eckhart Tolle" },
+      { text: "The quieter you become, the more you can hear.", author: "Ram Dass" },
+      { text: "You are the sky. Everything else is just the weather.", author: "Pema Chödrön" },
+      { text: "Joy is the simplest form of gratitude.", author: "Karl Barth" }
+    ],
+    reflections: [
+      "What part of you is just beginning to wake up? How can you tend it gently?",
+      "What old thing are you ready to let compost into something new?",
+      "Where have you been impatient with your own slow unfolding?",
+      "Name one small bud of hope you're carrying today. What does it need?",
+      "If today were a fresh garden bed, what would you plant?",
+      "What did winter teach you that spring is asking you to use?",
+      "Where do you feel the first green of something returning?"
+    ]
+  },
+
+  summer: {
+    palette: {
+      bg: '#fff4d4', bgDeep: '#f5e2a8', ink: '#2a1f0a', inkSoft: '#5a4420',
+      inkFaint: '#a08d5a', accent: '#e8a23a', accentSoft: '#f5c968',
+      accentDeep: '#c27a1a', card: '#fffbe8',
+      glowA: 'rgba(245, 201, 104, 0.3)', glowB: 'rgba(232, 162, 58, 0.2)'
+    },
+    mark: '🌞',
+    markLarge: '🌞',
+    divMark: '✺',
+    divMarkEnd: '✺ 🌞 ✺',
+    eyebrow: 'Vol. I · a journal for long days',
+    titleLine1: 'Golden Hour,',
+    titleLine2: 'Wide Open Sky',
+    moodHeading: 'how the heat sits in you today',
+    gratitudeHeading: 'three slices of sunlight',
+    gratitudePrompt: 'Small warmths worth savoring today—',
+    gratitudePlaceholder: 'cold water, bare feet in grass, an evening breeze...',
+    intentionHeading: "today's sunlit intention",
+    intentionPrompt: "What I'm opening toward today—",
+    intentionPlaceholder: 'one word, one wish, one warm thing...',
+    breathTitle: '~ a pause in the shade ~',
+    breathLabel: 'breathe in ~ sigh out warm',
+    reflectHeading: 'linger and reflect',
+    reflectPlaceholder: 'write freely, like an afternoon that stretches on...',
+    eveningHeading: 'twilight on the porch',
+    eveningPrompt: "One thing I'm releasing as the day cools—",
+    eveningPlaceholder: 'a heat, a word, a small ember...',
+    buttonText: 'gather another ray of wisdom',
+    colophon: 'written in honey ink on sun-warmed paper<br><em>be like the summer — generous, slow, endlessly bright</em>',
+    signupTitle: 'a letter with the long afternoon',
+    signupSubtitle: 'slow thoughts and sunlit reflections — once a week, like a porch visit',
+    signupNote: '(opens your email app — no data saved here)',
+    signupThanks: 'thank you ~ see you in the golden hour 🌞',
+    breathWave1: '~ warm ~',
+    breathWave2: '~ slow ~',
+    moods: [
+      {glyph:'🌞', label:'radiant'}, {glyph:'🍉', label:'juicy'},
+      {glyph:'🌊', label:'cool'}, {glyph:'🏖️', label:'easy'},
+      {glyph:'🥵', label:'wilted'}, {glyph:'🌅', label:'golden'}
+    ],
+    quotes: [
+      { text: "In the summertime, when the weather is fine, you can stretch right up and touch the sky.", author: "Mungo Jerry" },
+      { text: "Summer afternoon—summer afternoon; to me those have always been the two most beautiful words in the English language.", author: "Henry James" },
+      { text: "Live in the sunshine. Swim the sea. Drink the wild air.", author: "Ralph Waldo Emerson" },
+      { text: "Summer has filled her veins with light and her heart is washed with noon.", author: "C. Day Lewis" },
+      { text: "What good is the warmth of summer, without the cold of winter to give it sweetness.", author: "John Steinbeck" },
+      { text: "Summer means happy times and good sunshine.", author: "Brian Wilson" },
+      { text: "A life without love is like a year without summer.", author: "Swedish Proverb" },
+      { text: "Green was the silence, wet was the light, the month of June trembled like a butterfly.", author: "Pablo Neruda" },
+      { text: "Rest is not idleness, and to lie sometimes on the grass under trees on a summer's day, listening to the murmur of the water, is by no means a waste of time.", author: "John Lubbock" },
+      { text: "Summertime is always the best of what might be.", author: "Charles Bowden" },
+      { text: "And so with the sunshine and the great bursts of leaves growing on the trees, I had that familiar conviction that life was beginning over again with the summer.", author: "F. Scott Fitzgerald" },
+      { text: "Everything good, everything magical happens between the months of June and August.", author: "Jenny Han" },
+      { text: "The present moment is the only moment available to us.", author: "Thich Nhat Hanh" },
+      { text: "Be here now.", author: "Ram Dass" },
+      { text: "Gratitude turns what we have into enough.", author: "Aesop" },
+      { text: "Wherever you are, be there totally.", author: "Eckhart Tolle" },
+      { text: "Joy is the simplest form of gratitude.", author: "Karl Barth" },
+      { text: "Forever is composed of nows.", author: "Emily Dickinson" },
+      { text: "You are the sky. Everything else is just the weather.", author: "Pema Chödrön" },
+      { text: "Slow down and everything you are chasing will come around and catch you.", author: "John De Paola" }
+    ],
+    reflections: [
+      "Where in your life are you in full bloom right now? Are you letting yourself enjoy it?",
+      "What have you been pushing through that could simply be rested in?",
+      "What does 'ripe' mean for you this season — and what's ready?",
+      "When did you last do something just because it felt good?",
+      "Who have you shared sunlight with this week — actually or metaphorically?",
+      "What are you greedy for that has nothing to do with more?",
+      "If today were your long afternoon, what would you linger in?"
+    ]
+  },
+
+  fall: {
+    palette: {
+      bg: '#f4e4cc', bgDeep: '#e4c896', ink: '#2a1810', inkSoft: '#5a3820',
+      inkFaint: '#9a7a58', accent: '#c85a2a', accentSoft: '#e08a4a',
+      accentDeep: '#8f3d18', card: '#fcf2de',
+      glowA: 'rgba(224, 138, 74, 0.25)', glowB: 'rgba(200, 90, 42, 0.18)'
+    },
+    mark: '🍂',
+    markLarge: '🍁',
+    divMark: '🍂',
+    divMarkEnd: '🍁 🍂 🍁',
+    eyebrow: 'Vol. I · a journal for turning leaves',
+    titleLine1: 'The Slow',
+    titleLine2: 'Ember Days',
+    moodHeading: 'how the turning feels in you today',
+    gratitudeHeading: 'three warm embers',
+    gratitudePrompt: 'Small amber things worth gathering today—',
+    gratitudePlaceholder: 'a hot drink, crunch underfoot, wool on skin...',
+    intentionHeading: "today's harvest intention",
+    intentionPrompt: "What I'm gathering in today—",
+    intentionPlaceholder: 'one word, one wish, one thing worth keeping...',
+    breathTitle: '~ a pause by the fire ~',
+    breathLabel: 'breathe in ~ let it drift',
+    reflectHeading: 'shed and reflect',
+    reflectPlaceholder: 'write freely, like leaves letting go of the branch...',
+    eveningHeading: 'drawing in the curtains',
+    eveningPrompt: "One thing I'm letting fall before sleep—",
+    eveningPlaceholder: 'an old thought, a dry leaf, a weight of the day...',
+    buttonText: 'gather another leaf of wisdom',
+    colophon: 'written in amber ink on harvest-warm paper<br><em>be like the fall — patient, loosening, unafraid to let go</em>',
+    signupTitle: 'a letter by the fire',
+    signupSubtitle: 'warm reflections for cooler days — once a week, like a cup of something steeping',
+    signupNote: '(opens your email app — no data saved here)',
+    signupThanks: 'thank you ~ see you by the hearth 🍂',
+    breathWave1: '~ drift ~',
+    breathWave2: '~ let go ~',
+    moods: [
+      {glyph:'🍁', label:'amber'}, {glyph:'🍂', label:'crisp'},
+      {glyph:'🕯️', label:'candlelit'}, {glyph:'🍵', label:'steeped'},
+      {glyph:'🌫️', label:'misty'}, {glyph:'🧣', label:'wrapped'}
+    ],
+    quotes: [
+      { text: "Autumn is a second spring when every leaf is a flower.", author: "Albert Camus" },
+      { text: "Every leaf speaks bliss to me, fluttering from the autumn tree.", author: "Emily Brontë" },
+      { text: "I'm so glad I live in a world where there are Octobers.", author: "L.M. Montgomery" },
+      { text: "Autumn...the year's last, loveliest smile.", author: "William Cullen Bryant" },
+      { text: "Notice that autumn is more the season of the soul than of nature.", author: "Friedrich Nietzsche" },
+      { text: "The trees are about to show us how lovely it is to let the dead things go.", author: "Unknown" },
+      { text: "No spring nor summer beauty hath such grace as I have seen in one autumnal face.", author: "John Donne" },
+      { text: "Autumn shows us how beautiful it is to let things go.", author: "Unknown" },
+      { text: "Life starts all over again when it gets crisp in the fall.", author: "F. Scott Fitzgerald" },
+      { text: "Fall has always been my favorite season. The time when everything bursts with its last beauty, as if nature had been saving up all year for the grand finale.", author: "Lauren DeStefano" },
+      { text: "Autumn carries more gold in its pocket than all the other seasons.", author: "Jim Bishop" },
+      { text: "And all at once, summer collapsed into fall.", author: "Oscar Wilde" },
+      { text: "October, baptize me with leaves! Swaddle me in corduroy and nurse me with split pea soup.", author: "Rainbow Rowell" },
+      { text: "The present moment is the only moment available to us.", author: "Thich Nhat Hanh" },
+      { text: "Life is a balance of holding on and letting go.", author: "Rumi" },
+      { text: "Let go of the past and live fully in the present.", author: "Lao Tzu" },
+      { text: "Nothing ever goes away until it has taught us what we need to know.", author: "Pema Chödrön" },
+      { text: "Gratitude turns what we have into enough.", author: "Aesop" },
+      { text: "Simplicity, patience, compassion. These three are your greatest treasures.", author: "Lao Tzu" },
+      { text: "The wound is the place where the light enters you.", author: "Rumi" }
+    ],
+    reflections: [
+      "What in your life is ready to be let go of — not with regret, but with gratitude?",
+      "What have you harvested this year that you haven't properly acknowledged yet?",
+      "Where are you still clinging to something green when it's time to turn?",
+      "What warmth do you need to create indoors, now that it's cooler outside?",
+      "Name one thing you've carried all year that you can finally set down.",
+      "If you were a tree, what leaves would you shed first? Which last?",
+      "What does 'enough' look like as the light grows shorter?"
+    ]
+  },
+
+  winter: {
+    palette: {
+      bg: '#e4edf5', bgDeep: '#c2d4e4', ink: '#0f1a2a', inkSoft: '#2a3e58',
+      inkFaint: '#6a7e96', accent: '#4a7ca8', accentSoft: '#8fb0cc',
+      accentDeep: '#2a5580', card: '#f4f8fc',
+      glowA: 'rgba(143, 176, 204, 0.3)', glowB: 'rgba(74, 124, 168, 0.15)'
+    },
+    mark: '❄️',
+    markLarge: '❄️',
+    divMark: '❅',
+    divMarkEnd: '❅ ❄ ❅',
+    eyebrow: 'Vol. I · a journal for quiet hours',
+    titleLine1: 'Still Hours,',
+    titleLine2: 'Soft Snowfall',
+    moodHeading: 'how the stillness settles in you today',
+    gratitudeHeading: 'three small warmths',
+    gratitudePrompt: 'Small lights worth kindling today—',
+    gratitudePlaceholder: 'a hot drink, a soft blanket, lamplight on the window...',
+    intentionHeading: "today's quiet intention",
+    intentionPrompt: "What I'm holding close today—",
+    intentionPlaceholder: 'one word, one wish, one ember to tend...',
+    breathTitle: '~ a pause in the stillness ~',
+    breathLabel: 'breathe in ~ exhale slow',
+    reflectHeading: 'rest and reflect',
+    reflectPlaceholder: 'write freely, like snow settling on a quiet field...',
+    eveningHeading: 'banking the fire for the night',
+    eveningPrompt: "One thing I'm letting the snow cover—",
+    eveningPlaceholder: 'a worry, a chill, a small hard thing...',
+    buttonText: 'gather another flake of wisdom',
+    colophon: 'written in indigo ink on winter-pale paper<br><em>be like the winter — quiet, spacious, fiercely still</em>',
+    signupTitle: 'a letter in the quiet hours',
+    signupSubtitle: 'still reflections for still days — once a week, like snow on the sill',
+    signupNote: '(opens your email app — no data saved here)',
+    signupThanks: 'thank you ~ see you in the stillness ❄️',
+    breathWave1: '~ hush ~',
+    breathWave2: '~ still ~',
+    moods: [
+      {glyph:'❄️', label:'crystalline'}, {glyph:'🕯️', label:'candlelit'},
+      {glyph:'📚', label:'burrowed'}, {glyph:'🧊', label:'frozen'},
+      {glyph:'🌌', label:'starry'}, {glyph:'☕', label:'steaming'}
+    ],
+    quotes: [
+      { text: "In the depth of winter, I finally learned that within me there lay an invincible summer.", author: "Albert Camus" },
+      { text: "What good is the warmth of summer, without the cold of winter to give it sweetness.", author: "John Steinbeck" },
+      { text: "Winter is the time for comfort, for good food and warmth, for the touch of a friendly hand and for a talk beside the fire.", author: "Edith Sitwell" },
+      { text: "One kind word can warm three winter months.", author: "Japanese Proverb" },
+      { text: "In winter, the stars seem to have rekindled their fires.", author: "Henry David Thoreau" },
+      { text: "How many lessons of faith and beauty we should lose, if there were no winter in our year!", author: "Thomas Wentworth Higginson" },
+      { text: "To shorten winter, borrow some money due in spring.", author: "W.J. Vogel" },
+      { text: "Winter is not a season, it's a celebration.", author: "Anamika Mishra" },
+      { text: "No winter lasts forever; no spring skips its turn.", author: "Hal Borland" },
+      { text: "There is a privacy about it which no other season gives you... In spring, summer and fall people sort of have an open season on each other; only in the winter can you have longer, quiet stretches.", author: "Ruth Stout" },
+      { text: "A snowflake is one of God's most fragile creations, but look what they can do when they stick together.", author: "Vesta M. Kelly" },
+      { text: "Winter is on my head, but eternal spring is in my heart.", author: "Victor Hugo" },
+      { text: "The present moment is the only moment available to us.", author: "Thich Nhat Hanh" },
+      { text: "Within you there is a stillness and a sanctuary to which you can retreat at any time.", author: "Hermann Hesse" },
+      { text: "The quieter you become, the more you can hear.", author: "Ram Dass" },
+      { text: "In the midst of movement and chaos, keep stillness inside of you.", author: "Deepak Chopra" },
+      { text: "Quiet the mind, and the soul will speak.", author: "Ma Jaya Sati Bhagavati" },
+      { text: "You are the sky. Everything else is just the weather.", author: "Pema Chödrön" },
+      { text: "Silence isn't empty. It's full of answers.", author: "Unknown" },
+      { text: "Sometimes the most important thing in a whole day is the rest we take between two deep breaths.", author: "Etty Hillesum" }
+    ],
+    reflections: [
+      "What part of you has gone quiet this season? Can you let it rest a little longer?",
+      "What are you keeping warm — a project, a hope, a friendship — that you haven't named?",
+      "Where in your life would more silence, not more noise, actually help?",
+      "What would you write in a letter to yourself, to be read in spring?",
+      "What does 'enough light' mean today? Where can you find it?",
+      "What if rest were the work right now, and everything else could wait?",
+      "What small ember inside you deserves more tending?"
+    ]
+  }
+};
+
+/* ============================================================
+   SVG MASCOTS
+   ============================================================ */
+const SVGS = {
+  spring: {
+    header: `<svg viewBox="0 0 100 70" xmlns="http://www.w3.org/2000/svg">
+      <path d="M 50 65 Q 45 45 50 25 Q 55 45 50 65" stroke="var(--ink-soft)" stroke-width="1.5" fill="none"/>
+      <g transform="translate(50 25)">
+        <circle r="5" fill="var(--accent-soft)"/>
+        <circle cx="-7" cy="-3" r="5" fill="var(--accent-soft)"/>
+        <circle cx="7" cy="-3" r="5" fill="var(--accent-soft)"/>
+        <circle cx="-4" cy="5" r="5" fill="var(--accent-soft)"/>
+        <circle cx="4" cy="5" r="5" fill="var(--accent-soft)"/>
+        <circle r="3" fill="#f5d842"/>
+      </g>
+      <ellipse cx="35" cy="55" rx="8" ry="3" fill="#8fb57a" transform="rotate(-20 35 55)"/>
+      <ellipse cx="65" cy="58" rx="7" ry="3" fill="#8fb57a" transform="rotate(25 65 58)"/>
+    </svg>`,
+    corner: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <g transform="translate(50 55)">
+        <circle r="8" fill="var(--accent-soft)"/>
+        <circle cx="-12" cy="-5" r="8" fill="var(--accent-soft)"/>
+        <circle cx="12" cy="-5" r="8" fill="var(--accent-soft)"/>
+        <circle cx="-7" cy="8" r="8" fill="var(--accent-soft)"/>
+        <circle cx="7" cy="8" r="8" fill="var(--accent-soft)"/>
+        <circle r="5" fill="#f5d842"/>
+      </g>
+      <path d="M 50 65 L 50 95" stroke="#6a9a55" stroke-width="2"/>
+      <ellipse cx="42" cy="80" rx="7" ry="3" fill="#8fb57a" transform="rotate(-30 42 80)"/>
+      <ellipse cx="58" cy="85" rx="7" ry="3" fill="#8fb57a" transform="rotate(30 58 85)"/>
+      <g transform="translate(15 30)">
+        <circle r="3" fill="#f5a8be" opacity="0.7"/>
+        <circle cx="-4" cy="-2" r="3" fill="#f5a8be" opacity="0.7"/>
+        <circle cx="4" cy="-2" r="3" fill="#f5a8be" opacity="0.7"/>
+      </g>
+      <text x="70" y="25" font-family="Caveat, cursive" font-size="12" fill="var(--ink-faint)" opacity="0.6">hello</text>
+    </svg>`,
+    breath: `<svg viewBox="0 0 220 160" xmlns="http://www.w3.org/2000/svg">
+      <g class="body">
+        <!-- Stem -->
+        <path d="M 110 150 Q 105 110 110 70" stroke="#6a9a55" stroke-width="3" fill="none" stroke-linecap="round"/>
+        <!-- Leaves -->
+        <path d="M 110 120 Q 85 115 75 95 Q 95 105 110 115" fill="#8fb57a"/>
+        <path d="M 110 100 Q 135 90 145 70 Q 125 85 110 95" fill="#8fb57a"/>
+        <!-- Flower head -->
+        <g transform="translate(110 60)">
+          <ellipse cx="0" cy="-22" rx="12" ry="18" fill="var(--accent-soft)"/>
+          <ellipse cx="-20" cy="-10" rx="18" ry="12" fill="var(--accent-soft)"/>
+          <ellipse cx="20" cy="-10" rx="18" ry="12" fill="var(--accent-soft)"/>
+          <ellipse cx="-14" cy="14" rx="16" ry="14" fill="var(--accent-soft)"/>
+          <ellipse cx="14" cy="14" rx="16" ry="14" fill="var(--accent-soft)"/>
+          <circle r="10" fill="#f5d842"/>
+          <circle r="6" fill="var(--accent)"/>
+        </g>
+        <!-- Bee -->
+        <g transform="translate(165 50)">
+          <ellipse rx="6" ry="4" fill="#f5d842"/>
+          <path d="M -3 -4 L -3 4" stroke="var(--ink)" stroke-width="1.5"/>
+          <path d="M 0 -4 L 0 4" stroke="var(--ink)" stroke-width="1.5"/>
+          <path d="M 3 -4 L 3 4" stroke="var(--ink)" stroke-width="1.5"/>
+          <ellipse cx="-3" cy="-5" rx="3" ry="2" fill="#fff" opacity="0.7"/>
+          <ellipse cx="3" cy="-5" rx="3" ry="2" fill="#fff" opacity="0.7"/>
+        </g>
+      </g>
+    </svg>`
+  },
+
+  summer: {
+    header: `<svg viewBox="0 0 100 70" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="50" cy="35" r="15" fill="#f5c968"/>
+      <g stroke="#e8a23a" stroke-width="2" stroke-linecap="round">
+        <line x1="50" y1="10" x2="50" y2="5"/>
+        <line x1="50" y1="65" x2="50" y2="60"/>
+        <line x1="20" y1="35" x2="25" y2="35"/>
+        <line x1="75" y1="35" x2="80" y2="35"/>
+        <line x1="30" y1="15" x2="33" y2="18"/>
+        <line x1="67" y1="52" x2="70" y2="55"/>
+        <line x1="30" y1="55" x2="33" y2="52"/>
+        <line x1="67" y1="18" x2="70" y2="15"/>
+      </g>
+      <circle cx="50" cy="35" r="10" fill="#f5d842"/>
+      <ellipse cx="46" cy="33" rx="1.5" ry="2" fill="var(--ink)"/>
+      <ellipse cx="54" cy="33" rx="1.5" ry="2" fill="var(--ink)"/>
+      <path d="M 44 40 Q 50 44 56 40" stroke="var(--ink)" stroke-width="1.2" fill="none"/>
+    </svg>`,
+    corner: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="50" cy="50" r="25" fill="#f5c968"/>
+      <g stroke="#e8a23a" stroke-width="3" stroke-linecap="round">
+        <line x1="50" y1="10" x2="50" y2="18"/>
+        <line x1="50" y1="82" x2="50" y2="90"/>
+        <line x1="10" y1="50" x2="18" y2="50"/>
+        <line x1="82" y1="50" x2="90" y2="50"/>
+        <line x1="22" y1="22" x2="28" y2="28"/>
+        <line x1="72" y1="72" x2="78" y2="78"/>
+        <line x1="22" y1="78" x2="28" y2="72"/>
+        <line x1="72" y1="28" x2="78" y2="22"/>
+      </g>
+      <circle cx="50" cy="50" r="18" fill="#f5d842"/>
+      <ellipse cx="44" cy="47" rx="2" ry="3" fill="var(--ink)"/>
+      <ellipse cx="56" cy="47" rx="2" ry="3" fill="var(--ink)"/>
+      <path d="M 42 55 Q 50 62 58 55" stroke="var(--ink)" stroke-width="1.5" fill="none"/>
+      <ellipse cx="42" cy="52" rx="3" ry="2" fill="#f0a8be" opacity="0.5"/>
+      <ellipse cx="58" cy="52" rx="3" ry="2" fill="#f0a8be" opacity="0.5"/>
+    </svg>`,
+    breath: `<svg viewBox="0 0 220 160" xmlns="http://www.w3.org/2000/svg">
+      <g class="body">
+        <!-- Sun rays -->
+        <g stroke="#e8a23a" stroke-width="4" stroke-linecap="round">
+          <line x1="110" y1="10" x2="110" y2="25"/>
+          <line x1="110" y1="135" x2="110" y2="150"/>
+          <line x1="30" y1="80" x2="45" y2="80"/>
+          <line x1="175" y1="80" x2="190" y2="80"/>
+          <line x1="50" y1="25" x2="60" y2="35"/>
+          <line x1="160" y1="125" x2="170" y2="135"/>
+          <line x1="50" y1="135" x2="60" y2="125"/>
+          <line x1="160" y1="35" x2="170" y2="25"/>
+          <line x1="40" y1="50" x2="52" y2="55"/>
+          <line x1="168" y1="105" x2="180" y2="110"/>
+          <line x1="40" y1="110" x2="52" y2="105"/>
+          <line x1="168" y1="55" x2="180" y2="50"/>
+        </g>
+        <!-- Sun body -->
+        <circle cx="110" cy="80" r="45" fill="#f5c968"/>
+        <circle cx="110" cy="80" r="38" fill="#f5d842"/>
+        <!-- Face -->
+        <ellipse cx="98" cy="73" rx="3" ry="5" fill="var(--ink)"/>
+        <ellipse cx="122" cy="73" rx="3" ry="5" fill="var(--ink)"/>
+        <path d="M 95 88 Q 110 100 125 88" stroke="var(--ink)" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <!-- Cheeks -->
+        <ellipse cx="88" cy="85" rx="5" ry="3" fill="#f0a8be" opacity="0.6"/>
+        <ellipse cx="132" cy="85" rx="5" ry="3" fill="#f0a8be" opacity="0.6"/>
+        <!-- Eye sparkles -->
+        <circle cx="99" cy="71" r="1" fill="#fff"/>
+        <circle cx="123" cy="71" r="1" fill="#fff"/>
+      </g>
+    </svg>`
+  },
+
+  fall: {
+    header: `<svg viewBox="0 0 100 70" xmlns="http://www.w3.org/2000/svg">
+      <path d="M 30 60 Q 20 50 20 35 Q 25 25 40 30 Q 45 40 35 50 Z" fill="var(--accent)"/>
+      <path d="M 30 60 L 28 30" stroke="var(--accent-deep)" stroke-width="1" fill="none"/>
+      <path d="M 70 55 Q 78 45 78 30 Q 72 22 60 28 Q 55 38 65 48 Z" fill="#e8a23a"/>
+      <path d="M 70 55 L 72 25" stroke="var(--accent-deep)" stroke-width="1" fill="none"/>
+      <path d="M 50 65 Q 45 55 48 45 Q 55 45 52 60 Z" fill="#b85520"/>
+    </svg>`,
+    corner: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <!-- Large maple leaf -->
+      <g transform="translate(50 55)">
+        <path d="M 0 30 L -5 15 L -18 20 L -12 5 L -25 0 L -12 -5 L -18 -20 L -5 -15 L 0 -30 L 5 -15 L 18 -20 L 12 -5 L 25 0 L 12 5 L 18 20 L 5 15 Z" fill="var(--accent)"/>
+        <line x1="0" y1="-30" x2="0" y2="30" stroke="var(--accent-deep)" stroke-width="1"/>
+        <line x1="0" y1="0" x2="-18" y2="-20" stroke="var(--accent-deep)" stroke-width="0.5"/>
+        <line x1="0" y1="0" x2="18" y2="-20" stroke="var(--accent-deep)" stroke-width="0.5"/>
+      </g>
+      <!-- Small leaves -->
+      <path d="M 15 20 Q 10 18 10 25 Q 15 25 15 20" fill="#e8a23a" transform="rotate(-20 13 22)"/>
+      <path d="M 85 75 Q 80 72 82 80 Q 88 78 85 75" fill="#8f3d18" transform="rotate(30 84 77)"/>
+      <text x="15" y="15" font-family="Caveat, cursive" font-size="12" fill="var(--ink-faint)" opacity="0.6">*drift*</text>
+    </svg>`,
+    breath: `<svg viewBox="0 0 220 160" xmlns="http://www.w3.org/2000/svg">
+      <g class="body">
+        <!-- Tree branch -->
+        <path d="M 30 140 Q 60 110 110 90 Q 160 75 200 60" stroke="#5a3820" stroke-width="5" fill="none" stroke-linecap="round"/>
+        <path d="M 90 95 Q 85 75 75 65" stroke="#5a3820" stroke-width="3" fill="none"/>
+        <path d="M 140 80 Q 145 60 160 50" stroke="#5a3820" stroke-width="3" fill="none"/>
+        <!-- Leaves on branch - maple style -->
+        <g transform="translate(75 58)">
+          <path d="M 0 12 L -3 5 L -10 7 L -7 0 L -14 -3 L -7 -5 L -10 -12 L -3 -9 L 0 -15 L 3 -9 L 10 -12 L 7 -5 L 14 -3 L 7 0 L 10 7 L 3 5 Z" fill="var(--accent)"/>
+        </g>
+        <g transform="translate(160 45)">
+          <path d="M 0 10 L -2 4 L -8 6 L -6 0 L -12 -2 L -6 -4 L -8 -10 L -2 -7 L 0 -12 L 2 -7 L 8 -10 L 6 -4 L 12 -2 L 6 0 L 8 6 L 2 4 Z" fill="#e8a23a"/>
+        </g>
+        <g transform="translate(115 75)">
+          <path d="M 0 12 L -3 5 L -10 7 L -7 0 L -14 -3 L -7 -5 L -10 -12 L -3 -9 L 0 -15 L 3 -9 L 10 -12 L 7 -5 L 14 -3 L 7 0 L 10 7 L 3 5 Z" fill="#8f3d18"/>
+        </g>
+        <!-- Falling leaves -->
+        <g transform="translate(50 100) rotate(30)">
+          <path d="M 0 6 L -2 3 L -5 4 L -3 0 L -7 -2 L -3 -3 L -5 -6 L -2 -4 L 0 -8 L 2 -4 L 5 -6 L 3 -3 L 7 -2 L 3 0 L 5 4 L 2 3 Z" fill="var(--accent)" opacity="0.8"/>
+        </g>
+        <g transform="translate(180 115) rotate(-20)">
+          <path d="M 0 6 L -2 3 L -5 4 L -3 0 L -7 -2 L -3 -3 L -5 -6 L -2 -4 L 0 -8 L 2 -4 L 5 -6 L 3 -3 L 7 -2 L 3 0 L 5 4 L 2 3 Z" fill="#e8a23a" opacity="0.8"/>
+        </g>
+      </g>
+    </svg>`
+  },
+
+  winter: {
+    header: `<svg viewBox="0 0 100 70" xmlns="http://www.w3.org/2000/svg">
+      <g transform="translate(50 35)" stroke="var(--accent-deep)" stroke-width="1.5" stroke-linecap="round" fill="none">
+        <line x1="0" y1="-22" x2="0" y2="22"/>
+        <line x1="-19" y1="-11" x2="19" y2="11"/>
+        <line x1="-19" y1="11" x2="19" y2="-11"/>
+        <g>
+          <line x1="0" y1="-22" x2="-4" y2="-18"/>
+          <line x1="0" y1="-22" x2="4" y2="-18"/>
+          <line x1="0" y1="22" x2="-4" y2="18"/>
+          <line x1="0" y1="22" x2="4" y2="18"/>
+        </g>
+        <g>
+          <line x1="-19" y1="-11" x2="-18" y2="-16"/>
+          <line x1="-19" y1="-11" x2="-14" y2="-13"/>
+          <line x1="19" y1="11" x2="18" y2="16"/>
+          <line x1="19" y1="11" x2="14" y2="13"/>
+        </g>
+      </g>
+    </svg>`,
+    corner: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <!-- Small snowman -->
+      <circle cx="50" cy="70" r="22" fill="#fff" stroke="var(--accent)" stroke-width="1"/>
+      <circle cx="50" cy="42" r="15" fill="#fff" stroke="var(--accent)" stroke-width="1"/>
+      <circle cx="46" cy="40" r="1.5" fill="var(--ink)"/>
+      <circle cx="54" cy="40" r="1.5" fill="var(--ink)"/>
+      <path d="M 50 44 L 56 46 L 50 48 Z" fill="var(--accent)"/>
+      <path d="M 46 52 Q 50 55 54 52" stroke="var(--ink)" stroke-width="0.8" fill="none"/>
+      <circle cx="50" cy="62" r="1.2" fill="var(--ink)"/>
+      <circle cx="50" cy="70" r="1.2" fill="var(--ink)"/>
+      <circle cx="50" cy="78" r="1.2" fill="var(--ink)"/>
+      <!-- Arms -->
+      <line x1="32" y1="65" x2="20" y2="55" stroke="#5a3820" stroke-width="1.5"/>
+      <line x1="68" y1="65" x2="80" y2="55" stroke="#5a3820" stroke-width="1.5"/>
+      <!-- Hat -->
+      <rect x="38" y="22" width="24" height="4" fill="var(--accent-deep)"/>
+      <rect x="40" y="12" width="20" height="12" fill="var(--accent-deep)"/>
+      <!-- Snowflake decoration -->
+      <g transform="translate(18 22)" stroke="var(--accent-soft)" stroke-width="1" opacity="0.8">
+        <line x1="0" y1="-5" x2="0" y2="5"/>
+        <line x1="-4" y1="-3" x2="4" y2="3"/>
+        <line x1="-4" y1="3" x2="4" y2="-3"/>
+      </g>
+    </svg>`,
+    breath: `<svg viewBox="0 0 220 160" xmlns="http://www.w3.org/2000/svg">
+      <g class="body">
+        <!-- Background snowdrift -->
+        <path d="M 0 145 Q 55 130 110 140 Q 165 128 220 145 L 220 160 L 0 160 Z" fill="#e4edf5" opacity="0.6"/>
+        <!-- Snowman body -->
+        <circle cx="110" cy="110" r="32" fill="#fff" stroke="var(--accent)" stroke-width="1"/>
+        <circle cx="110" cy="68" r="22" fill="#fff" stroke="var(--accent)" stroke-width="1"/>
+        <!-- Face -->
+        <circle cx="103" cy="65" r="2.2" fill="var(--ink)"/>
+        <circle cx="117" cy="65" r="2.2" fill="var(--ink)"/>
+        <path d="M 110 70 L 120 74 L 110 78 Z" fill="var(--accent)"/>
+        <path d="M 102 82 Q 110 87 118 82" stroke="var(--ink)" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+        <!-- Cheeks -->
+        <ellipse cx="97" cy="75" rx="3" ry="2" fill="#f0a8be" opacity="0.5"/>
+        <ellipse cx="123" cy="75" rx="3" ry="2" fill="#f0a8be" opacity="0.5"/>
+        <!-- Buttons -->
+        <circle cx="110" cy="95" r="1.8" fill="var(--ink)"/>
+        <circle cx="110" cy="108" r="1.8" fill="var(--ink)"/>
+        <circle cx="110" cy="121" r="1.8" fill="var(--ink)"/>
+        <!-- Arms -->
+        <line x1="82" y1="105" x2="60" y2="88" stroke="#5a3820" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="138" y1="105" x2="160" y2="88" stroke="#5a3820" stroke-width="2.5" stroke-linecap="round"/>
+        <!-- Twig fingers -->
+        <line x1="60" y1="88" x2="55" y2="82" stroke="#5a3820" stroke-width="1.5"/>
+        <line x1="60" y1="88" x2="56" y2="92" stroke="#5a3820" stroke-width="1.5"/>
+        <line x1="160" y1="88" x2="165" y2="82" stroke="#5a3820" stroke-width="1.5"/>
+        <line x1="160" y1="88" x2="164" y2="92" stroke="#5a3820" stroke-width="1.5"/>
+        <!-- Hat -->
+        <rect x="94" y="42" width="32" height="5" fill="var(--accent-deep)"/>
+        <rect x="97" y="28" width="26" height="15" fill="var(--accent-deep)"/>
+        <rect x="97" y="38" width="26" height="4" fill="var(--accent)"/>
+        <!-- Scarf -->
+        <path d="M 88 55 Q 110 62 132 55 L 130 62 Q 110 68 90 62 Z" fill="var(--accent-deep)"/>
+        <path d="M 128 60 L 135 75 L 140 72 L 133 58 Z" fill="var(--accent-deep)"/>
+      </g>
+    </svg>`
+  }
+};
+
+/* ============================================================
+   LOGIC
+   ============================================================ */
+let currentSeason = 'spring';
+let quoteOffset = 0;
+
+function applyPalette(palette) {
+  const root = document.documentElement.style;
+  Object.entries({
+    'bg': palette.bg, 'bg-deep': palette.bgDeep, 'ink': palette.ink,
+    'ink-soft': palette.inkSoft, 'ink-faint': palette.inkFaint,
+    'accent': palette.accent, 'accent-soft': palette.accentSoft,
+    'accent-deep': palette.accentDeep, 'card': palette.card,
+    'glow-a': palette.glowA, 'glow-b': palette.glowB
+  }).forEach(([k, v]) => root.setProperty('--' + k, v));
+}
+
+function renderParticles(season) {
+  const overlay = document.getElementById('season-overlay');
+  overlay.innerHTML = '';
+  const count = 25;
+  const configs = {
+    spring: { cls: 'petal', content: '', duration: [10, 18], delay: [0, 15] },
+    summer: { cls: 'firefly', content: '', duration: [4, 8], delay: [0, 6] },
+    fall: { cls: 'leaf', content: ['🍂', '🍁', '🍃'], duration: [8, 14], delay: [0, 12] },
+    winter: { cls: 'snow', content: ['❄', '❅', '❆', '•'], duration: [10, 20], delay: [0, 15] }
+  };
+  const c = configs[season];
+  for (let i = 0; i < count; i++) {
+    const el = document.createElement('div');
+    el.className = c.cls;
+    el.style.left = Math.random() * 100 + '%';
+    el.style.top = (season === 'summer') ? (Math.random() * 100 + '%') : ('-5%');
+    el.style.animationDuration = (c.duration[0] + Math.random() * (c.duration[1] - c.duration[0])) + 's';
+    el.style.animationDelay = (Math.random() * c.delay[1]) + 's';
+    if (Array.isArray(c.content)) {
+      el.textContent = c.content[Math.floor(Math.random() * c.content.length)];
+      if (season === 'winter') el.style.fontSize = (10 + Math.random() * 12) + 'px';
+      if (season === 'fall') el.style.fontSize = (14 + Math.random() * 10) + 'px';
+    }
+    overlay.appendChild(el);
+  }
+}
+
+function renderMoods(moods) {
+  const grid = document.getElementById('mood-grid');
+  grid.innerHTML = '';
+  moods.forEach(m => {
+    const div = document.createElement('div');
+    div.className = 'mood-option';
+    div.dataset.mood = m.label;
+    div.innerHTML = `<span class="mood-glyph">${m.glyph}</span><span class="mood-label">${m.label}</span>`;
+    div.addEventListener('click', () => {
+      document.querySelectorAll('.mood-option').forEach(o => o.classList.remove('selected'));
+      div.classList.add('selected');
+    });
+    grid.appendChild(div);
+  });
+}
+
+function dateString() {
+  const d = new Date();
+  const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const day = d.getDate();
+  const suffix = (day % 10 === 1 && day !== 11) ? 'st' :
+                 (day % 10 === 2 && day !== 12) ? 'nd' :
+                 (day % 10 === 3 && day !== 13) ? 'rd' : 'th';
+  return `the ${day}${suffix} of ${months[d.getMonth()]}, ${d.getFullYear()}`;
+}
+
+function dailyIndex(arr) {
+  const d = new Date();
+  const dayOfYear = Math.floor((d - new Date(d.getFullYear(), 0, 0)) / 86400000);
+  return (dayOfYear * 7) % arr.length;
+}
+
+function setQuote() {
+  const s = SEASONS[currentSeason];
+  const idx = (dailyIndex(s.quotes) + quoteOffset) % s.quotes.length;
+  const q = s.quotes[idx];
+  const qEl = document.getElementById('quote-text');
+  const aEl = document.getElementById('quote-author');
+  qEl.style.opacity = 0; aEl.style.opacity = 0;
+  setTimeout(() => {
+    qEl.textContent = q.text;
+    aEl.textContent = q.author;
+    qEl.style.transition = 'opacity 0.8s ease';
+    aEl.style.transition = 'opacity 0.8s ease';
+    qEl.style.opacity = 1; aEl.style.opacity = 1;
+  }, 300);
+}
+
+function newQuote() { quoteOffset++; setQuote(); }
+
+function handleSignup() {
+  const input = document.getElementById('signup-email');
+  const errorEl = document.getElementById('signup-error');
+  const thanksEl = document.getElementById('signup-thanks');
+  const formWrap = document.getElementById('signup-form-wrap');
+  const email = input.value.trim();
+
+  // Basic email validation
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!email) {
+    errorEl.textContent = 'please enter your email first ~';
+    return;
+  }
+  if (!emailRegex.test(email)) {
+    errorEl.textContent = 'that email looks a bit off — can you check it?';
+    return;
+  }
+
+  errorEl.textContent = '';
+
+  // Build mailto link
+  const season = SEASONS[currentSeason];
+  const subject = encodeURIComponent(`Subscribe me — ${season.titleLine1} ${season.titleLine2}`);
+  const body = encodeURIComponent(
+    `Hello,\n\n` +
+    `I'd like to subscribe to your mindful letters.\n\n` +
+    `My email: ${email}\n\n` +
+    `(Sent from "${season.titleLine1} ${season.titleLine2}" — The Turning Year)\n`
+  );
+  const mailtoLink = `mailto:${SIGNUP_EMAIL}?subject=${subject}&body=${body}`;
+
+  // Open the user's email app
+  window.location.href = mailtoLink;
+
+  // Show thank-you message
+  thanksEl.textContent = season.signupThanks;
+  thanksEl.classList.add('show');
+  formWrap.style.display = 'none';
+}
+
+function detectSeason() {
+  const m = new Date().getMonth() + 1;
+  if (m >= 3 && m <= 5) return 'spring';
+  if (m >= 6 && m <= 8) return 'summer';
+  if (m >= 9 && m <= 11) return 'fall';
+  return 'winter';
+}
+
+function applySeason(key) {
+  currentSeason = key;
+  quoteOffset = 0;
+  const s = SEASONS[key];
+
+  document.body.className = 'season-' + key;
+  applyPalette(s.palette);
+
+  document.getElementById('eyebrow').textContent = s.eyebrow;
+  document.getElementById('title').innerHTML = `${s.titleLine1} <span class="mark">${s.markLarge}</span><br><span>${s.titleLine2}</span>`;
+  document.getElementById('date-line').textContent = dateString();
+
+  document.getElementById('quote-card').setAttribute('data-mark', s.mark);
+
+  document.getElementById('mood-heading').textContent = s.moodHeading;
+  document.getElementById('gratitude-heading').textContent = s.gratitudeHeading;
+  document.getElementById('gratitude-prompt').textContent = s.gratitudePrompt;
+  document.getElementById('gratitude-input').placeholder = s.gratitudePlaceholder;
+  document.getElementById('intention-heading').textContent = s.intentionHeading;
+  document.getElementById('intention-prompt').textContent = s.intentionPrompt;
+  document.getElementById('intention-input').placeholder = s.intentionPlaceholder;
+  document.getElementById('breath-title').textContent = s.breathTitle;
+  document.getElementById('breath-label').textContent = s.breathLabel;
+  document.getElementById('reflect-heading').textContent = s.reflectHeading;
+  document.getElementById('reflection-input').placeholder = s.reflectPlaceholder;
+  document.getElementById('evening-heading').textContent = s.eveningHeading;
+  document.getElementById('evening-prompt').textContent = s.eveningPrompt;
+  document.getElementById('evening-input').placeholder = s.eveningPlaceholder;
+
+  document.getElementById('div-mark-1').textContent = s.divMark;
+  document.getElementById('div-mark-2').textContent = s.divMarkEnd;
+  document.getElementById('new-quote-btn').textContent = s.buttonText;
+  document.getElementById('colophon').innerHTML = s.colophon;
+
+  // Signup copy (per season)
+  document.getElementById('signup-title').textContent = s.signupTitle;
+  document.getElementById('signup-subtitle').textContent = s.signupSubtitle;
+  document.getElementById('signup-note').textContent = s.signupNote;
+  // Reset signup state when switching seasons
+  document.getElementById('signup-form-wrap').style.display = 'flex';
+  document.getElementById('signup-thanks').classList.remove('show');
+  document.getElementById('signup-error').textContent = '';
+  document.getElementById('signup-email').value = '';
+
+  document.querySelectorAll('.mark-num').forEach(el => el.textContent = s.mark);
+
+  document.getElementById('header-svg').innerHTML = SVGS[key].header;
+  document.getElementById('corner-mascot').innerHTML = SVGS[key].corner;
+
+  document.getElementById('breath-mascot').innerHTML = `
+    ${SVGS[key].breath}
+    <div class="breath-waves">${s.breathWave1}</div>
+    <div class="breath-waves" style="animation-delay: 1.25s; top: 40%;">${s.breathWave2}</div>
+  `;
+
+  renderMoods(s.moods);
+  renderParticles(key);
+
+  const rIdx = dailyIndex(s.reflections);
+  document.getElementById('reflection-prompt').textContent = s.reflections[rIdx];
+
+  setQuote();
+}
+
+// Auto-grow textareas (except freewrite)
+document.querySelectorAll('textarea:not(.freewrite)').forEach(ta => {
+  ta.addEventListener('input', () => {
+    ta.style.height = 'auto';
+    ta.style.height = ta.scrollHeight + 'px';
+  });
+});
+
+// Season switcher
+document.getElementById('season-select').addEventListener('change', (e) => {
+  applySeason(e.target.value);
+});
+
+// Signup: submit on Enter
+document.getElementById('signup-email').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    handleSignup();
+  }
+});
+
+// Init — default to current real-world season
+const initial = detectSeason();
+document.getElementById('season-select').value = initial;
+applySeason(initial);
+</script>
+</body>
+</html>
