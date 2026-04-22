@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Three Different Ones — Tube Amp Topologies</title>
+<style>
+  :root {
+    --soot: #14141a;
+    --concrete: #2a2a30;
+    --concrete-2: #3a3a42;
+    --smoke: #5a5a62;
+    --bone: #d8d4c8;
+    --paper: #ebe6d8;
+    --pig: #ff9ec4;
+    --pig-deep: #e76a9b;
+    --rust: #8a4a3a;
+    --ember: #c46a3a;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--soot);
+    color: var(--paper);
+    font-family: "Georgia", "Times New Roman", serif;
+    line-height: 1.55;
+  }
+
+  body {
+    background:
+      radial-gradient(ellipse at top, #2c2530 0%, #15141a 55%, #0a0a0e 100%),
+      linear-gradient(180deg, #2a2530 0%, #0a0a0e 100%);
+    min-height: 100vh;
+  }
+
+  /* Smoky overlay */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(circle at 20% 30%, rgba(255,158,196,0.04), transparent 40%),
+      radial-gradient(circle at 80% 60%, rgba(196,106,58,0.04), transparent 40%),
+      repeating-linear-gradient(0deg, rgba(0,0,0,0.04) 0 1px, transparent 1px 3px);
+    z-index: 0;
+  }
+
+  .wrap {
+    position: relative;
+    z-index: 1;
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 48px 28px 80px;
+  }
+
+  /* ---------- HEADER / HERO ---------- */
+  header {
+    position: relative;
+    padding: 24px 0 8px;
+    border-bottom: 1px solid var(--concrete-2);
+    margin-bottom: 40px;
+  }
+
+  .eyebrow {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--pig);
+    margin-bottom: 14px;
+  }
+
+  h1 {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-weight: 900;
+    font-size: clamp(2.2rem, 5vw, 3.8rem);
+    letter-spacing: -0.01em;
+    line-height: 1.02;
+    margin: 0 0 12px;
+    color: var(--bone);
+    text-transform: uppercase;
+  }
+
+  .subtitle {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 1rem;
+    color: var(--smoke);
+    font-style: italic;
+    margin-bottom: 28px;
+  }
+
+  /* Battersea + pig SVG */
+  .scene {
+    display: block;
+    width: 100%;
+    max-width: 760px;
+    height: auto;
+    margin: 8px auto 24px;
+    filter: drop-shadow(0 8px 40px rgba(0,0,0,0.5));
+  }
+
+  /* ---------- SECTION HEADERS ---------- */
+  h2 {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.95rem;
+    color: var(--pig);
+    margin: 40px 0 14px;
+    padding-bottom: 6px;
+    border-bottom: 1px dashed var(--concrete-2);
+  }
+
+  p.lede {
+    color: var(--bone);
+    font-size: 1.05rem;
+    max-width: 72ch;
+  }
+
+  /* ---------- TABLE ---------- */
+  .table-scroll {
+    overflow-x: auto;
+    border: 1px solid var(--concrete-2);
+    background: linear-gradient(180deg, #1b1b21 0%, #15151a 100%);
+    box-shadow: inset 0 0 80px rgba(0,0,0,0.4);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 0.86rem;
+    min-width: 900px;
+  }
+
+  thead th {
+    position: sticky;
+    top: 0;
+    background: linear-gradient(180deg, #2a2029 0%, #1f1821 100%);
+    color: var(--pig);
+    text-transform: uppercase;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    font-weight: 700;
+    padding: 14px 12px;
+    text-align: left;
+    border-bottom: 2px solid var(--pig-deep);
+    white-space: nowrap;
+  }
+
+  thead th:first-child {
+    color: var(--bone);
+    background: linear-gradient(180deg, #1f1f25 0%, #15151a 100%);
+    border-bottom-color: var(--concrete-2);
+  }
+
+  tbody td {
+    padding: 12px 12px;
+    border-bottom: 1px solid #222228;
+    vertical-align: top;
+    color: var(--paper);
+  }
+
+  tbody tr:nth-child(even) td {
+    background: rgba(255,255,255,0.015);
+  }
+
+  tbody tr:hover td {
+    background: rgba(255,158,196,0.05);
+  }
+
+  tbody th {
+    text-align: left;
+    padding: 12px 12px;
+    font-weight: 700;
+    color: var(--bone);
+    border-bottom: 1px solid #222228;
+    background: rgba(0,0,0,0.25);
+    white-space: nowrap;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  /* highlight the pig in the table — SET columns */
+  thead th.set {
+    color: var(--pig);
+  }
+
+  thead th.pp {
+    color: var(--ember);
+    border-bottom-color: var(--ember);
+  }
+
+  /* ---------- TAKEAWAY CARD ---------- */
+  .takeaway {
+    margin-top: 44px;
+    padding: 26px 28px;
+    background: linear-gradient(180deg, #1d1820 0%, #141016 100%);
+    border-left: 4px solid var(--pig);
+    position: relative;
+  }
+
+  .takeaway::before {
+    content: "♫";
+    position: absolute;
+    top: 12px;
+    right: 18px;
+    color: var(--pig);
+    opacity: 0.25;
+    font-size: 2.4rem;
+  }
+
+  .takeaway h3 {
+    margin: 0 0 10px;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: 0.8rem;
+    color: var(--pig);
+  }
+
+  .takeaway p {
+    margin: 0 0 10px;
+    color: var(--paper);
+  }
+
+  .confidence {
+    margin-top: 18px;
+    font-size: 0.82rem;
+    color: var(--smoke);
+    font-style: italic;
+  }
+
+  /* ---------- FOOTER ---------- */
+  footer {
+    margin-top: 60px;
+    padding-top: 20px;
+    border-top: 1px solid var(--concrete-2);
+    color: var(--smoke);
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-align: center;
+  }
+
+  footer .pink {
+    color: var(--pig);
+  }
+
+  /* pig float animation */
+  @keyframes drift {
+    0%   { transform: translate(0, 0) rotate(-2deg); }
+    50%  { transform: translate(8px, -6px) rotate(1deg); }
+    100% { transform: translate(0, 0) rotate(-2deg); }
+  }
+  .pig {
+    animation: drift 8s ease-in-out infinite;
+    transform-origin: center;
+  }
+
+  /* smoke drift */
+  @keyframes smokeDrift {
+    0%   { opacity: 0.55; transform: translateY(0) translateX(0); }
+    50%  { opacity: 0.35; transform: translateY(-6px) translateX(4px); }
+    100% { opacity: 0.55; transform: translateY(0) translateX(0); }
+  }
+  .smoke { animation: smokeDrift 6s ease-in-out infinite; }
+  .smoke.s2 { animation-delay: -2s; }
+  .smoke.s3 { animation-delay: -4s; }
+  .smoke.s4 { animation-delay: -1s; }
+
+  @media (max-width: 640px) {
+    .wrap { padding: 28px 16px 60px; }
+    h1 { font-size: 2rem; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">Pigs (Three Different Ones)</div>
+    <h1>Tube Amp Topologies</h1>
+    <div class="subtitle">Single-ended, push-pull triode, push-pull ultralinear — and the pigs that sing through them.</div>
+
+    <!-- Battersea Power Station + floating pig -->
+    <svg class="scene" viewBox="0 0 800 340" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <!-- sky gradient -->
+      <defs>
+        <linearGradient id="sky" x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0%"  stop-color="#3a2f3a"/>
+          <stop offset="55%" stop-color="#221a22"/>
+          <stop offset="100%" stop-color="#0f0c10"/>
+        </linearGradient>
+        <linearGradient id="stack" x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0%"  stop-color="#58545a"/>
+          <stop offset="100%" stop-color="#2a272b"/>
+        </linearGradient>
+        <linearGradient id="bldg" x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0%"  stop-color="#4a3e3a"/>
+          <stop offset="100%" stop-color="#1e1815"/>
+        </linearGradient>
+        <radialGradient id="pigGrad" cx="50%" cy="40%" r="60%">
+          <stop offset="0%"  stop-color="#ffc4dc"/>
+          <stop offset="70%" stop-color="#ff9ec4"/>
+          <stop offset="100%" stop-color="#d06a93"/>
+        </radialGradient>
+        <filter id="blur1"><feGaussianBlur stdDeviation="3"/></filter>
+      </defs>
+
+      <rect x="0" y="0" width="800" height="340" fill="url(#sky)"/>
+
+      <!-- distant haze -->
+      <rect x="0" y="230" width="800" height="110" fill="#1a1318" opacity="0.6"/>
+
+      <!-- smoke plumes (behind stacks) -->
+      <g opacity="0.55">
+        <ellipse class="smoke"    cx="215" cy="70"  rx="40" ry="18" fill="#6a5a60" filter="url(#blur1)"/>
+        <ellipse class="smoke s2" cx="355" cy="55"  rx="55" ry="22" fill="#7a6a70" filter="url(#blur1)"/>
+        <ellipse class="smoke s3" cx="475" cy="50"  rx="60" ry="25" fill="#8a7a80" filter="url(#blur1)"/>
+        <ellipse class="smoke s4" cx="615" cy="65"  rx="45" ry="20" fill="#6a5a60" filter="url(#blur1)"/>
+      </g>
+
+      <!-- main building -->
+      <rect x="180" y="180" width="450" height="120" fill="url(#bldg)"/>
+      <!-- brick texture (stripes) -->
+      <g opacity="0.18" fill="#000">
+        <rect x="180" y="200" width="450" height="2"/>
+        <rect x="180" y="220" width="450" height="2"/>
+        <rect x="180" y="240" width="450" height="2"/>
+        <rect x="180" y="260" width="450" height="2"/>
+        <rect x="180" y="280" width="450" height="2"/>
+      </g>
+      <!-- windows -->
+      <g fill="#c46a3a" opacity="0.55">
+        <rect x="210" y="210" width="10" height="14"/>
+        <rect x="240" y="210" width="10" height="14"/>
+        <rect x="270" y="210" width="10" height="14"/>
+        <rect x="560" y="210" width="10" height="14"/>
+        <rect x="590" y="210" width="10" height="14"/>
+        <rect x="210" y="250" width="10" height="14"/>
+        <rect x="240" y="250" width="10" height="14"/>
+        <rect x="560" y="250" width="10" height="14"/>
+        <rect x="590" y="250" width="10" height="14"/>
+      </g>
+
+      <!-- four chimneys -->
+      <g>
+        <rect x="205" y="90"  width="22" height="130" fill="url(#stack)"/>
+        <rect x="345" y="75"  width="22" height="145" fill="url(#stack)"/>
+        <rect x="465" y="75"  width="22" height="145" fill="url(#stack)"/>
+        <rect x="605" y="90"  width="22" height="130" fill="url(#stack)"/>
+        <!-- caps -->
+        <rect x="201" y="86"  width="30" height="6" fill="#6a656c"/>
+        <rect x="341" y="71"  width="30" height="6" fill="#6a656c"/>
+        <rect x="461" y="71"  width="30" height="6" fill="#6a656c"/>
+        <rect x="601" y="86"  width="30" height="6" fill="#6a656c"/>
+      </g>
+
+      <!-- ground -->
+      <rect x="0" y="300" width="800" height="40" fill="#0a080a"/>
+      <rect x="0" y="298" width="800" height="3" fill="#2a2025" opacity="0.7"/>
+
+      <!-- flying pig, tethered -->
+      <g class="pig" transform="translate(400,130)">
+        <!-- tether line -->
+        <line x1="0" y1="18" x2="66" y2="100" stroke="#2a2025" stroke-width="1.2" opacity="0.6"/>
+        <line x1="-6" y1="18" x2="-80" y2="95" stroke="#2a2025" stroke-width="1.2" opacity="0.6"/>
+        <!-- body -->
+        <ellipse cx="0" cy="0" rx="48" ry="28" fill="url(#pigGrad)"/>
+        <!-- head -->
+        <ellipse cx="-40" cy="-4" rx="16" ry="14" fill="url(#pigGrad)"/>
+        <!-- snout -->
+        <ellipse cx="-54" cy="-2" rx="6" ry="5" fill="#e76a9b"/>
+        <circle cx="-55" cy="-3" r="1" fill="#3a1a2a"/>
+        <circle cx="-53" cy="-1" r="1" fill="#3a1a2a"/>
+        <!-- eye -->
+        <circle cx="-44" cy="-7" r="1.6" fill="#2a1220"/>
+        <!-- ear -->
+        <path d="M -38 -16 L -32 -22 L -28 -14 Z" fill="#d06a93"/>
+        <!-- legs (dangling) -->
+        <rect x="-14" y="22" width="5" height="12" rx="2" fill="#d06a93"/>
+        <rect x="0"   y="24" width="5" height="12" rx="2" fill="#d06a93"/>
+        <rect x="14"  y="22" width="5" height="12" rx="2" fill="#d06a93"/>
+        <!-- tail -->
+        <path d="M 46 -2 q 8 -4 6 6 q -2 6 -8 2" fill="none" stroke="#d06a93" stroke-width="2.5" stroke-linecap="round"/>
+        <!-- highlight -->
+        <ellipse cx="-8" cy="-10" rx="18" ry="6" fill="#ffd4e4" opacity="0.45"/>
+      </g>
+    </svg>
+  </header>
+
+  <p class="lede">
+    Three topologies, five implementations. Same signal path philosophy (hot glass, high voltage, iron-coupled output)
+    utterly different personalities at the speaker terminals. The cells below compare the mechanics; the takeaway at the
+    bottom compares the feel.
+  </p>
+
+  <h2>Side by side</h2>
+
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr>
+          <th>Aspect</th>
+          <th class="set">Type 45 SET</th>
+          <th class="set">2A3 SET</th>
+          <th class="set">300B SET</th>
+          <th class="pp">PP Triode</th>
+          <th class="pp">PP Ultralinear</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th>Topology</th>
+          <td>One DHT, Class A</td>
+          <td>One DHT, Class A</td>
+          <td>One DHT, Class A</td>
+          <td>Two tubes, 180° phase, Class A/AB</td>
+          <td>Two tubes, screen tap ~40%, Class AB</td>
+        </tr>
+        <tr>
+          <th>Typical power</th>
+          <td>1.5–2 W</td>
+          <td>3–4 W (single plate); ~15 W PP</td>
+          <td>7–9 W</td>
+          <td>15–30 W</td>
+          <td>30–100 W</td>
+        </tr>
+        <tr>
+          <th>Plate voltage</th>
+          <td>~250 V</td>
+          <td>~250 V</td>
+          <td>~350–450 V</td>
+          <td>varies</td>
+          <td>varies</td>
+        </tr>
+        <tr>
+          <th>Plate resistance (Rp)</th>
+          <td>~1,700 Ω</td>
+          <td>~800 Ω</td>
+          <td>~700 Ω</td>
+          <td>—</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <th>Filament</th>
+          <td>2.5 V DHT</td>
+          <td>2.5 V DHT</td>
+          <td>5 V DHT</td>
+          <td>mix</td>
+          <td>mix</td>
+        </tr>
+        <tr>
+          <th>Distortion character</th>
+          <td>Lowest 2nd-harmonic at low level; very linear, clips gracefully</td>
+          <td>2nd-harmonic dominant, slightly more than 45</td>
+          <td>2nd-harmonic; richer, warmer texture</td>
+          <td>Evens cancel; 3rd-harmonic dominant, lower THD</td>
+          <td>Between triode and pentode</td>
+        </tr>
+        <tr>
+          <th>Damping factor</th>
+          <td>Very low (~2)</td>
+          <td>Low (~3)</td>
+          <td>Low (~3–4)</td>
+          <td>Moderate (4–8)</td>
+          <td>Higher (8–15)</td>
+        </tr>
+        <tr>
+          <th>Bass authority</th>
+          <td>Weakest; "delicate"</td>
+          <td>Better than 45; still gentle</td>
+          <td>Warmer, fuller bloom</td>
+          <td>Tighter</td>
+          <td>Tightest of the three</td>
+        </tr>
+        <tr>
+          <th>Sonic reputation</th>
+          <td>Purest, most transparent mids; jewel-like, tiny presentation</td>
+          <td>Most neutral of the classic DHTs; punchier than 45</td>
+          <td>Romantic, lush, holographic mids</td>
+          <td>Liquid mids with better grip</td>
+          <td>Most "hi-fi," neutral, controlled</td>
+        </tr>
+        <tr>
+          <th>Speaker demand</th>
+          <td>100+ dB (horns, Lowthers)</td>
+          <td>95+ dB (Klipsch, Zu, single-drivers)</td>
+          <td>93–95+ dB</td>
+          <td>88–92 dB OK</td>
+          <td>85–90 dB OK</td>
+        </tr>
+        <tr>
+          <th>Tube cost / availability</th>
+          <td>Scarce; NOS $200–600/pr; few current-production</td>
+          <td>Moderate; good current-production (EH, JJ, Sophia)</td>
+          <td>Plentiful current-production; NOS WE very expensive</td>
+          <td>Depends on tube</td>
+          <td>Depends on tube</td>
+        </tr>
+        <tr>
+          <th>OPT requirements</th>
+          <td>Gapped, must handle DC; small but high-quality critical</td>
+          <td>Gapped, DC bias; slightly larger than 45</td>
+          <td>Gapped, DC bias; larger core</td>
+          <td>No DC; easier core</td>
+          <td>No DC; needs UL taps</td>
+        </tr>
+        <tr>
+          <th>Classic examples</th>
+          <td>WE 91A-style; Shindo, Yamamoto A-08</td>
+          <td>Cary CAD-805 (triode mode), AN Kageki, Sun Audio</td>
+          <td>Cary 300B, AN Ongaku, many boutique</td>
+          <td>McIntosh MC30 (triode-strapped), Air Tight ATM-300</td>
+          <td>Dynaco ST-70, Marantz 8B, most modern EL34/KT88</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="takeaway">
+    <h3>Running with the dogs — quick mental model</h3>
+    <p>
+      <strong style="color:var(--pig)">Type 45</strong> is the most refined and most limiting DHT — you need the right
+      speaker or it falls apart. <strong style="color:var(--pig)">2A3</strong> is the "sensible DHT":
+      meaningfully more headroom with most of the 45's purity. <strong style="color:var(--pig)">300B</strong> trades some
+      transparency for warmth and usable power.
+    </p>
+    <p>
+      <strong style="color:var(--ember)">PP Triode</strong> keeps much of the single-ended tonal character while doubling
+      the power and cancelling even-order distortion. <strong style="color:var(--ember)">Ultralinear</strong> is Hafler's
+      compromise — screen taps give you ~80% of triode linearity with ~80% of pentode power, and the most flexible
+      speaker match.
+    </p>
+    <p class="confidence">
+      Confidence: high on power, Rp, and topology facts (well-documented tube specs). Sonic descriptions are
+      consensus-level audiophile characterizations, not measurements.
+    </p>
+  </div>
+
+  <footer>
+    <span class="pink">⬥</span> &nbsp; Three different ones &nbsp; <span class="pink">⬥</span>
+  </footer>
+</div>
+</body>
+</html>
