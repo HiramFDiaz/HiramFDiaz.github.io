@@ -491,12 +491,36 @@
           <td>Most "hi-fi," neutral, controlled</td>
         </tr>
         <tr>
-          <th>Speaker demand</th>
-          <td>100+ dB (horns, Lowthers)</td>
-          <td>95+ dB (Klipsch, Zu, single-drivers)</td>
-          <td>93–95+ dB</td>
-          <td>88–92 dB OK</td>
-          <td>85–90 dB OK</td>
+          <th>Sensitivity — near-field (~3 ft)</th>
+          <td>92+ dB</td>
+          <td>88+ dB</td>
+          <td>85+ dB</td>
+          <td>82+ dB</td>
+          <td>80+ dB</td>
+        </tr>
+        <tr>
+          <th>Sensitivity — mid-room (~10 ft)</th>
+          <td>100+ dB</td>
+          <td>95+ dB</td>
+          <td>93+ dB</td>
+          <td>88–92 dB</td>
+          <td>85–90 dB</td>
+        </tr>
+        <tr>
+          <th>Speaker type (the real constraint)</th>
+          <td>Crossover-less single-driver only (Lowther, PHY-HP, Voxativ)</td>
+          <td>Single-driver or very-high-sensitivity horn with benign network</td>
+          <td>Single-driver, or vintage horn (Altec, Klipsch Heritage) as a compromise</td>
+          <td>2-way OK if impedance is reasonably flat</td>
+          <td>Most box speakers with standard crossovers</td>
+        </tr>
+        <tr>
+          <th>Why (load character)</th>
+          <td>DF≈2: any crossover dip or phase swing bends FR — even 1.5-way designs dip 3-4Ω at the handoff</td>
+          <td>Same — slightly more headroom to mask it</td>
+          <td>Same — reactive loads still warp the top end</td>
+          <td>DF 4-8 tolerates mild Z swings</td>
+          <td>DF 8-15 drives reactive, Z-swinging loads with minimal FR effect</td>
         </tr>
         <tr>
           <th>Tube cost / availability</th>
@@ -540,6 +564,34 @@
       compromise — screen taps give you ~80% of triode linearity with ~80% of pentode power, and the most flexible
       speaker match.
     </p>
+    <p style="border-left: 3px solid var(--ember); padding-left: 14px; margin-top: 18px;">
+      <strong style="color:var(--ember)">One nuance on SPL.</strong> The "you need 100 dB speakers for a SET" rule of
+      thumb assumes a mid-room listening triangle (~10 ft). Inverse square law gives +6 dB per halving of distance, so
+      near-field listening (3-4 ft) relaxes the requirement by ~9-10 dB. A 95 dB speaker at 3 ft produces essentially the
+      same SPL at your ears as a 100 dB speaker at 7 ft. This is why 45 SET systems in a desktop or recliner-plus-couch
+      configuration can work with "only" 92-95 dB speakers, provided the impedance/phase constraint below is still met.
+    </p>
+    <p style="border-left: 3px solid var(--pig); padding-left: 14px; margin-top: 18px;">
+      <strong style="color:var(--pig)">One nuance on matching.</strong> Sensitivity tells you how loud a speaker gets per
+      watt; it does <em>not</em> tell you how well a SET will drive it. With a damping factor of 2–4, the amp's output
+      voltage follows the speaker's impedance curve — any dip, peak, or phase swing becomes a bump in frequency response.
+      In practice this rules out almost every speaker with a crossover. Even 1.5-way designs — a widebander plus a helper
+      woofer crossed at 80-150 Hz with a single cap and coil — dip to 3-4Ω with ±45° phase at the handoff, and a SET
+      will hear it. The honest answer is that SETs want crossover-less single-driver speakers (Lowther, PHY-HP, Voxativ,
+      Fostex widebanders), and the Klipsch/Altec horn crowd accepts a known compromise in exchange for dynamics and
+      headroom. PP triode widens the window; ultralinear opens it all the way.
+    </p>
+
+    <p style="margin-top: 22px; padding: 14px 16px; background: rgba(255,255,255,0.02); border: 1px dashed var(--concrete-2); font-size: 0.88rem; color: var(--bone);">
+      <strong style="color:var(--pig); text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.72rem; font-family: 'Helvetica Neue', Arial, sans-serif;">Footnote &middot; Filament heating.</strong><br/>
+      Another advantage of low-power DHTs: their filaments tolerate AC heating well, and the best builds lean into it —
+      the Korneff 45 above is a canonical example. AC heating skips the rectifier and filter caps of a DC filament
+      supply, which advocates argue robs the signal of immediacy. Residual hum is nulled with a balance potentiometer
+      ("humdinger") or a center-tapped filament winding. This benefit doesn't transfer to PP designs built around
+      indirectly-heated tubes (EL34, KT88, 6L6) — their heater is isolated from the cathode, so DC heating is a
+      non-issue and the sonic argument doesn't apply.
+    </p>
+
     <p class="confidence">
       Confidence: high on power, Rp, and topology facts (well-documented tube specs). Sonic descriptions are
       consensus-level audiophile characterizations, not measurements.
