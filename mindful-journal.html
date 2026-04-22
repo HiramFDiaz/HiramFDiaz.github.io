@@ -1,0 +1,1177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nine Lives · A Mindful Journal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f7ecd9;
+    --bg-deep: #ecddc0;
+    --ink: #2a1f1a;
+    --ink-soft: #5a4a3e;
+    --ink-faint: #9a8b78;
+    --accent: #c87339;
+    --accent-soft: #e8a274;
+    --accent-deep: #a55a2a;
+    --card: #fdf6e8;
+    --glow-a: rgba(232, 162, 116, 0.22);
+    --glow-b: rgba(122, 138, 102, 0.18);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Fraunces', serif;
+    font-weight: 300;
+    line-height: 1.6;
+    min-height: 100vh;
+    overflow-x: hidden;
+    transition: background 0.6s ease, color 0.6s ease;
+  }
+
+  body {
+    background:
+      radial-gradient(ellipse at 15% 10%, var(--glow-a) 0%, transparent 45%),
+      radial-gradient(ellipse at 85% 85%, var(--glow-b) 0%, transparent 50%),
+      var(--bg);
+    background-attachment: fixed;
+    padding: 4vh 5vw 8vh;
+    position: relative;
+    transition: background 0.6s ease;
+  }
+
+  /* Theme switcher */
+  .theme-switcher {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 10;
+    background: var(--card);
+    border: 1.5px solid var(--bg-deep);
+    border-radius: 30px;
+    padding: 0.5rem 0.8rem;
+    box-shadow: 0 4px 14px rgba(42, 31, 26, 0.08);
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .theme-switcher label {
+    font-family: 'Caveat', cursive;
+    font-size: 1.05rem;
+    color: var(--ink-soft);
+  }
+
+  .theme-switcher select {
+    font-family: 'Caveat', cursive;
+    font-size: 1.1rem;
+    color: var(--accent);
+    background: transparent;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 0.2rem 0.5rem;
+    font-weight: 600;
+  }
+
+  /* Corner mascot */
+  .corner-mascot {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 70px;
+    height: 70px;
+    z-index: 3;
+    opacity: 0.9;
+    transition: transform 0.4s ease;
+  }
+  .corner-mascot:hover { transform: rotate(-5deg) scale(1.1); }
+
+  .container {
+    max-width: 780px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+    padding-top: 40px;
+  }
+
+  /* Masthead */
+  .masthead {
+    text-align: center;
+    padding: 3vh 0 5vh;
+    position: relative;
+    animation: fadeUp 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  .eyebrow {
+    font-family: 'Caveat', cursive;
+    font-size: 1.3rem;
+    color: var(--accent);
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    transform: rotate(-1.5deg);
+    display: inline-block;
+  }
+
+  h1 {
+    font-family: 'Fraunces', serif;
+    font-weight: 300;
+    font-size: clamp(3rem, 8vw, 5rem);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    font-style: italic;
+    color: var(--ink);
+    transition: color 0.6s ease;
+  }
+
+  h1 .mark {
+    color: var(--accent);
+    font-style: normal;
+    display: inline-block;
+  }
+
+  .date-line {
+    font-family: 'Caveat', cursive;
+    font-size: 1.4rem;
+    margin-top: 1.5rem;
+    color: var(--ink-soft);
+    font-weight: 400;
+    transform: rotate(-0.5deg);
+    display: inline-block;
+  }
+
+  .header-svg {
+    display: block;
+    margin: 0 auto 1rem;
+    width: 80px;
+    height: 60px;
+  }
+
+  /* Quote section */
+  .quote-section {
+    padding: 5vh 0 4vh;
+    text-align: center;
+    animation: fadeUp 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) 0.2s backwards;
+  }
+
+  .quote-card {
+    background: var(--card);
+    border: 1px solid var(--bg-deep);
+    border-radius: 8px;
+    padding: 3.5rem 2.5rem 2.5rem;
+    position: relative;
+    box-shadow: 0 8px 24px rgba(42, 31, 26, 0.06), 0 2px 4px rgba(42, 31, 26, 0.04);
+    transition: background 0.6s ease, border-color 0.6s ease;
+  }
+
+  .quote-card::before {
+    content: attr(data-mark);
+    position: absolute;
+    top: -18px;
+    left: 50%;
+    transform: translateX(-50%) rotate(-10deg);
+    background: var(--bg);
+    padding: 0 0.8rem;
+    font-size: 1.5rem;
+    transition: background 0.6s ease;
+  }
+
+  blockquote {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: clamp(1.4rem, 3vw, 1.9rem);
+    line-height: 1.4;
+    font-weight: 300;
+    color: var(--ink);
+    max-width: 560px;
+    margin: 0 auto;
+  }
+
+  .attribution {
+    margin-top: 1.8rem;
+    font-family: 'Caveat', cursive;
+    font-size: 1.2rem;
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  .attribution::before { content: '— '; }
+
+  /* Divider */
+  .divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 4vh 0 3vh;
+    gap: 1rem;
+    animation: fadeUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.4s backwards;
+  }
+
+  .divider .line {
+    flex: 1;
+    max-width: 100px;
+    height: 1px;
+    background: var(--ink-faint);
+    opacity: 0.5;
+  }
+
+  .divider .ornament { font-size: 1.3rem; }
+
+  /* Sections */
+  .section {
+    padding: 2.5vh 0;
+    animation: fadeUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.5s backwards;
+  }
+
+  .section-label {
+    font-family: 'Caveat', cursive;
+    font-size: 1.5rem;
+    color: var(--ink-soft);
+    margin-bottom: 1rem;
+    font-weight: 500;
+    display: flex;
+    align-items: baseline;
+    gap: 0.8rem;
+  }
+
+  .section-label .mark-num {
+    color: var(--accent);
+    font-size: 1.2rem;
+  }
+
+  /* Mood grid */
+  .mood-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 0.6rem;
+    margin-top: 1rem;
+  }
+
+  .mood-option {
+    background: var(--card);
+    border: 1.5px solid var(--bg-deep);
+    border-radius: 14px;
+    padding: 1.2rem 0.4rem 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    text-align: center;
+  }
+
+  .mood-option:hover {
+    border-color: var(--accent);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 14px rgba(42, 31, 26, 0.12);
+  }
+
+  .mood-option.selected {
+    background: var(--accent);
+    border-color: var(--accent);
+    transform: translateY(-3px);
+  }
+
+  .mood-option.selected .mood-label { color: var(--card); }
+
+  .mood-glyph { font-size: 1.8rem; display: block; margin-bottom: 0.3rem; }
+
+  .mood-label {
+    font-family: 'Caveat', cursive;
+    font-size: 0.95rem;
+    color: var(--ink-soft);
+    font-weight: 500;
+  }
+
+  /* Prompt blocks */
+  .prompt-text {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 1.2rem;
+    color: var(--ink);
+    margin-bottom: 0.8rem;
+    line-height: 1.4;
+  }
+
+  textarea {
+    width: 100%;
+    background: var(--card);
+    border: 1.5px solid var(--bg-deep);
+    border-radius: 10px;
+    padding: 1rem 1.2rem;
+    font-family: 'Caveat', cursive;
+    font-size: 1.3rem;
+    color: var(--ink);
+    resize: none;
+    outline: none;
+    transition: all 0.3s ease;
+    min-height: 3rem;
+    line-height: 1.5;
+  }
+
+  textarea:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--glow-a);
+  }
+
+  textarea::placeholder {
+    color: var(--ink-faint);
+    font-style: italic;
+    opacity: 0.7;
+  }
+
+  .freewrite {
+    min-height: 220px;
+    font-size: 1.25rem;
+    line-height: 1.9;
+    background-image:
+      repeating-linear-gradient(
+        transparent,
+        transparent 1.85rem,
+        var(--glow-a) 1.85rem,
+        var(--glow-a) calc(1.85rem + 1px)
+      );
+    background-position: 0 2.6rem;
+  }
+
+  /* Breathing section */
+  .breath-section {
+    margin: 5vh 0;
+    text-align: center;
+    padding: 4vh 2rem;
+    background: var(--card);
+    border-radius: 20px;
+    border: 1.5px solid var(--bg-deep);
+    position: relative;
+    overflow: hidden;
+    animation: fadeUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.6s backwards;
+    transition: background 0.6s ease, border-color 0.6s ease;
+  }
+
+  .breath-title {
+    font-family: 'Caveat', cursive;
+    font-size: 1.7rem;
+    margin-bottom: 2rem;
+    color: var(--ink-soft);
+    font-weight: 500;
+  }
+
+  .breath-mascot {
+    width: 200px;
+    height: 140px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  .breath-mascot svg { width: 100%; height: 100%; }
+
+  .breath-mascot .body {
+    transform-origin: center bottom;
+    animation: breath 5s ease-in-out infinite;
+  }
+
+  @keyframes breath {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.08); }
+  }
+
+  .breath-label {
+    font-family: 'Caveat', cursive;
+    font-size: 1.3rem;
+    margin-top: 1rem;
+    color: var(--accent);
+  }
+
+  .breath-waves {
+    position: absolute;
+    top: 50%;
+    right: 15%;
+    font-family: 'Caveat', cursive;
+    color: var(--accent-soft);
+    font-size: 1.3rem;
+    animation: wave-float 2.5s ease-in-out infinite;
+    opacity: 0;
+  }
+
+  @keyframes wave-float {
+    0% { opacity: 0; transform: translateX(0) translateY(0); }
+    50% { opacity: 0.7; transform: translateX(15px) translateY(-8px); }
+    100% { opacity: 0; transform: translateX(30px) translateY(-16px); }
+  }
+
+  /* Close */
+  .close {
+    text-align: center;
+    margin-top: 5vh;
+    padding-top: 4vh;
+    animation: fadeUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.7s backwards;
+  }
+
+  .close .divider { margin-bottom: 2.5rem; }
+
+  .new-quote-btn {
+    background: var(--accent);
+    border: none;
+    padding: 1rem 2.5rem;
+    font-family: 'Caveat', cursive;
+    font-size: 1.2rem;
+    color: var(--card);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    border-radius: 30px;
+    box-shadow: 0 4px 12px rgba(42, 31, 26, 0.2);
+  }
+
+  .new-quote-btn:hover {
+    background: var(--ink);
+    transform: translateY(-2px);
+  }
+
+  .colophon {
+    margin-top: 2.5rem;
+    font-family: 'Caveat', cursive;
+    font-size: 1.1rem;
+    color: var(--ink-faint);
+    line-height: 1.5;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Fish theme: bubbles rising */
+  body.theme-fish::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    background-image:
+      radial-gradient(circle at 10% 90%, rgba(255,255,255,0.4) 2px, transparent 3px),
+      radial-gradient(circle at 30% 70%, rgba(255,255,255,0.3) 1.5px, transparent 2.5px),
+      radial-gradient(circle at 70% 85%, rgba(255,255,255,0.4) 2.5px, transparent 3.5px),
+      radial-gradient(circle at 85% 60%, rgba(255,255,255,0.3) 1.5px, transparent 2.5px);
+    animation: bubbles-rise 8s linear infinite;
+  }
+
+  @keyframes bubbles-rise {
+    from { background-position: 0 0, 0 0, 0 0, 0 0; }
+    to { background-position: 0 -200px, 0 -200px, 0 -200px, 0 -200px; }
+  }
+
+  @media (max-width: 600px) {
+    .mood-grid { grid-template-columns: repeat(3, 1fr); }
+    body { padding: 3vh 4vw 6vh; }
+    .quote-card { padding: 3rem 1.5rem 2rem; }
+    .corner-mascot { width: 50px; height: 50px; top: 10px; right: 10px; }
+    .theme-switcher { top: 10px; left: 10px; padding: 0.4rem 0.6rem; }
+    .theme-switcher label { font-size: 0.95rem; }
+    .theme-switcher select { font-size: 1rem; }
+    .container { padding-top: 60px; }
+  }
+</style>
+</head>
+<body class="theme-cat">
+
+<!-- Theme switcher -->
+<div class="theme-switcher">
+  <label for="theme-select">a journal for:</label>
+  <select id="theme-select">
+    <option value="cat">🐱 cats</option>
+    <option value="pig">🐷 pigs</option>
+    <option value="dog">🐶 dogs</option>
+    <option value="fish">🐟 fish</option>
+  </select>
+</div>
+
+<!-- Corner mascot (swapped by theme) -->
+<div class="corner-mascot" id="corner-mascot"></div>
+
+<div class="container">
+
+  <header class="masthead">
+    <div class="header-svg" id="header-svg"></div>
+    <div class="eyebrow" id="eyebrow">Vol. I · a journal for quiet souls</div>
+    <h1 id="title">Nine Lives <span class="mark" id="title-mark">🐾</span><br><span id="title-sub">Nine Breaths</span></h1>
+    <div class="date-line" id="date-line"></div>
+  </header>
+
+  <section class="quote-section">
+    <div class="quote-card" id="quote-card" data-mark="🐾">
+      <blockquote id="quote-text"></blockquote>
+      <div class="attribution" id="quote-author"></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-label"><span class="mark-num" id="mood-mark">🐾</span><span id="mood-heading">how you feel today</span></div>
+    <div class="mood-grid" id="mood-grid"></div>
+  </section>
+
+  <div class="divider">
+    <div class="line"></div>
+    <span class="ornament" id="div-mark-1">🐾</span>
+    <div class="line"></div>
+  </div>
+
+  <section class="section">
+    <div class="section-label"><span class="mark-num">🐾</span><span id="gratitude-heading">three small joys</span></div>
+    <div class="prompt-text" id="gratitude-prompt"></div>
+    <textarea id="gratitude-input" rows="3"></textarea>
+  </section>
+
+  <section class="section">
+    <div class="section-label"><span class="mark-num">🐾</span><span id="intention-heading">today's intention</span></div>
+    <div class="prompt-text" id="intention-prompt"></div>
+    <textarea id="intention-input" rows="2"></textarea>
+  </section>
+
+  <section class="breath-section">
+    <div class="breath-title" id="breath-title">~ a pause to breathe ~</div>
+    <div class="breath-mascot" id="breath-mascot"></div>
+    <div class="breath-label" id="breath-label">breathe in ~ breathe out</div>
+  </section>
+
+  <section class="section">
+    <div class="section-label"><span class="mark-num">🐾</span><span id="reflect-heading">stretch and reflect</span></div>
+    <div class="prompt-text" id="reflection-prompt"></div>
+    <textarea class="freewrite" id="reflection-input" rows="8"></textarea>
+  </section>
+
+  <section class="section">
+    <div class="section-label"><span class="mark-num">🐾</span><span id="evening-heading">curling up for the night</span></div>
+    <div class="prompt-text" id="evening-prompt"></div>
+    <textarea id="evening-input" rows="2"></textarea>
+  </section>
+
+  <div class="close">
+    <div class="divider">
+      <div class="line"></div>
+      <span class="ornament" id="div-mark-2">🐾 🐾 🐾</span>
+      <div class="line"></div>
+    </div>
+    <button class="new-quote-btn" id="new-quote-btn" onclick="newQuote()">fetch another bit of wisdom</button>
+    <div class="colophon" id="colophon"></div>
+  </div>
+
+</div>
+
+<script>
+/* ============================================================
+   THEMES — each is a fully self-contained configuration.
+   ============================================================ */
+const THEMES = {
+  cat: {
+    palette: {
+      bg: '#f7ecd9', bgDeep: '#ecddc0', ink: '#2a1f1a', inkSoft: '#5a4a3e',
+      inkFaint: '#9a8b78', accent: '#c87339', accentSoft: '#e8a274',
+      accentDeep: '#a55a2a', card: '#fdf6e8',
+      glowA: 'rgba(232, 162, 116, 0.22)', glowB: 'rgba(122, 138, 102, 0.18)'
+    },
+    mark: '🐾',
+    markLarge: '🐾',
+    divMark: '🐾',
+    divMarkEnd: '🐾 🐾 🐾',
+    eyebrow: 'Vol. I · a journal for quiet souls',
+    title: 'Nine Lives',
+    titleSub: 'Nine Breaths',
+    moodHeading: 'how the cat of you feels today',
+    gratitudeHeading: 'three small sunbeams',
+    gratitudePrompt: 'Little things worth stretching toward today—',
+    gratitudePlaceholder: 'warm toast, a good stretch, morning light on the floor...',
+    intentionHeading: "today's gentle intention",
+    intentionPrompt: "What I'm carrying in my paws today—",
+    intentionPlaceholder: 'one word, one wish, one soft thing...',
+    breathTitle: '~ a pause to purr ~',
+    breathLabel: 'breathe in ~ purr out',
+    reflectHeading: 'stretch and reflect',
+    reflectPlaceholder: 'write freely, like a cat kneading a blanket...',
+    eveningHeading: 'curling up for the night',
+    eveningPrompt: "One thing I'm setting down before sleep—",
+    eveningPlaceholder: 'a worry, a tangle, a small hiss of the day...',
+    buttonText: 'fetch another whisker of wisdom',
+    colophon: 'written on soft paws ~ ginger ink on cream paper<br><em>be like the cat — curious, calm, and unbothered</em>',
+    breathWave1: 'mrrr~',
+    breathWave2: 'purr~',
+    moods: [
+      {glyph:'☀️', label:'sunbeam'}, {glyph:'😺', label:'purring'},
+      {glyph:'🍞', label:'loaf mode'}, {glyph:'⚡', label:'zoomies'},
+      {glyph:'📦', label:'in the box'}, {glyph:'🐾', label:'soft paws'}
+    ],
+    quotes: [
+      { text: "Time spent with cats is never wasted.", author: "Sigmund Freud" },
+      { text: "One cat just leads to another.", author: "Ernest Hemingway" },
+      { text: "A cat has absolute emotional honesty.", author: "Ernest Hemingway" },
+      { text: "In ancient times cats were worshipped as gods; they have not forgotten this.", author: "Terry Pratchett" },
+      { text: "The smallest feline is a masterpiece.", author: "Leonardo da Vinci" },
+      { text: "What greater gift than the love of a cat?", author: "Charles Dickens" },
+      { text: "A cat pours his body on the floor like water.", author: "William Lyon Phelps" },
+      { text: "There are no ordinary cats.", author: "Colette" },
+      { text: "The present moment is the only moment available to us.", author: "Thich Nhat Hanh" },
+      { text: "Wherever you are, be there totally.", author: "Eckhart Tolle" },
+      { text: "The quieter you become, the more you can hear.", author: "Ram Dass" },
+      { text: "What you seek is seeking you.", author: "Rumi" },
+      { text: "Feelings come and go like clouds in a windy sky.", author: "Thich Nhat Hanh" },
+      { text: "Every moment is a fresh beginning.", author: "T.S. Eliot" },
+      { text: "Be here now.", author: "Ram Dass" },
+      { text: "You are the sky. Everything else is just the weather.", author: "Pema Chödrön" },
+      { text: "Smile, breathe, and go slowly.", author: "Thich Nhat Hanh" },
+      { text: "Dogs have owners, cats have staff.", author: "Unknown" },
+      { text: "A house without a cat is just a building.", author: "Unknown" },
+      { text: "Cats are connoisseurs of comfort.", author: "James Herriot" },
+      { text: "Simplicity, patience, compassion. These three are your greatest treasures.", author: "Lao Tzu" },
+      { text: "Joy is the simplest form of gratitude.", author: "Karl Barth" },
+      { text: "Gratitude turns what we have into enough.", author: "Aesop" },
+      { text: "Forever is composed of nows.", author: "Emily Dickinson" },
+      { text: "As every cat owner knows, nobody owns a cat.", author: "Ellen Perry Berkeley" }
+    ],
+    reflections: [
+      "Where in your body do you feel tight today? Can you soften it, the way a cat softens into sleep?",
+      "What sunbeam have you missed this week by looking elsewhere?",
+      "If you were a cat, where would you curl up right now? What does that place mean?",
+      "A cat doesn't apologize for napping. What are you apologizing for that you don't need to?",
+      "What's been hissing at the edges of your thoughts? What does it actually want?",
+      "What are you carrying in your paws that isn't yours to carry?",
+      "Notice the space between your thoughts. What lives in that quiet?"
+    ]
+  },
+
+  pig: {
+    palette: {
+      bg: '#fde8ed', bgDeep: '#f4d0da', ink: '#3a1a22', inkSoft: '#6b3a48',
+      inkFaint: '#a87a8a', accent: '#e07a9a', accentSoft: '#f2a8bd',
+      accentDeep: '#b85575', card: '#fff4f7',
+      glowA: 'rgba(242, 168, 189, 0.28)', glowB: 'rgba(224, 122, 154, 0.15)'
+    },
+    mark: '🐽',
+    markLarge: '🐽',
+    divMark: '❀',
+    divMarkEnd: '❀ 🐽 ❀',
+    eyebrow: 'Vol. I · a journal for gentle souls',
+    title: 'Rolling in',
+    titleSub: 'the Good Mud',
+    moodHeading: 'how the pig of you feels today',
+    gratitudeHeading: 'three small truffles',
+    gratitudePrompt: 'Little things worth rooting for today—',
+    gratitudePlaceholder: 'a soft blanket, a shared snack, a patch of sun...',
+    intentionHeading: "today's snug intention",
+    intentionPrompt: "What I'm nuzzling toward today—",
+    intentionPlaceholder: 'one word, one wish, one cozy thing...',
+    breathTitle: '~ a pause to snuffle ~',
+    breathLabel: 'breathe in ~ oink out softly',
+    reflectHeading: 'wallow and reflect',
+    reflectPlaceholder: 'write freely, roll around in the thoughts...',
+    eveningHeading: 'snuggling into the hay',
+    eveningPrompt: "One thing I'm setting down before sleep—",
+    eveningPlaceholder: 'a worry, a tangle, a small grumble of the day...',
+    buttonText: 'snuffle out more wisdom',
+    colophon: 'written in rose ink on soft pink paper<br><em>be like the pig — curious, content, unhurried</em>',
+    breathWave1: 'oink~',
+    breathWave2: 'snrf~',
+    moods: [
+      {glyph:'🌸', label:'blossomy'}, {glyph:'🐽', label:'snuggly'},
+      {glyph:'🍎', label:'well-fed'}, {glyph:'💭', label:'daydreamy'},
+      {glyph:'🌧️', label:'mud-heavy'}, {glyph:'🫧', label:'tender'}
+    ],
+    quotes: [
+      { text: "A pig is a jolly companion, boar, sow, barrow, or gilt.", author: "Thomas Jefferson" },
+      { text: "I learned long ago, never to wrestle with a pig. You get dirty, and besides, the pig likes it.", author: "George Bernard Shaw" },
+      { text: "Pigs are intelligent, social animals who experience joy, pain, and affection.", author: "Jane Goodall" },
+      { text: "Some pig.", author: "Charlotte, from Charlotte's Web" },
+      { text: "The pig, if I am not mistaken, supplies us with all manner of comforts.", author: "Samuel Butler" },
+      { text: "Never try to teach a pig to sing. It wastes your time and annoys the pig.", author: "Robert A. Heinlein" },
+      { text: "All animals are equal, but some are more equal than others.", author: "George Orwell" },
+      { text: "Happiness is a warm pile of hay and good company.", author: "Unknown" },
+      { text: "The present moment is the only moment available to us.", author: "Thich Nhat Hanh" },
+      { text: "Wherever you are, be there totally.", author: "Eckhart Tolle" },
+      { text: "The quieter you become, the more you can hear.", author: "Ram Dass" },
+      { text: "Simplicity, patience, compassion. These three are your greatest treasures.", author: "Lao Tzu" },
+      { text: "Gratitude turns what we have into enough.", author: "Aesop" },
+      { text: "Joy is the simplest form of gratitude.", author: "Karl Barth" },
+      { text: "You are the sky. Everything else is just the weather.", author: "Pema Chödrön" },
+      { text: "Every moment is a fresh beginning.", author: "T.S. Eliot" },
+      { text: "Be here now.", author: "Ram Dass" },
+      { text: "Forever is composed of nows.", author: "Emily Dickinson" },
+      { text: "Slow down and everything you are chasing will come around and catch you.", author: "John De Paola" },
+      { text: "Peace comes from within. Do not seek it without.", author: "Buddha" }
+    ],
+    reflections: [
+      "What simple comfort have you been overlooking? Can you let yourself have it today?",
+      "A pig doesn't apologize for resting in the mud. What are you apologizing for that is really just rest?",
+      "What small, soft thing would make today feel kinder?",
+      "Where are you rushing when you could be rooting slowly?",
+      "What are you hungry for that isn't food?",
+      "If today were a patch of sun and soft earth, what would you settle into?",
+      "What is one grumble you can let out, and then let go?"
+    ]
+  },
+
+  dog: {
+    palette: {
+      bg: '#ece4d4', bgDeep: '#d8cdb5', ink: '#2b2318', inkSoft: '#574a36',
+      inkFaint: '#968871', accent: '#8b5a2b', accentSoft: '#c49a70',
+      accentDeep: '#654020', card: '#f8f2e4',
+      glowA: 'rgba(196, 154, 112, 0.25)', glowB: 'rgba(139, 90, 43, 0.15)'
+    },
+    mark: '🐾',
+    markLarge: '🦴',
+    divMark: '🦴',
+    divMarkEnd: '🐾 🦴 🐾',
+    eyebrow: 'Vol. I · a journal for loyal hearts',
+    title: 'Good Dog,',
+    titleSub: 'Good Day',
+    moodHeading: 'how the dog of you feels today',
+    gratitudeHeading: 'three good boys of the day',
+    gratitudePrompt: 'Small things worth wagging about today—',
+    gratitudePlaceholder: 'a walk, a friend, a patch of grass...',
+    intentionHeading: "today's good-dog intention",
+    intentionPrompt: "What I'm chasing today, in a good way—",
+    intentionPlaceholder: 'one word, one wish, one thing to fetch...',
+    breathTitle: '~ a pause to settle ~',
+    breathLabel: 'breathe in ~ sigh out',
+    reflectHeading: 'sit, stay, reflect',
+    reflectPlaceholder: 'write freely, like following a scent...',
+    eveningHeading: 'settling into the bed',
+    eveningPrompt: "One thing I'm dropping before sleep—",
+    eveningPlaceholder: 'a worry, a bone I should bury for real, a bark of the day...',
+    buttonText: 'fetch another bit of wisdom',
+    colophon: 'written in warm brown on oatmeal paper<br><em>be like the dog — loyal, present, endlessly delighted</em>',
+    breathWave1: 'woof~',
+    breathWave2: '*sigh*',
+    moods: [
+      {glyph:'☀️', label:'wagging'}, {glyph:'🦴', label:'good-boy'},
+      {glyph:'😴', label:'napping'}, {glyph:'🎾', label:'playful'},
+      {glyph:'🌧️', label:'under the bed'}, {glyph:'💕', label:'cuddly'}
+    ],
+    quotes: [
+      { text: "Dogs do speak, but only to those who know how to listen.", author: "Orhan Pamuk" },
+      { text: "A dog is the only thing on earth that loves you more than he loves himself.", author: "Josh Billings" },
+      { text: "Dogs have a way of finding the people who need them.", author: "Thom Jones" },
+      { text: "Until one has loved an animal, a part of one's soul remains unawakened.", author: "Anatole France" },
+      { text: "The better I get to know men, the more I find myself loving dogs.", author: "Charles de Gaulle" },
+      { text: "Dogs are not our whole life, but they make our lives whole.", author: "Roger Caras" },
+      { text: "Happiness is a warm puppy.", author: "Charles M. Schulz" },
+      { text: "Every dog must have his day.", author: "Jonathan Swift" },
+      { text: "The greatest pleasure of a dog is that you may make a fool of yourself with him, and he will not scold you.", author: "Samuel Butler" },
+      { text: "A dog will teach you unconditional love.", author: "Robert Wagner" },
+      { text: "The present moment is the only moment available to us.", author: "Thich Nhat Hanh" },
+      { text: "Wherever you are, be there totally.", author: "Eckhart Tolle" },
+      { text: "Be here now.", author: "Ram Dass" },
+      { text: "Every moment is a fresh beginning.", author: "T.S. Eliot" },
+      { text: "Gratitude turns what we have into enough.", author: "Aesop" },
+      { text: "The quieter you become, the more you can hear.", author: "Ram Dass" },
+      { text: "Joy is the simplest form of gratitude.", author: "Karl Barth" },
+      { text: "Forever is composed of nows.", author: "Emily Dickinson" },
+      { text: "Kindness is the language which the deaf can hear and the blind can see.", author: "Mark Twain" },
+      { text: "You are the sky. Everything else is just the weather.", author: "Pema Chödrön" }
+    ],
+    reflections: [
+      "What small thing today deserved more of your tail-wagging attention?",
+      "A dog greets each day like it's new. Where have you forgotten that today is also new?",
+      "What bone are you still chewing that no longer has any flavor?",
+      "Who have you been loyal to — including yourself?",
+      "What would it mean to greet yourself at the door the way a dog does?",
+      "Where have you been barking at something that doesn't deserve the energy?",
+      "What's one scent — real or metaphorical — you want to follow today?"
+    ]
+  },
+
+  fish: {
+    palette: {
+      bg: '#d4e8ed', bgDeep: '#b8d4dc', ink: '#0f2a35', inkSoft: '#2c4f5c',
+      inkFaint: '#6a8994', accent: '#2b8ba3', accentSoft: '#6cbccc',
+      accentDeep: '#1a5f73', card: '#ecf6f8',
+      glowA: 'rgba(108, 188, 204, 0.3)', glowB: 'rgba(43, 139, 163, 0.15)'
+    },
+    mark: '〰',
+    markLarge: '🐚',
+    divMark: '〰',
+    divMarkEnd: '〰 🐚 〰',
+    eyebrow: 'Vol. I · a journal for drifting souls',
+    title: 'Deep Blue,',
+    titleSub: 'Slow Current',
+    moodHeading: 'how the fish of you feels today',
+    gratitudeHeading: 'three small shimmers',
+    gratitudePrompt: 'Small glints worth noticing in the current today—',
+    gratitudePlaceholder: 'a ray of light, a still moment, a quiet word...',
+    intentionHeading: "today's drifting intention",
+    intentionPrompt: "What I'm swimming gently toward today—",
+    intentionPlaceholder: 'one word, one wish, one quiet current...',
+    breathTitle: '~ a pause to drift ~',
+    breathLabel: 'breathe in ~ bubble out',
+    reflectHeading: 'drift and reflect',
+    reflectPlaceholder: 'write freely, like letting the current carry you...',
+    eveningHeading: 'settling into the deep',
+    eveningPrompt: "One thing I'm letting sink before sleep—",
+    eveningPlaceholder: 'a worry, a tangle, a ripple of the day...',
+    buttonText: 'cast for another pearl',
+    colophon: 'written in tidal ink on sea-worn paper<br><em>be like the fish — fluid, silent, at home in the deep</em>',
+    breathWave1: '○ ○ ○',
+    breathWave2: '~ ~ ~',
+    moods: [
+      {glyph:'🌊', label:'flowing'}, {glyph:'✨', label:'shimmery'},
+      {glyph:'🫧', label:'drifting'}, {glyph:'🐟', label:'schooling'},
+      {glyph:'🌑', label:'in the deep'}, {glyph:'🐚', label:'still'}
+    ],
+    quotes: [
+      { text: "The cure for anything is salt water: sweat, tears, or the sea.", author: "Isak Dinesen" },
+      { text: "The sea, once it casts its spell, holds one in its net of wonder forever.", author: "Jacques Cousteau" },
+      { text: "In every drop of water there is a story of life.", author: "Leena Arif" },
+      { text: "We are tied to the ocean. And when we go back to the sea, we are going back from whence we came.", author: "John F. Kennedy" },
+      { text: "Water is the driving force of all nature.", author: "Leonardo da Vinci" },
+      { text: "The sea, washing the equator and the poles, offers its perilous aid.", author: "Ralph Waldo Emerson" },
+      { text: "Be like water making its way through cracks. Do not be assertive, but adjust to the object.", author: "Bruce Lee" },
+      { text: "In one drop of water are found all the secrets of all the oceans.", author: "Kahlil Gibran" },
+      { text: "The fish trap exists because of the fish. Once you've gotten the fish you can forget the trap.", author: "Zhuangzi" },
+      { text: "Empty your mind, be formless, shapeless, like water.", author: "Bruce Lee" },
+      { text: "The present moment is the only moment available to us.", author: "Thich Nhat Hanh" },
+      { text: "You cannot stop the waves, but you can learn to surf.", author: "Jon Kabat-Zinn" },
+      { text: "The quieter you become, the more you can hear.", author: "Ram Dass" },
+      { text: "Feelings come and go like clouds in a windy sky.", author: "Thich Nhat Hanh" },
+      { text: "Life is a balance of holding on and letting go.", author: "Rumi" },
+      { text: "Let go of the past and live fully in the present.", author: "Lao Tzu" },
+      { text: "Peace comes from within. Do not seek it without.", author: "Buddha" },
+      { text: "Forever is composed of nows.", author: "Emily Dickinson" },
+      { text: "Surrender to what is. Let go of what was.", author: "Sonia Ricotti" },
+      { text: "In the midst of movement and chaos, keep stillness inside of you.", author: "Deepak Chopra" }
+    ],
+    reflections: [
+      "What are you fighting against that could simply carry you if you let it?",
+      "Where have you been swimming upstream when the current offers a softer path?",
+      "What silence in your life has been speaking to you lately?",
+      "A fish doesn't explain the water. What truth do you live in but rarely name?",
+      "What ripple from last week is still moving through you today?",
+      "Where is the stillness beneath your surface noise?",
+      "What is one thing you can let sink to the bottom today?"
+    ]
+  }
+};
+
+/* ============================================================
+   SVG MASCOTS
+   ============================================================ */
+const SVGS = {
+  cat: {
+    header: `<svg viewBox="0 0 80 60" xmlns="http://www.w3.org/2000/svg">
+      <path d="M 20 45 L 15 25 L 25 35 L 40 33 L 55 35 L 65 25 L 60 45 Z" fill="var(--ink)"/>
+      <circle cx="33" cy="40" r="1.5" fill="var(--accent)"/>
+      <circle cx="47" cy="40" r="1.5" fill="var(--accent)"/>
+    </svg>`,
+    corner: `<svg viewBox="0 0 100 80" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="50" cy="55" rx="38" ry="18" fill="var(--accent)"/>
+      <ellipse cx="80" cy="48" rx="12" ry="10" fill="var(--accent)"/>
+      <path d="M 72 42 L 70 34 L 76 40 Z" fill="var(--accent)"/>
+      <path d="M 84 42 L 88 34 L 86 42 Z" fill="var(--accent)"/>
+      <path d="M 12 52 Q 4 48 2 54 Q 8 58 12 58 Z" fill="var(--accent)"/>
+      <path d="M 75 48 Q 73 49 74 50 Q 76 49 75 48" fill="var(--ink)"/>
+      <path d="M 85 48 Q 83 49 84 50 Q 86 49 85 48" fill="var(--ink)"/>
+      <text x="20" y="30" font-family="Caveat, cursive" font-size="14" fill="var(--ink-faint)" opacity="0.7">z z z</text>
+    </svg>`,
+    breath: `<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
+      <path d="M 20 85 Q 5 70 10 50 Q 15 40 25 45" stroke="var(--accent)" stroke-width="10" fill="none" stroke-linecap="round"/>
+      <g class="body">
+        <ellipse cx="100" cy="85" rx="60" ry="25" fill="var(--accent)"/>
+        <circle cx="145" cy="65" r="22" fill="var(--accent)"/>
+        <path d="M 130 50 L 128 35 L 138 48 Z" fill="var(--accent)"/>
+        <path d="M 160 50 L 162 35 L 152 48 Z" fill="var(--accent)"/>
+        <path d="M 131 47 L 132 40 L 136 46 Z" fill="var(--accent-soft)"/>
+        <path d="M 159 47 L 158 40 L 154 46 Z" fill="var(--accent-soft)"/>
+        <ellipse cx="138" cy="65" rx="1.5" ry="2.5" fill="var(--ink)"/>
+        <ellipse cx="152" cy="65" rx="1.5" ry="2.5" fill="var(--ink)"/>
+        <path d="M 143 71 L 147 71 L 145 74 Z" fill="#c87a7a"/>
+        <path d="M 145 74 Q 143 77 141 75" stroke="var(--ink)" stroke-width="0.8" fill="none"/>
+        <path d="M 145 74 Q 147 77 149 75" stroke="var(--ink)" stroke-width="0.8" fill="none"/>
+        <line x1="134" y1="72" x2="122" y2="70" stroke="var(--ink)" stroke-width="0.5"/>
+        <line x1="156" y1="72" x2="168" y2="70" stroke="var(--ink)" stroke-width="0.5"/>
+        <path d="M 80 70 Q 82 75 80 80" stroke="var(--accent-deep)" stroke-width="2" fill="none"/>
+        <path d="M 95 68 Q 97 75 95 82" stroke="var(--accent-deep)" stroke-width="2" fill="none"/>
+        <path d="M 110 68 Q 112 75 110 82" stroke="var(--accent-deep)" stroke-width="2" fill="none"/>
+        <ellipse cx="75" cy="103" rx="8" ry="4" fill="var(--accent)"/>
+        <ellipse cx="105" cy="105" rx="8" ry="4" fill="var(--accent)"/>
+      </g>
+    </svg>`
+  },
+
+  pig: {
+    header: `<svg viewBox="0 0 80 60" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="40" cy="40" rx="30" ry="18" fill="var(--accent-soft)"/>
+      <ellipse cx="40" cy="42" rx="8" ry="5" fill="var(--accent-deep)"/>
+      <ellipse cx="36" cy="42" rx="1.5" ry="2" fill="var(--ink)"/>
+      <ellipse cx="44" cy="42" rx="1.5" ry="2" fill="var(--ink)"/>
+      <path d="M 20 30 L 25 20 L 28 32 Z" fill="var(--accent-soft)"/>
+      <path d="M 60 30 L 55 20 L 52 32 Z" fill="var(--accent-soft)"/>
+    </svg>`,
+    corner: `<svg viewBox="0 0 100 80" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="50" cy="55" rx="40" ry="22" fill="var(--accent-soft)"/>
+      <ellipse cx="50" cy="58" rx="10" ry="6" fill="var(--accent-deep)"/>
+      <circle cx="46" cy="57" r="1.5" fill="var(--ink)"/>
+      <circle cx="54" cy="57" r="1.5" fill="var(--ink)"/>
+      <path d="M 20 42 L 25 30 L 32 44 Z" fill="var(--accent-soft)"/>
+      <path d="M 80 42 L 75 30 L 68 44 Z" fill="var(--accent-soft)"/>
+      <path d="M 85 55 Q 95 55 93 65 Q 88 68 86 62" stroke="var(--accent-deep)" stroke-width="2" fill="none"/>
+      <ellipse cx="38" cy="72" rx="4" ry="3" fill="var(--accent-deep)"/>
+      <ellipse cx="62" cy="72" rx="4" ry="3" fill="var(--accent-deep)"/>
+      <text x="15" y="25" font-family="Caveat, cursive" font-size="14" fill="var(--ink-faint)" opacity="0.7">oink</text>
+    </svg>`,
+    breath: `<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
+      <g class="body">
+        <ellipse cx="100" cy="75" rx="70" ry="35" fill="var(--accent-soft)"/>
+        <ellipse cx="100" cy="82" rx="18" ry="12" fill="var(--accent-deep)"/>
+        <ellipse cx="92" cy="80" rx="2.5" ry="3.5" fill="var(--ink)"/>
+        <ellipse cx="108" cy="80" rx="2.5" ry="3.5" fill="var(--ink)"/>
+        <ellipse cx="92" cy="84" rx="1.5" ry="1" fill="var(--ink)"/>
+        <ellipse cx="108" cy="84" rx="1.5" ry="1" fill="var(--ink)"/>
+        <ellipse cx="70" cy="65" rx="2" ry="3" fill="var(--ink)"/>
+        <ellipse cx="130" cy="65" rx="2" ry="3" fill="var(--ink)"/>
+        <path d="M 40 55 L 48 40 L 58 58 Z" fill="var(--accent-soft)"/>
+        <path d="M 160 55 L 152 40 L 142 58 Z" fill="var(--accent-soft)"/>
+        <path d="M 165 78 Q 180 78 178 90 Q 172 94 168 88" stroke="var(--accent-deep)" stroke-width="3" fill="none"/>
+        <ellipse cx="80" cy="108" rx="8" ry="4" fill="var(--accent-deep)"/>
+        <ellipse cx="120" cy="108" rx="8" ry="4" fill="var(--accent-deep)"/>
+        <path d="M 85 70 Q 88 72 85 74" stroke="var(--ink)" stroke-width="0.6" fill="none" opacity="0.5"/>
+        <path d="M 115 70 Q 112 72 115 74" stroke="var(--ink)" stroke-width="0.6" fill="none" opacity="0.5"/>
+      </g>
+    </svg>`
+  },
+
+  dog: {
+    header: `<svg viewBox="0 0 80 60" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="40" cy="38" rx="22" ry="18" fill="var(--accent)"/>
+      <path d="M 18 30 Q 10 25 12 45 Q 20 46 24 40 Z" fill="var(--accent)"/>
+      <path d="M 62 30 Q 70 25 68 45 Q 60 46 56 40 Z" fill="var(--accent)"/>
+      <ellipse cx="40" cy="42" rx="4" ry="3" fill="var(--ink)"/>
+      <circle cx="34" cy="35" r="1.5" fill="var(--ink)"/>
+      <circle cx="46" cy="35" r="1.5" fill="var(--ink)"/>
+    </svg>`,
+    corner: `<svg viewBox="0 0 100 80" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="50" cy="55" rx="38" ry="22" fill="var(--accent)"/>
+      <ellipse cx="50" cy="60" rx="8" ry="6" fill="var(--accent-deep)"/>
+      <ellipse cx="50" cy="58" rx="3" ry="2" fill="var(--ink)"/>
+      <path d="M 15 45 Q 5 42 10 65 Q 20 65 22 56 Z" fill="var(--accent)"/>
+      <path d="M 85 45 Q 95 42 90 65 Q 80 65 78 56 Z" fill="var(--accent)"/>
+      <circle cx="42" cy="50" r="1.5" fill="var(--ink)"/>
+      <circle cx="58" cy="50" r="1.5" fill="var(--ink)"/>
+      <path d="M 45 62 Q 50 66 55 62" stroke="var(--ink)" stroke-width="1" fill="none"/>
+      <text x="15" y="25" font-family="Caveat, cursive" font-size="14" fill="var(--ink-faint)" opacity="0.7">*zzz*</text>
+    </svg>`,
+    breath: `<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
+      <path d="M 20 85 Q 5 75 15 55 Q 22 50 28 60" stroke="var(--accent)" stroke-width="8" fill="none" stroke-linecap="round"/>
+      <g class="body">
+        <ellipse cx="100" cy="85" rx="65" ry="28" fill="var(--accent)"/>
+        <ellipse cx="145" cy="65" r="25" fill="var(--accent)"/>
+        <circle cx="145" cy="65" r="24" fill="var(--accent)"/>
+        <path d="M 125 50 Q 115 45 118 75 Q 128 75 130 62 Z" fill="var(--accent-deep)"/>
+        <path d="M 165 50 Q 175 45 172 75 Q 162 75 160 62 Z" fill="var(--accent-deep)"/>
+        <ellipse cx="138" cy="63" rx="2" ry="2.5" fill="var(--ink)"/>
+        <ellipse cx="152" cy="63" rx="2" ry="2.5" fill="var(--ink)"/>
+        <ellipse cx="145" cy="73" rx="3.5" ry="2.5" fill="var(--ink)"/>
+        <path d="M 145 75 Q 142 79 140 77" stroke="var(--ink)" stroke-width="0.8" fill="none"/>
+        <path d="M 145 75 Q 148 79 150 77" stroke="var(--ink)" stroke-width="0.8" fill="none"/>
+        <path d="M 143 78 Q 145 82 147 78" fill="#c87a7a"/>
+        <ellipse cx="80" cy="108" rx="8" ry="4" fill="var(--accent)"/>
+        <ellipse cx="105" cy="108" rx="8" ry="4" fill="var(--accent)"/>
+        <path d="M 85 78 Q 90 82 85 86" stroke="var(--accent-deep)" stroke-width="2" fill="none" opacity="0.5"/>
+        <path d="M 110 76 Q 115 82 110 88" stroke="var(--accent-deep)" stroke-width="2" fill="none" opacity="0.5"/>
+      </g>
+    </svg>`
+  },
+
+  fish: {
+    header: `<svg viewBox="0 0 80 60" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="35" cy="30" rx="22" ry="12" fill="var(--accent)"/>
+      <path d="M 12 30 L 0 20 L 0 40 Z" fill="var(--accent)"/>
+      <circle cx="45" cy="28" r="2" fill="var(--ink)"/>
+      <path d="M 25 30 Q 30 26 35 30" stroke="var(--ink)" stroke-width="0.5" fill="none" opacity="0.4"/>
+      <path d="M 30 30 Q 35 28 40 30" stroke="var(--ink)" stroke-width="0.5" fill="none" opacity="0.4"/>
+      <circle cx="55" cy="15" r="2" fill="var(--accent-soft)" opacity="0.6"/>
+      <circle cx="62" cy="10" r="1.5" fill="var(--accent-soft)" opacity="0.5"/>
+    </svg>`,
+    corner: `<svg viewBox="0 0 100 80" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="50" cy="45" rx="32" ry="18" fill="var(--accent)"/>
+      <path d="M 18 45 L 2 30 L 2 60 Z" fill="var(--accent)"/>
+      <path d="M 50 30 L 48 18 L 58 30" fill="var(--accent-soft)"/>
+      <circle cx="65" cy="42" r="3" fill="#fff"/>
+      <circle cx="66" cy="42" r="1.8" fill="var(--ink)"/>
+      <path d="M 30 45 Q 40 40 50 45" stroke="var(--accent-deep)" stroke-width="1" fill="none" opacity="0.5"/>
+      <path d="M 30 48 Q 40 44 50 48" stroke="var(--accent-deep)" stroke-width="1" fill="none" opacity="0.5"/>
+      <circle cx="85" cy="25" r="2.5" fill="var(--accent-soft)" opacity="0.7"/>
+      <circle cx="78" cy="15" r="1.8" fill="var(--accent-soft)" opacity="0.6"/>
+      <circle cx="90" cy="40" r="1.5" fill="var(--accent-soft)" opacity="0.5"/>
+    </svg>`,
+    breath: `<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
+      <g class="body">
+        <ellipse cx="95" cy="60" rx="55" ry="30" fill="var(--accent)"/>
+        <path d="M 40 60 L 10 35 L 10 85 Z" fill="var(--accent)"/>
+        <path d="M 95 30 L 85 10 L 110 30" fill="var(--accent-soft)"/>
+        <path d="M 95 90 L 85 108 L 110 90" fill="var(--accent-soft)"/>
+        <circle cx="135" cy="55" r="6" fill="#fff"/>
+        <circle cx="137" cy="55" r="3.5" fill="var(--ink)"/>
+        <circle cx="138" cy="54" r="1" fill="#fff"/>
+        <path d="M 145 68 Q 150 72 148 76" stroke="var(--ink)" stroke-width="1" fill="none"/>
+        <path d="M 60 55 Q 75 48 90 55" stroke="var(--accent-deep)" stroke-width="1.5" fill="none" opacity="0.5"/>
+        <path d="M 60 60 Q 75 54 90 60" stroke="var(--accent-deep)" stroke-width="1.5" fill="none" opacity="0.5"/>
+        <path d="M 60 65 Q 75 60 90 65" stroke="var(--accent-deep)" stroke-width="1.5" fill="none" opacity="0.5"/>
+        <circle cx="170" cy="25" r="4" fill="var(--accent-soft)" opacity="0.6"/>
+        <circle cx="180" cy="40" r="2.5" fill="var(--accent-soft)" opacity="0.5"/>
+        <circle cx="175" cy="55" r="2" fill="var(--accent-soft)" opacity="0.4"/>
+      </g>
+    </svg>`
+  }
+};
+
+/* ============================================================
+   LOGIC
+   ============================================================ */
+let currentTheme = 'cat';
+let quoteOffset = 0;
+
+function applyPalette(palette) {
+  const root = document.documentElement.style;
+  root.setProperty('--bg', palette.bg);
+  root.setProperty('--bg-deep', palette.bgDeep);
+  root.setProperty('--ink', palette.ink);
+  root.setProperty('--ink-soft', palette.inkSoft);
+  root.setProperty('--ink-faint', palette.inkFaint);
+  root.setProperty('--accent', palette.accent);
+  root.setProperty('--accent-soft', palette.accentSoft);
+  root.setProperty('--accent-deep', palette.accentDeep);
+  root.setProperty('--card', palette.card);
+  root.setProperty('--glow-a', palette.glowA);
+  root.setProperty('--glow-b', palette.glowB);
+}
+
+function renderMoods(moods) {
+  const grid = document.getElementById('mood-grid');
+  grid.innerHTML = '';
+  moods.forEach(m => {
+    const div = document.createElement('div');
+    div.className = 'mood-option';
+    div.dataset.mood = m.label;
+    div.innerHTML = `<span class="mood-glyph">${m.glyph}</span><span class="mood-label">${m.label}</span>`;
+    div.addEventListener('click', () => {
+      document.querySelectorAll('.mood-option').forEach(o => o.classList.remove('selected'));
+      div.classList.add('selected');
+    });
+    grid.appendChild(div);
+  });
+}
+
+function dateString() {
+  const d = new Date();
+  const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const day = d.getDate();
+  const suffix = (day % 10 === 1 && day !== 11) ? 'st' :
+                 (day % 10 === 2 && day !== 12) ? 'nd' :
+                 (day % 10 === 3 && day !== 13) ? 'rd' : 'th';
+  return `the ${day}${suffix} of ${months[d.getMonth()]}, ${d.getFullYear()}`;
+}
+
+function dailyIndex(arr) {
+  const d = new Date();
+  const dayOfYear = Math.floor((d - new Date(d.getFullYear(), 0, 0)) / 86400000);
+  return (dayOfYear * 7) % arr.length;
+}
+
+function setQuote() {
+  const t = THEMES[currentTheme];
+  const idx = (dailyIndex(t.quotes) + quoteOffset) % t.quotes.length;
+  const q = t.quotes[idx];
+  const qEl = document.getElementById('quote-text');
+  const aEl = document.getElementById('quote-author');
+  qEl.style.opacity = 0; aEl.style.opacity = 0;
+  setTimeout(() => {
+    qEl.textContent = q.text;
+    aEl.textContent = q.author;
+    qEl.style.transition = 'opacity 0.8s ease';
+    aEl.style.transition = 'opacity 0.8s ease';
+    qEl.style.opacity = 1; aEl.style.opacity = 1;
+  }, 300);
+}
+
+function newQuote() { quoteOffset++; setQuote(); }
+
+function applyTheme(themeKey) {
+  currentTheme = themeKey;
+  quoteOffset = 0;
+  const t = THEMES[themeKey];
+
+  // Swap body class (for bubbles effect on fish)
+  document.body.className = 'theme-' + themeKey;
+
+  // Palette
+  applyPalette(t.palette);
+
+  // Text content
+  document.getElementById('eyebrow').textContent = t.eyebrow;
+  document.getElementById('title').innerHTML = `${t.title} <span class="mark">${t.markLarge}</span><br><span>${t.titleSub}</span>`;
+  document.getElementById('date-line').textContent = dateString();
+
+  document.getElementById('quote-card').setAttribute('data-mark', t.mark);
+
+  document.getElementById('mood-mark').textContent = t.mark;
+  document.getElementById('mood-heading').textContent = t.moodHeading;
+  document.getElementById('gratitude-heading').textContent = t.gratitudeHeading;
+  document.getElementById('gratitude-prompt').textContent = t.gratitudePrompt;
+  document.getElementById('gratitude-input').placeholder = t.gratitudePlaceholder;
+  document.getElementById('intention-heading').textContent = t.intentionHeading;
+  document.getElementById('intention-prompt').textContent = t.intentionPrompt;
+  document.getElementById('intention-input').placeholder = t.intentionPlaceholder;
+  document.getElementById('breath-title').textContent = t.breathTitle;
+  document.getElementById('breath-label').textContent = t.breathLabel;
+  document.getElementById('reflect-heading').textContent = t.reflectHeading;
+  document.getElementById('reflection-input').placeholder = t.reflectPlaceholder;
+  document.getElementById('evening-heading').textContent = t.eveningHeading;
+  document.getElementById('evening-prompt').textContent = t.eveningPrompt;
+  document.getElementById('evening-input').placeholder = t.eveningPlaceholder;
+
+  document.getElementById('div-mark-1').textContent = t.divMark;
+  document.getElementById('div-mark-2').textContent = t.divMarkEnd;
+  document.getElementById('new-quote-btn').textContent = t.buttonText;
+  document.getElementById('colophon').innerHTML = t.colophon;
+
+  // Section mark-nums — update all inline ones
+  document.querySelectorAll('.mark-num').forEach(el => el.textContent = t.mark);
+
+  // SVGs
+  document.getElementById('header-svg').innerHTML = SVGS[themeKey].header;
+  document.getElementById('corner-mascot').innerHTML = SVGS[themeKey].corner;
+
+  // Breath mascot with waves
+  document.getElementById('breath-mascot').innerHTML = `
+    ${SVGS[themeKey].breath}
+    <div class="breath-waves">${t.breathWave1}</div>
+    <div class="breath-waves" style="animation-delay: 1.25s; top: 40%;">${t.breathWave2}</div>
+  `;
+
+  // Moods
+  renderMoods(t.moods);
+
+  // Quote + reflection
+  setQuote();
+  const rIdx = dailyIndex(t.reflections);
+  document.getElementById('reflection-prompt').textContent = t.reflections[rIdx];
+}
+
+// Auto-grow textareas
+document.querySelectorAll('textarea:not(.freewrite)').forEach(ta => {
+  ta.addEventListener('input', () => {
+    ta.style.height = 'auto';
+    ta.style.height = ta.scrollHeight + 'px';
+  });
+});
+
+// Theme switcher
+document.getElementById('theme-select').addEventListener('change', (e) => {
+  applyTheme(e.target.value);
+});
+
+// Init
+applyTheme('cat');
+</script>
+</body>
+</html>
