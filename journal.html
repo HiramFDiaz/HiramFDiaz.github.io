@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stillness · A Mindfulness Journal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter+Tight:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1814;
+    --ink-soft: #4a453d;
+    --ink-faint: #8b8478;
+    --paper: #f5f0e6;
+    --paper-warm: #ebe3d3;
+    --paper-deep: #e0d5bf;
+    --accent: #8b3a2e;
+    --accent-soft: #c4917a;
+    --sage: #6b7a5a;
+    --gold: #a68a5b;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Inter Tight', sans-serif;
+    font-weight: 300;
+    line-height: 1.6;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body {
+    background:
+      radial-gradient(ellipse at 20% 10%, rgba(196, 145, 122, 0.15) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 90%, rgba(107, 122, 90, 0.12) 0%, transparent 50%),
+      var(--paper);
+    background-attachment: fixed;
+    padding: 4vh 5vw 8vh;
+    position: relative;
+  }
+
+  /* Paper grain */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3CfeColorMatrix values='0 0 0 0 0.1 0 0 0 0 0.09 0 0 0 0 0.08 0 0 0 0.08 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    opacity: 0.35;
+    pointer-events: none;
+    z-index: 1;
+    mix-blend-mode: multiply;
+  }
+
+  .container {
+    max-width: 780px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* Masthead */
+  .masthead {
+    text-align: center;
+    padding: 3vh 0 5vh;
+    border-bottom: 1px solid var(--ink);
+    position: relative;
+    animation: fadeUp 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  .masthead::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40%;
+    height: 1px;
+    background: var(--ink);
+  }
+
+  .eyebrow {
+    font-family: 'Inter Tight', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    font-weight: 400;
+    margin-bottom: 1.2rem;
+  }
+
+  h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: clamp(3rem, 8vw, 5.5rem);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    font-style: italic;
+    color: var(--ink);
+  }
+
+  h1 .amp {
+    color: var(--accent);
+    font-style: italic;
+  }
+
+  .date-line {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    margin-top: 1.5rem;
+    color: var(--ink-soft);
+    font-weight: 400;
+  }
+
+  /* Quote section */
+  .quote-section {
+    padding: 6vh 0 5vh;
+    text-align: center;
+    position: relative;
+    animation: fadeUp 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) 0.2s backwards;
+  }
+
+  .quote-mark {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 8rem;
+    color: var(--accent-soft);
+    line-height: 0.5;
+    margin-bottom: 1rem;
+    font-style: italic;
+    opacity: 0.6;
+  }
+
+  blockquote {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+    line-height: 1.35;
+    font-weight: 300;
+    color: var(--ink);
+    max-width: 620px;
+    margin: 0 auto;
+    letter-spacing: -0.01em;
+  }
+
+  .attribution {
+    margin-top: 2rem;
+    font-size: 0.8rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    font-weight: 400;
+  }
+
+  .attribution::before {
+    content: '—';
+    margin-right: 0.6em;
+    color: var(--accent);
+  }
+
+  /* Section divider */
+  .divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 5vh 0 4vh;
+    gap: 1.5rem;
+    animation: fadeUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.4s backwards;
+  }
+
+  .divider .line {
+    flex: 1;
+    max-width: 120px;
+    height: 1px;
+    background: var(--ink-faint);
+  }
+
+  .divider .ornament {
+    font-family: 'Cormorant Garamond', serif;
+    color: var(--accent);
+    font-size: 1.2rem;
+    font-style: italic;
+  }
+
+  /* Mood tracker */
+  .section {
+    padding: 3vh 0;
+    animation: fadeUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.5s backwards;
+  }
+
+  .section-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.1rem;
+    color: var(--ink-soft);
+    margin-bottom: 1rem;
+    letter-spacing: 0.02em;
+  }
+
+  .section-label .num {
+    font-family: 'Inter Tight', sans-serif;
+    font-style: normal;
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    color: var(--accent);
+    margin-right: 1rem;
+    vertical-align: 1px;
+  }
+
+  .mood-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 0.6rem;
+    margin-top: 1rem;
+  }
+
+  .mood-option {
+    background: transparent;
+    border: 1px solid var(--ink-faint);
+    padding: 1rem 0.4rem;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+    font-family: 'Cormorant Garamond', serif;
+    color: var(--ink-soft);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .mood-option::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--ink);
+    transform: translateY(100%);
+    transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+    z-index: 0;
+  }
+
+  .mood-option > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .mood-option:hover {
+    border-color: var(--ink);
+    color: var(--paper);
+  }
+
+  .mood-option:hover::before {
+    transform: translateY(0);
+  }
+
+  .mood-option.selected {
+    border-color: var(--ink);
+    color: var(--paper);
+  }
+
+  .mood-option.selected::before {
+    transform: translateY(0);
+  }
+
+  .mood-glyph {
+    font-size: 1.5rem;
+    font-style: italic;
+    display: block;
+    margin-bottom: 0.3rem;
+  }
+
+  .mood-label {
+    font-family: 'Inter Tight', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: 400;
+  }
+
+  /* Prompts */
+  .prompt-block {
+    margin-top: 2rem;
+  }
+
+  .prompt-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.25rem;
+    color: var(--ink);
+    margin-bottom: 0.8rem;
+    line-height: 1.4;
+  }
+
+  textarea {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--ink-faint);
+    padding: 0.8rem 0;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.15rem;
+    color: var(--ink);
+    resize: none;
+    outline: none;
+    transition: border-color 0.3s ease;
+    min-height: 3rem;
+    line-height: 1.6;
+  }
+
+  textarea:focus {
+    border-bottom-color: var(--accent);
+  }
+
+  textarea::placeholder {
+    color: var(--ink-faint);
+    font-style: italic;
+    opacity: 0.6;
+  }
+
+  .freewrite {
+    min-height: 200px;
+    background: rgba(255, 255, 255, 0.3);
+    border: 1px solid var(--ink-faint);
+    padding: 1.5rem;
+    margin-top: 1rem;
+    font-size: 1.1rem;
+    line-height: 1.8;
+    background-image:
+      repeating-linear-gradient(
+        transparent,
+        transparent 1.75rem,
+        rgba(139, 58, 46, 0.08) 1.75rem,
+        rgba(139, 58, 46, 0.08) calc(1.75rem + 1px)
+      );
+  }
+
+  /* Breath section */
+  .breath-section {
+    margin: 6vh 0;
+    text-align: center;
+    padding: 4vh 2rem;
+    border-top: 1px solid var(--ink-faint);
+    border-bottom: 1px solid var(--ink-faint);
+    animation: fadeUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.6s backwards;
+  }
+
+  .breath-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+    color: var(--ink-soft);
+  }
+
+  .breath-circle {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--accent-soft), var(--sage));
+    margin: 0 auto;
+    opacity: 0.7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: breathe 8s ease-in-out infinite;
+    position: relative;
+  }
+
+  .breath-circle::before {
+    content: '';
+    position: absolute;
+    inset: -20px;
+    border: 1px solid var(--accent-soft);
+    border-radius: 50%;
+    opacity: 0.4;
+    animation: breathe 8s ease-in-out infinite;
+  }
+
+  .breath-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    color: var(--paper);
+    font-size: 1.1rem;
+    letter-spacing: 0.1em;
+  }
+
+  @keyframes breathe {
+    0%, 100% { transform: scale(0.85); }
+    50% { transform: scale(1.15); }
+  }
+
+  /* Close action */
+  .close {
+    text-align: center;
+    margin-top: 5vh;
+    padding-top: 4vh;
+    border-top: 1px solid var(--ink-faint);
+    animation: fadeUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.7s backwards;
+  }
+
+  .new-quote-btn {
+    background: transparent;
+    border: 1px solid var(--ink);
+    padding: 0.9rem 2.5rem;
+    font-family: 'Inter Tight', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--ink);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 400;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .new-quote-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--ink);
+    transform: translateX(-101%);
+    transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  .new-quote-btn span {
+    position: relative;
+    z-index: 1;
+    transition: color 0.3s ease;
+  }
+
+  .new-quote-btn:hover::before {
+    transform: translateX(0);
+  }
+
+  .new-quote-btn:hover span {
+    color: var(--paper);
+  }
+
+  .colophon {
+    margin-top: 3rem;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 0.95rem;
+    color: var(--ink-faint);
+    line-height: 1.7;
+  }
+
+  .colophon .orn {
+    color: var(--accent);
+    margin: 0 0.5rem;
+  }
+
+  @keyframes fadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (max-width: 600px) {
+    .mood-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    body { padding: 3vh 4vw 6vh; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Masthead -->
+  <header class="masthead">
+    <div class="eyebrow">Vol. I · Daily Meditations</div>
+    <h1>Stillness <span class="amp">&</span><br>Small Truths</h1>
+    <div class="date-line" id="date-line"></div>
+  </header>
+
+  <!-- Quote -->
+  <section class="quote-section">
+    <div class="quote-mark">"</div>
+    <blockquote id="quote-text"></blockquote>
+    <div class="attribution" id="quote-author"></div>
+  </section>
+
+  <!-- Divider -->
+  <div class="divider">
+    <div class="line"></div>
+    <span class="ornament">❦</span>
+    <div class="line"></div>
+  </div>
+
+  <!-- Mood -->
+  <section class="section">
+    <div class="section-label"><span class="num">I.</span>How the body feels</div>
+    <div class="mood-grid" id="mood-grid">
+      <div class="mood-option" data-mood="radiant"><span class="mood-glyph">☀</span><span class="mood-label">Radiant</span></div>
+      <div class="mood-option" data-mood="content"><span class="mood-glyph">◐</span><span class="mood-label">Content</span></div>
+      <div class="mood-option" data-mood="quiet"><span class="mood-glyph">◯</span><span class="mood-label">Quiet</span></div>
+      <div class="mood-option" data-mood="restless"><span class="mood-glyph">≈</span><span class="mood-label">Restless</span></div>
+      <div class="mood-option" data-mood="heavy"><span class="mood-glyph">▼</span><span class="mood-label">Heavy</span></div>
+      <div class="mood-option" data-mood="tender"><span class="mood-glyph">❋</span><span class="mood-label">Tender</span></div>
+    </div>
+  </section>
+
+  <!-- Prompts -->
+  <section class="section">
+    <div class="section-label"><span class="num">II.</span>Gratitude</div>
+    <div class="prompt-block">
+      <div class="prompt-text">Three small things worth noticing today—</div>
+      <textarea placeholder="the first light through the window, a stranger's kindness…" rows="3"></textarea>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-label"><span class="num">III.</span>Intention</div>
+    <div class="prompt-block">
+      <div class="prompt-text">What I am gently carrying into this day—</div>
+      <textarea placeholder="one word, one wish, one practice…" rows="2"></textarea>
+    </div>
+  </section>
+
+  <!-- Breath interlude -->
+  <section class="breath-section">
+    <div class="breath-title">A pause, before the writing</div>
+    <div class="breath-circle">
+      <span class="breath-label">breathe</span>
+    </div>
+  </section>
+
+  <!-- Free write -->
+  <section class="section">
+    <div class="section-label"><span class="num">IV.</span>Reflection</div>
+    <div class="prompt-text" id="reflection-prompt"></div>
+    <textarea class="freewrite" placeholder="Write freely. No one is reading but you." rows="8"></textarea>
+  </section>
+
+  <!-- Evening -->
+  <section class="section">
+    <div class="section-label"><span class="num">V.</span>At day's end</div>
+    <div class="prompt-block">
+      <div class="prompt-text">One thing I am releasing tonight—</div>
+      <textarea placeholder="a worry, a word unspoken, a small regret…" rows="2"></textarea>
+    </div>
+  </section>
+
+  <!-- Close -->
+  <div class="close">
+    <button class="new-quote-btn" onclick="newQuote()"><span>Another Meditation</span></button>
+    <div class="colophon">
+      Set in Cormorant Garamond <span class="orn">❦</span> printed on the morning of remembering
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const quotes = [
+    { text: "The present moment is the only moment available to us, and it is the door to all moments.", author: "Thich Nhat Hanh" },
+    { text: "Wherever you are, be there totally.", author: "Eckhart Tolle" },
+    { text: "You cannot stop the waves, but you can learn to surf.", author: "Jon Kabat-Zinn" },
+    { text: "The quieter you become, the more you can hear.", author: "Ram Dass" },
+    { text: "Between stimulus and response there is a space. In that space is our power to choose our response.", author: "Viktor Frankl" },
+    { text: "What you seek is seeking you.", author: "Rumi" },
+    { text: "Your mind will answer most questions if you learn to relax and wait for the answer.", author: "William S. Burroughs" },
+    { text: "Feelings come and go like clouds in a windy sky. Conscious breathing is my anchor.", author: "Thich Nhat Hanh" },
+    { text: "The soul always knows what to do to heal itself. The challenge is to silence the mind.", author: "Caroline Myss" },
+    { text: "Happiness is not something ready made. It comes from your own actions.", author: "Dalai Lama" },
+    { text: "Every moment is a fresh beginning.", author: "T.S. Eliot" },
+    { text: "Breath is the bridge which connects life to consciousness.", author: "Thich Nhat Hanh" },
+    { text: "Do not dwell in the past, do not dream of the future, concentrate the mind on the present moment.", author: "Buddha" },
+    { text: "In the midst of movement and chaos, keep stillness inside of you.", author: "Deepak Chopra" },
+    { text: "The only way out is through.", author: "Robert Frost" },
+    { text: "You are the sky. Everything else is just the weather.", author: "Pema Chödrön" },
+    { text: "Be kind whenever possible. It is always possible.", author: "Dalai Lama" },
+    { text: "When you realize nothing is lacking, the whole world belongs to you.", author: "Lao Tzu" },
+    { text: "The wound is the place where the light enters you.", author: "Rumi" },
+    { text: "Life is a balance of holding on and letting go.", author: "Rumi" },
+    { text: "Silence isn't empty. It's full of answers.", author: "Unknown" },
+    { text: "Smile, breathe, and go slowly.", author: "Thich Nhat Hanh" },
+    { text: "Nothing can bring you peace but yourself.", author: "Ralph Waldo Emerson" },
+    { text: "Mindfulness is a way of befriending ourselves and our experience.", author: "Jon Kabat-Zinn" },
+    { text: "The best way to capture moments is to pay attention. This is how we cultivate mindfulness.", author: "Jon Kabat-Zinn" },
+    { text: "Let go of the past and live fully in the present.", author: "Lao Tzu" },
+    { text: "Peace comes from within. Do not seek it without.", author: "Buddha" },
+    { text: "Everything has beauty, but not everyone sees it.", author: "Confucius" },
+    { text: "Tension is who you think you should be. Relaxation is who you are.", author: "Chinese Proverb" },
+    { text: "Walk as if you are kissing the Earth with your feet.", author: "Thich Nhat Hanh" },
+    { text: "The little things? The little moments? They aren't little.", author: "Jon Kabat-Zinn" },
+    { text: "When we get too caught up in the busyness of the world, we lose connection with one another and ourselves.", author: "Jack Kornfield" },
+    { text: "Paradise is not a place; it's a state of consciousness.", author: "Sri Chinmoy" },
+    { text: "In today's rush, we all think too much, seek too much, want too much, and forget about the joy of just being.", author: "Eckhart Tolle" },
+    { text: "Stop acting so small. You are the universe in ecstatic motion.", author: "Rumi" },
+    { text: "The mountain remains unmoved at its seeming defeat by the mist.", author: "Rabindranath Tagore" },
+    { text: "Each morning we are born again. What we do today is what matters most.", author: "Buddha" },
+    { text: "A calm mind brings inner strength and self-confidence.", author: "Dalai Lama" },
+    { text: "Be here now.", author: "Ram Dass" },
+    { text: "Drop the idea of becoming someone, because you are already a masterpiece.", author: "Osho" },
+    { text: "The thing about meditation is: you become more and more you.", author: "David Lynch" },
+    { text: "Within you there is a stillness and a sanctuary to which you can retreat at any time.", author: "Hermann Hesse" },
+    { text: "Life is available only in the present moment.", author: "Thich Nhat Hanh" },
+    { text: "To understand the immeasurable, the mind must be extraordinarily quiet, still.", author: "Jiddu Krishnamurti" },
+    { text: "The only Zen you find on the tops of mountains is the Zen you bring up there.", author: "Robert M. Pirsig" },
+    { text: "Meditation is not evasion; it is a serene encounter with reality.", author: "Thich Nhat Hanh" },
+    { text: "Don't let yesterday take up too much of today.", author: "Will Rogers" },
+    { text: "There is nothing either good or bad, but thinking makes it so.", author: "William Shakespeare" },
+    { text: "Empty your mind, be formless, shapeless, like water.", author: "Bruce Lee" },
+    { text: "The real meditation is how you live your life.", author: "Jon Kabat-Zinn" },
+    { text: "When you do things from your soul, you feel a river moving in you, a joy.", author: "Rumi" },
+    { text: "Awareness is the greatest agent for change.", author: "Eckhart Tolle" },
+    { text: "You have within you right now, everything you need to deal with whatever the world can throw at you.", author: "Brian Tracy" },
+    { text: "The goal of life is to make your heartbeat match the beat of the universe.", author: "Joseph Campbell" },
+    { text: "The way to live in the present is to remember that 'This too shall pass.'", author: "Joey Green" },
+    { text: "Life isn't as serious as the mind makes it out to be.", author: "Eckhart Tolle" },
+    { text: "Simplicity, patience, compassion. These three are your greatest treasures.", author: "Lao Tzu" },
+    { text: "In the stillness of the quiet, if we listen, we can hear the whisper of the heart.", author: "Howard Martin" },
+    { text: "Surrender to what is. Let go of what was. Have faith in what will be.", author: "Sonia Ricotti" },
+    { text: "The best meditation is effortless. The best meditation is a gentle awareness.", author: "Maxime Lagacé" },
+    { text: "Yesterday is history, tomorrow is a mystery, today is a gift of God, which is why we call it the present.", author: "Bil Keane" },
+    { text: "What day is it? It's today, squeaked Piglet. My favorite day, said Pooh.", author: "A.A. Milne" },
+    { text: "To a mind that is still, the whole universe surrenders.", author: "Zhuangzi" },
+    { text: "Don't believe everything you think.", author: "Allan Lokos" },
+    { text: "Mindfulness isn't difficult, we just need to remember to do it.", author: "Sharon Salzberg" },
+    { text: "Be the silent witness of your thoughts.", author: "Eckhart Tolle" },
+    { text: "Acknowledging the good that you already have in your life is the foundation for all abundance.", author: "Eckhart Tolle" },
+    { text: "Knowing others is intelligence; knowing yourself is true wisdom.", author: "Lao Tzu" },
+    { text: "Learn to be calm and you will always be happy.", author: "Paramahansa Yogananda" },
+    { text: "Notice the beauty in small things.", author: "Unknown" },
+    { text: "Just breathe. You're doing fine.", author: "Unknown" },
+    { text: "Our life is shaped by our mind; we become what we think.", author: "Buddha" },
+    { text: "If you want to conquer the anxiety of life, live in the moment, live in the breath.", author: "Amit Ray" },
+    { text: "Let go of your mind and then be mindful. Close your ears and listen!", author: "Rumi" },
+    { text: "Follow your bliss and the universe will open doors where there were only walls.", author: "Joseph Campbell" },
+    { text: "What we plant in the soil of contemplation, we shall reap in the harvest of action.", author: "Meister Eckhart" },
+    { text: "Life is really simple, but we insist on making it complicated.", author: "Confucius" },
+    { text: "The more tranquil a man becomes, the greater is his success, his influence, his power for good.", author: "James Allen" },
+    { text: "Quiet the mind, and the soul will speak.", author: "Ma Jaya Sati Bhagavati" },
+    { text: "You will not be punished for your anger; you will be punished by your anger.", author: "Buddha" },
+    { text: "The only time you fail is when you fall down and stay down.", author: "Stephen Richards" },
+    { text: "Slow down and everything you are chasing will come around and catch you.", author: "John De Paola" },
+    { text: "To know yourself as the Being underneath the thinker is the key to freedom.", author: "Eckhart Tolle" },
+    { text: "The art of being happy lies in the power of extracting happiness from common things.", author: "Henry Ward Beecher" },
+    { text: "Just when the caterpillar thought the world was over, it became a butterfly.", author: "Proverb" },
+    { text: "Gratitude turns what we have into enough.", author: "Aesop" },
+    { text: "Let yourself be silently drawn by the strange pull of what you really love.", author: "Rumi" },
+    { text: "When I let go of what I am, I become what I might be.", author: "Lao Tzu" },
+    { text: "Nothing ever goes away until it has taught us what we need to know.", author: "Pema Chödrön" },
+    { text: "A single breath, taken with awareness, can change everything.", author: "Unknown" },
+    { text: "The heart is like a garden. It can grow compassion or fear, resentment or love.", author: "Jack Kornfield" },
+    { text: "Do your little bit of good where you are; it's those little bits of good put together that overwhelm the world.", author: "Desmond Tutu" },
+    { text: "Forever is composed of nows.", author: "Emily Dickinson" },
+    { text: "Kindness is the language which the deaf can hear and the blind can see.", author: "Mark Twain" },
+    { text: "Sometimes the most important thing in a whole day is the rest we take between two deep breaths.", author: "Etty Hillesum" },
+    { text: "If you correct your mind, the rest of your life will fall into place.", author: "Lao Tzu" },
+    { text: "The spiritual journey is the unlearning of fear and the acceptance of love.", author: "Marianne Williamson" },
+    { text: "You must learn to let go. Release the stress. You were never in control anyway.", author: "Steve Maraboli" },
+    { text: "Fall in love with the process and the results will come.", author: "Eric Thomas" },
+    { text: "Your calm mind is the ultimate weapon against your challenges.", author: "Bryant McGill" },
+    { text: "The greatest weapon against stress is our ability to choose one thought over another.", author: "William James" },
+    { text: "Joy is the simplest form of gratitude.", author: "Karl Barth" },
+    { text: "Let reality be reality. Let things flow naturally forward in whatever way they like.", author: "Lao Tzu" },
+    { text: "And into the forest I go, to lose my mind and find my soul.", author: "John Muir" }
+  ];
+
+  const reflectionPrompts = [
+    "What is asking to be heard inside you today?",
+    "When did you feel most alive this week, and what was present?",
+    "What belief are you ready to gently set down?",
+    "Where in your body does this moment live?",
+    "What would you tell yourself from five years ago?",
+    "What is a kindness you can offer yourself, without earning it?",
+    "Notice what you've been avoiding. What does it need?",
+    "Write about a small joy from today, in as much detail as you can.",
+    "What does your mind keep returning to? What might it be trying to say?",
+    "If rest were not a reward, but a practice, what would today look like?",
+    "What part of you feels most tender right now?",
+    "Where have you been too hard on yourself? Write a softer version.",
+    "What would 'enough' feel like today?",
+    "Notice the space between your thoughts. What lives there?",
+    "What are you carrying that doesn't belong to you?"
+  ];
+
+  function dateString() {
+    const d = new Date();
+    const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    const day = d.getDate();
+    const suffix = (day % 10 === 1 && day !== 11) ? 'st' :
+                   (day % 10 === 2 && day !== 12) ? 'nd' :
+                   (day % 10 === 3 && day !== 13) ? 'rd' : 'th';
+    return `The ${day}${suffix} of ${months[d.getMonth()]}, ${d.getFullYear()}`;
+  }
+
+  function dailyIndex(arr) {
+    // Deterministic daily rotation + simple offset so it feels daily-fresh
+    const d = new Date();
+    const dayOfYear = Math.floor((d - new Date(d.getFullYear(), 0, 0)) / 86400000);
+    return (dayOfYear * 7) % arr.length;
+  }
+
+  let quoteOffset = 0;
+
+  function setQuote() {
+    const idx = (dailyIndex(quotes) + quoteOffset) % quotes.length;
+    const q = quotes[idx];
+    const qEl = document.getElementById('quote-text');
+    const aEl = document.getElementById('quote-author');
+    qEl.style.opacity = 0;
+    aEl.style.opacity = 0;
+    setTimeout(() => {
+      qEl.textContent = q.text;
+      aEl.textContent = q.author;
+      qEl.style.transition = 'opacity 0.8s ease';
+      aEl.style.transition = 'opacity 0.8s ease';
+      qEl.style.opacity = 1;
+      aEl.style.opacity = 1;
+    }, 300);
+  }
+
+  function newQuote() {
+    quoteOffset++;
+    setQuote();
+  }
+
+  function setReflection() {
+    const idx = dailyIndex(reflectionPrompts);
+    document.getElementById('reflection-prompt').textContent = reflectionPrompts[idx];
+  }
+
+  // Mood selection
+  document.querySelectorAll('.mood-option').forEach(opt => {
+    opt.addEventListener('click', () => {
+      document.querySelectorAll('.mood-option').forEach(o => o.classList.remove('selected'));
+      opt.classList.add('selected');
+    });
+  });
+
+  // Auto-grow textareas (except the free-write)
+  document.querySelectorAll('textarea:not(.freewrite)').forEach(ta => {
+    ta.addEventListener('input', () => {
+      ta.style.height = 'auto';
+      ta.style.height = ta.scrollHeight + 'px';
+    });
+  });
+
+  // Initialize
+  document.getElementById('date-line').textContent = dateString();
+  setQuote();
+  setReflection();
+</script>
+</body>
+</html>
